@@ -1,6 +1,6 @@
 /** Basic CSS Styling **/
 html {
-    background: url("static/img/silver_scales.png") repeat scroll 0 0 transparent;
+    background: url("../img/silver_scales.png") repeat scroll 0 0 transparent;
 }
 
 body {
