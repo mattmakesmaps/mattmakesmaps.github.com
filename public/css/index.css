@@ -295,5 +295,5 @@ a[href]:visited.homepage-postlist-link {
 }
 a[href]:hover.homepage-postlist-link,
 a[href]:active.homepage-postlist-link {
-	color: var(--color-gray-20);
+	color: var(--color-gray-50);
 }
