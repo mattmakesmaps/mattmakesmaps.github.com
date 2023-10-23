@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>Google Motion Charts: From Data To Information </title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,38 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>Google Motion Charts: From Data To Information </h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2009-01-31">31 January 2009</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>I've been playing with the motion chart gadget in Google's AJAX API Playground recently, and have found it to be an extremely interesting tool to use. In order to produce data rich charts, all that is necessary is to import a tabular datasheet into google docs and call on it within a javascript function. <!-- more --></p>
+<p>The spreadsheet itself requires:</p>
+<ul>
+<li>
+<p>The first column be entity data (place names, events, etc.)</p>
+</li>
+<li>
+<p>The second column to be formatted as 'Date'</p>
+</li>
+<li>
+<p>The third and following columns to contain your chart-worthy data.</p>
+</li>
+</ul>
+<p>A simple example can be found below depicting historical weather station information for three cities in the Western United States. This information was downloaded from the <a href="http://www.wrcc.dri.edu/">Western Regional Climate Center</a> and imported manually into a <a href="http://spreadsheets.google.com/ccc?key=pPDD5D7AqVH0jefmgJwF9OQ">google docs spreadsheet</a>. As we can see, we have a variety of different ways to explore the data, and hopefully, synthesize them into useful information for decision makers in a best case scenario.</p>
+<p>Above: Markers indicate the cities in which weather station data was collected.</p>
+<p>Above: Google Motion Chart Gadget. NOTE: The data are actually compiled monthly averages from 1971-2000. For the sake of simplicity however, i fed the date column in a format of 'Jan-1' which turns out automatically appends the current year. The proper date should read for example, '1/1' rather than '1/1/09'.</p>
+<p>In any event, in a data rich GIS environment, we can easily succumb to 'data overload'. This creates a barrier for decision makers in understanding their situations, and as such can lead to poor planning. Through the careful use of data visualization tools such as this, however, decision makers can be empowered to quickly analyze data in a variety of ways, creating useful information on-the-fly and without the use of specialized GIS technical know-how.</p>
+<p>At least I think that's how it works.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2009-01-24-osm-minutely-tile-updates-thanks-cloudmade/">OSM &#39;Minutely&#39; Tile Updates: Thanks CloudMade!</a></li><li>Next: <a href="/blog/2009-03-13-arcgis-rest-api-openlayers-unit-testing-fun-in-the-sun/">ArcGIS REST API / OpenLayers / Unit Testing = Fun In The Sun</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2009-01-31-google-motion-charts-from-data-to-information/ -->
 	</body>
 </html>

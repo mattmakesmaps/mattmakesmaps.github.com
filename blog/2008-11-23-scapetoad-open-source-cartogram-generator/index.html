@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>ScapeToad - Open Source Cartogram Generator</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,27 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>ScapeToad - Open Source Cartogram Generator</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2008-11-23">23 November 2008</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p><a href="http://chorogram.choros.ch/scapetoad/index.php">ScapeToad</a> provides an amazingly easy to use interface for creating cartograms. Accepting shapefiles directly as input, it has a wide variety of fine-tunable settings in addition to its presets. The ability to utilize multiple layers as weights also seems like a pretty exciting feature. Written entirely in java, it's platform-independent, another plus for mac and / or linux GIS users. <!-- more --></p>
+<p>[caption id=&quot;attachment_127&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Above: The counties of Washington State.&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/11/wa.jpeg"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/11/wa-300x202.jpg" alt="WA_Green"></a>[/caption]</p>
+<p>What is so cool about this program is that not only does it use shapefiles as an input, but it generates shapefiles as output as well. A SizeError attribute is also generated to allow a user to easily control map symbology using GIS software. In addition to this, one can also export as an SVG directly to use in a graphics editor.</p>
+<p>The cartogram below was generated using the percentage of a county's total area covered by state routes. The lighter colors indicate a smaller distortion in size while the darker colors indicate a larger distortion in size. Note the I-5 corridor in Western Washington is heavily affected using this criteria.</p>
+<p>[caption id=&quot;attachment_128&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Above: The result. &quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/11/cartogram2.jpeg"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/11/cartogram2-300x212.jpg" alt="WA_Cartogram"></a>[/caption]</p>
+<p>ScapeToad - <a href="http://chorogram.choros.ch/scapetoad/index.php">http://chorogram.choros.ch/scapetoad/index.php</a></p>
+<p>Data (WA DOT) - <a href="http://www.wsdot.wa.gov/">http://www.wsdot.wa.gov/</a></p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2008-11-22-attribution-css-and-irc/">Attribution, CSS, and IRC</a></li><li>Next: <a href="/blog/2008-11-30-spherical-mercator-new-portfolio/">Spherical Mercator / New Portfolio</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2008-11-23-scapetoad-open-source-cartogram-generator/ -->
 	</body>
 </html>

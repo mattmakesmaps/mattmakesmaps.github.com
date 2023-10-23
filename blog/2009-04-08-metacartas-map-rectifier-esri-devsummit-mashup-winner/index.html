@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>MetaCarta&#39;s Map Rectifier + ESRI DevSummit Mashup Winner :)</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,29 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>MetaCarta&#39;s Map Rectifier + ESRI DevSummit Mashup Winner :)</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2009-04-08">08 April 2009</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>I never knew about the <a href="http://labs.metacarta.com/rectifier/">MetaCarta Labs' Map Rectifier</a> tool, but I'll expect to be using it more in the future. After uploading an image to the site, a user has full control over the creation of Ground Control Points. The advanced nature of this tool is shown though included RMS error reporting as well as the choice between multiple transformation algorithms. <!-- more --> In addition to uploading your own content, a user has the ability to add GCPs for other users' uploads as well.</p>
+<p><code>Archived Post. Image Removed.</code></p>
+<p>What's really amazing is the ability to directly access rectified images via WMS overlay. Each image hosted on the site is given a unique URL, we can insert into our favorite web mapping clients.</p>
+<p>To try it out, I used the <a href="http://resources.esri.com/arcgisserver/apis/javascript/gmaps/index.cfm?fa=codeGalleryDetails&amp;scriptID=16067">ExtMap - Mashup Framework</a> developed by ArcGIS user <a href="http://resources.esri.com/arcgisserver/apis/javascript/gmaps/index.cfm?fa=codeGallery&amp;authorID=alperdincer">alperdincer</a>. This particular application framework was one of the winners at 2009 ESRI DevSummit, with good reason. I was able to quickly pass in the MetaCarta Labs URL, allowing the ExtMap application to consume and display the WMS layer with ease.</p>
+<p><code>Archived Post. Image Removed.</code></p>
+<p>In addition to WMS layers, we can add in KML/GeoRSS as well as ArcGIS Server Dynamic/Tiled Map Layers.</p>
+<p><code>Archived Post. Image Removed.</code></p>
+<p>Easy as pie? Piece of Cake? Yes. It's innovative projects like these that keep pushing me to learn more about web mapping technology. Big thanks go out to crschmidt (who i assumed was involved w/ the project) at MetaCarta and <a href="http://resources.esri.com/arcgisserver/apis/javascript/gmaps/index.cfm?fa=codeGallery&amp;authorID=alperdincer">alperdincer</a> for putting together two great products.</p>
+<p>On a final note, the MetaCarta Rectifier has the ability to export out images as geotiffs, allowing us to consume them in our desktop GIS applications. A quick check in ArcCatalog of the Chernobyl sample image I exported out revealed a WGS84 GCS. I can see some really nice workflows combining this tool with tiling programs such as <a href="http://www.klokan.cz/projects/gdal2tiles/">GDAL2Tiles</a> for painless TMS creation.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2009-04-07-cloudmade-tile-request-graphics/">CloudMade Tile Request Graphics</a></li><li>Next: <a href="/blog/2009-04-22-visualizing-an-existing-mysql-database/">Visualizing An Existing MySQL Database</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2009-04-08-metacartas-map-rectifier-esri-devsummit-mashup-winner/ -->
 	</body>
 </html>

@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>TileStache: Generate [Topo|Geo]JSON Vector Tiles</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+
+	--homepage-postlist-background-color: #4d49be;
+	--homepage-postlist-text-color: #fff;
+
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+
+		--homepage-postlist-text-color: var(--color-gray-20);
+
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	max-width: 40em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main {
+	padding: 1rem;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+header:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+pre:not([class*="language-"]) {
+	margin: .5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: capitalize;
+	font-style: italic;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.post-metadata time {
+	margin-right: 1em;
+}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+a[href].header-anchor:focus,
+a[href].header-anchor:hover {
+	text-decoration: underline;
+}
+a[href].header-anchor:focus,
+:hover > a[href].header-anchor {
+	color: #aaa;
+}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/* Create "responsive" images that resize with the viewport */
+
+img {
+	max-inline-size: 100%;
+	block-size: auto;
+}
+
+div.recentPosts {
+	background-color: var(--homepage-postlist-background-color);
+	color: var(--homepage-postlist-text-color);
+	padding: 1rem;
+}
+
+a[href].homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:visited.homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:hover.homepage-postlist-link,
+a[href]:active.homepage-postlist-link {
+	color: var(--color-gray-50);
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/" class="home-link">mattmakesmaps</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/">Home</a></li>
+					<li class="nav-item"><a href="/blog/">Blog</a></li>
+					<li class="nav-item"><a href="/cv/">CV</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>TileStache: Generate [Topo|Geo]JSON Vector Tiles</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2013-10-09">09 October 2013</time></li>
+</ul>
+
+<p>Vector tiles are simply tiled representations of geographic data, much like raster tiles
+used to power typical web maps such as OpenStreetMap. They differ from traditional
+raster tiles however in that instead being an image, they actually contain the
+geographic coordinates and attributes of the features that exist within their bounding boxes.
+Vector tiles can be used for a variety of different rendered outputs within a modern web-mapping
+application. One examples can include serving as an intermediate step in the processing of
+raster tiles. This approach is adopted by Mapbox, who have defined their own
+<a href="https://www.mapbox.com/blog/vector-tiles/">mapnik-vector-tile</a> spec. This allows for amazing
+styling possibilities, allowing raster tiles to be generated with different styles quickly and
+efficiently based on the same dataset. Another approach relies on transmitting vector data directly
+to the client, where client-side libs render data as SVGs directly in the browser. <a href="http://d3js.org">D3.js</a>
+is a JavaScript library that can do this just this, as illustrated by <a href="http://bl.ocks.org/svmatthews/6081504">Sam Matthews</a>. Now that we know what they're good for, how can we take our own local geographic data, and render our own?</p>
+<!-- more -->
+<p><a href="http://tilestache.org">TileStache</a> is a Tiled Mapping Server written in Python. The core committer on the project
+is <a href="http://mike.teczno.com">Michael Migurski</a>, formerly of <a href="http://stamen.com">Stamen Design</a> and now CTO of
+<a href="http://www.codeforamerica.org">Code for America</a>. He's blogged extensively about his development of
+the TileStache project to incorporate both use-cases illustrated above
+(<a href="http://mike.teczno.com/notes/postgreslessness-mapnik-vectiles.html">pipeline to raster tiles via mapnik</a>,
+<a href="http://mike.teczno.com/notes/vector-tile-rendering-numbers.html">client-side rendering</a>)</p>
+<p>I've been reviewing the source code for this project for the past few weeks and have been impressed at the accessibility
+of the code to a novice Python developer such as myself. In any event, I'd like to use this post to drop some
+quick notes on how to get things up and running.</p>
+<h2 id="prerequisites" tabindex="-1">Prerequisites <a class="header-anchor" href="#prerequisites">#</a></h2>
+<ul>
+<li>TileStache Installed With Dependencies</li>
+<li>PostGIS Installed</li>
+</ul>
+<h2 id="data" tabindex="-1">Data <a class="header-anchor" href="#data">#</a></h2>
+<p>The dataset I imported for rendering is known as 'processed_p', which can be downloaded <a href="http://openstreetmapdata.com/data/land-polygons">here</a>. This is the land dataset used in the OpenStreetMap basemap. I picked this dataset because it is highly detailed, large (365 MB), and projected in spherical mercator. This is a perfect example of a dataset in which you would really want to have a server spraying out just those specific slices of data (tiles) a user has requested, from the larger whole.</p>
+<h2 id="process" tabindex="-1">Process <a class="header-anchor" href="#process">#</a></h2>
+<ol>
+<li>Create a PostGIS Database, 'ts_data'</li>
+</ol>
+<pre class="language-bash" tabindex="0"><code class="language-bash">$ created ts_data
+$ psql <span class="token parameter variable">-d</span> ts_data
+ts_data<span class="token comment"># CREATE EXTENSION postgis;</span>
+CREATE EXTENSION
+<span class="token assign-left variable">ts_data</span><span class="token operator">=</span><span class="token comment"># CREATE SCHEMA osm;</span>
+CREATE SCHEMA</code></pre>
+<ol start="2">
+<li>Load processed_p Shapefile into PostGIS</li>
+</ol>
+<p>NOTE: See the excellent shp2pgsql/pgsql2shp cheat sheet by <a href="http://www.bostongis.com/pgsql2shp_shp2pgsql_quickguide_20.bqg">BostonGIS</a></p>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token comment"># NOTE YMMV, MAY NEED TO ADD ADDITIONAL PSQL CONNECTION PARAMS. SEE '$psql --help'</span>
+$ shp2pgsql <span class="token parameter variable">-I</span> <span class="token parameter variable">-s</span> <span class="token number">900913</span> land_polygons.shp osm.land_polygons_split <span class="token operator">|</span> psql <span class="token parameter variable">-d</span> ts_data </code></pre>
+<ol start="3">
+<li>Create a TileStache Config</li>
+</ol>
+<p>TileStache relies on a user-defined configuration file to define a layer, accessible by a client.
+In this context, a layer is essentially a combination of a backing dataset (e.g. shapefile, MBTiles,
+PostGIS database, etc.) and instructions on how those data should be rendered (e.g. Vector Tiles, UTF-GRID, Mapnik, etc.)</p>
+<p>An example configuration file can be found <a href="https://github.com/mattmakesmaps/TileStache-Experiment/blob/master/config_files/topojson.cfg#L84-L99">here</a>. I've highlighted the relevant block, which is excerpted
+below. This example uses the VecTiles provider (<a href="http://tilestache.org/doc/TileStache.Goodies.VecTiles.html">docs</a>),
+which requires a PostGIS backing store, and produces tiles in geojson, topojson, or Mapnik Vector Tile (MVT) format.
+Comments have been added below for clarity.</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token string-property property">"osm-processed_p1"</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token comment">// Layer Name</span>
+    <span class="token comment">// Sets ACCESS-CONTROL-ALLOW-ORIGIN header to "*"</span>
+    <span class="token string-property property">"allowed origin"</span><span class="token operator">:</span> <span class="token string">"*"</span><span class="token punctuation">,</span> 
+    <span class="token string-property property">"provider"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token string-property property">"class"</span><span class="token operator">:</span> <span class="token string">"TileStache.Goodies.VecTiles:Provider"</span><span class="token punctuation">,</span>
+        <span class="token comment">// PostGIS Connection Info</span>
+        <span class="token string-property property">"kwargs"</span><span class="token operator">:</span> <span class="token punctuation">{</span> 
+            <span class="token string-property property">"dbinfo"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token string-property property">"host"</span><span class="token operator">:</span> <span class="token string">"localhost"</span><span class="token punctuation">,</span>
+                <span class="token string-property property">"user"</span><span class="token operator">:</span> <span class="token string">"matt"</span><span class="token punctuation">,</span>
+                <span class="token string-property property">"database"</span><span class="token operator">:</span> <span class="token string">"ts_data"</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token comment">// An array of queries for each zoom level.</span>
+            <span class="token comment">// One query == Used for All Zooms</span>
+            <span class="token string-property property">"queries"</span><span class="token operator">:</span> <span class="token punctuation">[</span> 
+                <span class="token string">"SELECT gid, geom AS __geometry__ FROM osm.land_polygons_split"</span>
+            <span class="token punctuation">]</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<ol start="4">
+<li>Start the Server.</li>
+</ol>
+<p>TileStache comes pre-canned with it's own simple development server. If installing TileStache from a python package
+manager, It can be accessed from the command line via <code>$ tilestache-server.py</code>.</p>
+<p>The server should now be accessible via <a href="http://127.0.0.1:8080/">http://127.0.0.1:8080/</a>. &quot;TileStache bellows hello.&quot;</p>
+<ol start="5">
+<li>Request a Tile.</li>
+</ol>
+<p>From the <a href="http://tilestache.org/doc/">API docs</a>: &quot;TileStache URLs are based on a Google Maps-like scheme&quot;:</p>
+<pre><code>/{layer name}/{zoom}/{column}/{row}.{extension}
+</code></pre>
+<p>Utilizing the layer name referenced in the configuration example above, &quot;osm-processed_p1&quot;, a tile request would look like:</p>
+<pre><code>http://127.0.0.1:8080/osm-processed_p1/9/147/196.topojson #TopoJSON
+http://127.0.0.1:8080/osm-processed_p1/9/147/196.json #GeoJSON
+http://127.0.0.1:8080/osm-processed_p1/9/147/196.mvt # Mapnik Vector Tile
+</code></pre>
+<p>Looking at the HTTP requests above, we can see that we're calling on the same layer, e.g. the same backing datastore,
+but rendering those same data into three different output formats. Pretty neat.</p>
+<h2 id="wrapping-up" tabindex="-1">Wrapping Up <a class="header-anchor" href="#wrapping-up">#</a></h2>
+<p>TileStache vector tiles can be rendered in any number of client side JS libraries that support GeoJSON or TopoJSON.
+Pushing the above requested TopoJSON tile to github, we can view the rendered geometries with their attributes.</p>
+<pre><code>gist 6896905 s00_9_147_196.topojson
+</code></pre>
+<p>TileStache provides an easy-to-use point of entry for vector tiles. In a later post I'll go over some of the profiling
+experiments I've been running, using TileStache's dynamic line simplification, and it's affects on file size as well as
+the aesthetic affects on representations of these geometries.</p>
+<p>I'll also be writing out the work I did extending TileStache to support calls to the <a href="http://labs.giphy.com">Giphy Labs API</a>: <a href="http://mattmakesmaps.github.io/TileStache-GiphyAPI-Demo/">http://mattmakesmaps.github.io/TileStache-GiphyAPI-Demo/</a></p>
+
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2013-08-26-quickstart-gis-setup-on-ubuntu-linux-12-dot-04-lts/">Quickstart GIS Setup on Ubuntu Linux 12.04 LTS</a></li><li>Next: <a href="/blog/2013-10-15-tilestache-links-roundup/">TileStache-Links-Roundup</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- Current page: /blog/2013-10-09-tilestache-rendering-topojson/ -->
+	</body>
+</html>

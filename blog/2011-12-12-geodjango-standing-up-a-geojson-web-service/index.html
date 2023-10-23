@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>GeoDjango: Standing Up A GeoJSON Web-Service</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+
+	--homepage-postlist-background-color: #4d49be;
+	--homepage-postlist-text-color: #fff;
+
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+
+		--homepage-postlist-text-color: var(--color-gray-20);
+
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	max-width: 40em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main {
+	padding: 1rem;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+header:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+pre:not([class*="language-"]) {
+	margin: .5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: capitalize;
+	font-style: italic;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.post-metadata time {
+	margin-right: 1em;
+}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+a[href].header-anchor:focus,
+a[href].header-anchor:hover {
+	text-decoration: underline;
+}
+a[href].header-anchor:focus,
+:hover > a[href].header-anchor {
+	color: #aaa;
+}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/* Create "responsive" images that resize with the viewport */
+
+img {
+	max-inline-size: 100%;
+	block-size: auto;
+}
+
+div.recentPosts {
+	background-color: var(--homepage-postlist-background-color);
+	color: var(--homepage-postlist-text-color);
+	padding: 1rem;
+}
+
+a[href].homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:visited.homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:hover.homepage-postlist-link,
+a[href]:active.homepage-postlist-link {
+	color: var(--color-gray-50);
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/" class="home-link">mattmakesmaps</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/">Home</a></li>
+					<li class="nav-item"><a href="/blog/">Blog</a></li>
+					<li class="nav-item"><a href="/cv/">CV</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>GeoDjango: Standing Up A GeoJSON Web-Service</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2011-12-12">12 December 2011</time></li>
+</ul>
+
+<p>The models are complete. The database is loaded with some test tabular and spatial data. We're pushing out HTML representations of attribute data using GeoDjango's standard templating functions. Now, the focus moves to visualizing these features' geometries in a spatial context. Just as with a Django QuerySet, GeoDjango provides a GeoQuerySet. <!-- more --> When paired with a spatially-enabled database (e.g. PostGIS, SpatialLite, etc.), the GeoQuerySet provides functionality for querying data using a series of spatial filters, in addition to tabular filters. As a point of reference, the GeoDjango docs have great tables depicting a blow-by-blow comparison of different spatial databases, displaying each available <a href="https://docs.djangoproject.com/en/dev/ref/contrib/gis/db-api/#spatial-lookup-compatibility">Spatial Lookup</a> and <a href="https://docs.djangoproject.com/en/dev/ref/contrib/gis/db-api/#geoqueryset-methods">GeoQuerySet method</a>. Take note, PostGIS is the clear winner in terms of functionality ;)</p>
+<h2 id="why-geojson" tabindex="-1">Why GeoJSON? <a class="header-anchor" href="#why-geojson">#</a></h2>
+<p>From the perspective of exporting data, GeoDjango supports a number of formats. The GeoQuerySet methods can represent your model's geometry column in a number of different <a href="https://docs.djangoproject.com/en/dev/ref/contrib/gis/geoquerysets/#geometry-output">formats</a>: GeoHash, GeoJSON, GML, KML, and SVG. Of all these serialization formats, I've found KML to be the most frequently used amongst GeoDjango users. Illustrative of this, three of the four functions in <a href="https://code.djangoproject.com/browser/django/trunk/django/contrib/gis/shortcuts.py">django.contrib.gis.shortcuts</a> have to do with KML/KMZ. That's awesome, but where is the love for GeoJSON?</p>
+<p>KML can be easily consumed by OpenLayers, the king of open source web mapping viewers. But some of the new kids, e.g. leaflet, polymaps, look to favor GeoJSON over KML as an input for dynamically rendered data, not directly consuming KML out-of-the-box. That being said, if you want KML, this <a href="https://github.com/shramov/Leaflet/tree/master/src/layer">fork of leaflet</a> looks like it will work for you. In my particular project, I'm interested in using leaflet, so GeoJSON was the way to go.</p>
+<p>Later on, I'd like to do some speed comparisons, rendering the same featureset using OpenLayers, represented as both KML and GeoJSON, but that's for the future. I'm wondering if OpenLayers will handle the JSON object faster then KML's XML? JSON is just JavaScript after all.</p>
+<h2 id="the-problem" tabindex="-1">The Problem <a class="header-anchor" href="#the-problem">#</a></h2>
+<p>The GeoDjango GeoQuerySet API has built in methods to handle the serialization and de-serialization of a result set's geometries into different formats. The problem is that these methods only wrap the geometries of a result set. For display in a web mapping application, like leaflet, I want to have access to both the geometry in the format of my choosing, as well as the supplementary attributes (name, type, etc.) which provide context for that geometry.</p>
+<p>For example, asking for the GeoJSON representation of a given feature through Django's shell, like this:</p>
+<pre class="language-python" tabindex="0"><code class="language-python"><span class="token comment"># Import Models from the Company Application</span>
+<span class="token keyword">from</span> company<span class="token punctuation">.</span>Models <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token comment"># Create a GeoQuerySet from the primary key, return GeoJSON</span>
+qs <span class="token operator">=</span> Boundary<span class="token punctuation">.</span>objects<span class="token punctuation">.</span><span class="token builtin">filter</span><span class="token punctuation">(</span>pk<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span>geojson<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment"># Print GeoJSON representation of geom</span>
+<span class="token keyword">print</span> qs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>geojson</code></pre>
+<p>Will produce a GeoJSON object like this:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token punctuation">{</span>
+ <span class="token string-property property">"type"</span><span class="token operator">:</span><span class="token string">"MultiPolygon"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"coordinates"</span><span class="token operator">:</span><span class="token punctuation">[</span>
+    <span class="token punctuation">[</span>
+      <span class="token punctuation">[</span>
+        <span class="token punctuation">[</span>
+          <span class="token operator">-</span><span class="token number">122.574295</span><span class="token punctuation">,</span>
+          <span class="token number">47.856636</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>
+          <span class="token operator">-</span><span class="token number">122.573924</span><span class="token punctuation">,</span>
+          <span class="token number">47.85718</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>
+          <span class="token operator">-</span><span class="token number">122.573719</span><span class="token punctuation">,</span>
+          <span class="token number">47.85757</span>
+        <span class="token punctuation">]</span> <span class="token comment">// Truncated Verticies</span>
+      <span class="token punctuation">]</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span></code></pre>
+<p>As shown in the example above, the geometries are returned, but not the tabular attributes associated with that feature. Looking at the <a href="http://geojson.org/geojson-spec.html">GeoJSON spec</a>, there are multiple 'type' values which an object can be constrained by. Using GeoDjango's geoJSON() method will produce a type matching the geometry listed in the associated GeoDjango model (point, line, polygon, etc). The distinction here is that I'd like to return a GeoJSON object of type 'Feature' or 'FeatureCollection'. These types require an additional 'properties' parameter, which can store tabular attributes. From the spec:</p>
+<blockquote></blockquote>
+<p>A feature object must have a member with the name &quot;properties&quot;. The value of the properties member is an object (any JSON object or a JSON null value).</p>
+<p>So, the trick now is to dynamically create a GeoJSON object which contains both populated Geom and Properties attributes.</p>
+<h2 id="the-fix-vectorformats" tabindex="-1">The fix (vectorformats) <a class="header-anchor" href="#the-fix-vectorformats">#</a></h2>
+<p>In order to create a fully populated GeoJSON object, we need to bring in some extra assistance. Some quick searching brought me to this stack exchange <a href="http://stackoverflow.com/questions/3034482/rendering-spatial-data-of-geoqueryset-in-a-custom-view-on-geodjango">response</a>, from <a href="http://crschmidt.net/blog/">Chris Schmidt</a>. Chris' vectorformats package handles the serialization and de-serializtion of a variety of formats, including Django Querysets and GeoJSON. From the project <a href="http://packages.python.org/vectorformats/">homepage</a>:</p>
+<blockquote></blockquote>
+<p>The vectorformats library is designed to make it easy to serialize content from any source to any source within Python. Think of it as a “poor man’s OGR” – a pure Python implementation of transforming features to and from various formats (largely XML based).</p>
+<p>Installing vectorformats is as easy as:</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token variable">$sudo</span> easy_install vectorformats</code></pre>
+<p>From there, as outlined in the above referenced post, it's only a matter of adding a few lines into your GeoDjango app's <a href="https://github.com/mattmakesmaps/geodjango/blob/master/sampling/views.py">view function</a>.</p>
+<pre class="language-python" tabindex="0"><code class="language-python"><span class="token comment"># Using vectorfeatures module return a GeoJSON FeatureCollection</span>
+<span class="token comment"># for a given boundary ID.</span>
+<span class="token keyword">def</span> <span class="token function">boundary_detail</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> boundary_id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    boundary_detail <span class="token operator">=</span> Boundary<span class="token punctuation">.</span>objects<span class="token punctuation">.</span><span class="token builtin">filter</span><span class="token punctuation">(</span>pk<span class="token operator">=</span>boundary_id<span class="token punctuation">)</span>
+    djf <span class="token operator">=</span> Django<span class="token punctuation">.</span>Django<span class="token punctuation">(</span>geodjango<span class="token operator">=</span><span class="token string">'geom'</span><span class="token punctuation">,</span> properties<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    geoj <span class="token operator">=</span> GeoJSON<span class="token punctuation">.</span>GeoJSON<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    s <span class="token operator">=</span> geoj<span class="token punctuation">.</span>encode<span class="token punctuation">(</span>djf<span class="token punctuation">.</span>decode<span class="token punctuation">(</span>boundary_detail<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> HttpResponse<span class="token punctuation">(</span>s<span class="token punctuation">)</span></code></pre>
+<p>The resulting GeoJSON object, represented as a 'type' of 'FeatureCollection':</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token punctuation">{</span>
+  <span class="token string-property property">"crs"</span><span class="token operator">:</span><span class="token keyword">null</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"type"</span><span class="token operator">:</span><span class="token string">"FeatureCollection"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"features"</span><span class="token operator">:</span><span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token string-property property">"geometry"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+        <span class="token string-property property">"type"</span><span class="token operator">:</span><span class="token string">"MultiPolygon"</span><span class="token punctuation">,</span>
+        <span class="token string-property property">"coordinates"</span><span class="token operator">:</span><span class="token punctuation">[</span>
+          <span class="token punctuation">[</span>
+            <span class="token punctuation">[</span>
+              <span class="token punctuation">[</span>
+                <span class="token operator">-</span><span class="token number">122.574295</span><span class="token punctuation">,</span>
+                <span class="token number">47.856636</span>
+              <span class="token punctuation">]</span><span class="token punctuation">,</span>
+              <span class="token punctuation">[</span>
+                <span class="token operator">-</span><span class="token number">122.573924</span><span class="token punctuation">,</span>
+                <span class="token number">47.85718</span>
+              <span class="token punctuation">]</span><span class="token punctuation">,</span>
+              <span class="token punctuation">[</span>
+                <span class="token operator">-</span><span class="token number">122.573719</span><span class="token punctuation">,</span>
+                <span class="token number">47.85757</span>
+              <span class="token punctuation">]</span> <span class="token comment">// Truncated Verticies</span>
+            <span class="token punctuation">]</span>
+          <span class="token punctuation">]</span>
+        <span class="token punctuation">]</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token string-property property">"type"</span><span class="token operator">:</span><span class="token string">"Feature"</span><span class="token punctuation">,</span>
+      <span class="token string-property property">"id"</span><span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">,</span>
+      <span class="token string-property property">"properties"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+        <span class="token string-property property">"name"</span><span class="token operator">:</span><span class="token string">"Port Gamble"</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span></code></pre>
+<p>And there you have it, GeoJSON containing both the geometry and attributes. This output can now be mapped to URL, creating an endpoint such as 'http://my-site.com/geojson/boundary/{boundary_id}/'. Pass this to your web mapping client, and you're ready to rock.</p>
+
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2011-11-28-moving-to-geodjango/">Moving to GeoDjango</a></li><li>Next: <a href="/blog/2013-05-01-django-add-mapquest-tiles/">Hack GeoDjango Admin with Mapquest Tiles</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- Current page: /blog/2011-12-12-geodjango-standing-up-a-geojson-web-service/ -->
+	</body>
+</html>

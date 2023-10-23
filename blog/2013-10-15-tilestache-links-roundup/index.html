@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>TileStache-Links-Roundup</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,38 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>TileStache-Links-Roundup</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2013-10-15">15 October 2013</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>I'm giving a presentation at this year's <a href="http://cugos.org/events/2013/10/16/fall-fling/">CUGOS Fall Fling Bling</a>, on <a href="http://tilestache.org">TileStache</a>. The list below are a series of interesting links I've found regarding TileStache, or Vector Tiles in general.</p>
+<h2 id="mind-of-migurski" tabindex="-1">Mind of Migurski <a class="header-anchor" href="#mind-of-migurski">#</a></h2>
+<ul>
+<li><a href="http://mike.teczno.com/notes/vector-tile-rendering-numbers.html">Tiled Vector Update, with Math</a></li>
+<li><a href="http://mike.teczno.com/notes/postgreslessness-mapnik-vectiles.html">the libery of postgreslessness: tiled vectors in mapnik</a></li>
+<li><a href="http://mike.teczno.com/notes/tilestache.html">Presenting TileStache</a></li>
+</ul>
+<h2 id="nelson-minar-vector-tiles-notes" tabindex="-1">Nelson Minar Vector Tiles Notes <a class="header-anchor" href="#nelson-minar-vector-tiles-notes">#</a></h2>
+<ul>
+<li><a href="https://github.com/NelsonMinar/vector-river-map">Map of American Rivers</a>: <strong>NOTE:</strong> This is a fantastic tutorial.</li>
+<li><a href="http://bl.ocks.org/NelsonMinar/5851197">TopoJSON Vector Maps from OSM</a></li>
+<li><a href="http://vimeopro.com/openstreetmapus/state-of-the-map-us-2013/video/68099164">TopoJSON: A Smaller GeoJSON with Some Neat Tricks</a></li>
+</ul>
+<h2 id="data" tabindex="-1">Data <a class="header-anchor" href="#data">#</a></h2>
+<ul>
+<li><a href="http://openstreetmap.us/~migurski/vector-datasource/">OSM US Vector Tiles</a></li>
+</ul>
+<p>My own slides from the Fall Fling can be found <a href="https://speakerdeck.com/mattmakesmaps/tilestache-more-then-youre-granddads-tilecache-server">here</a>. An introductory blog post on rendering TopoJSON with TileStache can be found, <a href="http://mattmakesmaps.com/blog/2013/10/09/tilestache-rendering-topojson/">here</a>.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2013-10-09-tilestache-rendering-topojson/">TileStache: Generate [Topo|Geo]JSON Vector Tiles</a></li><li>Next: <a href="/blog/2013-11-13-creating-label-points-with-openstreetmap-data/">Creating Label Points With OpenStreetMap Data</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2013-10-15-tilestache-links-roundup/ -->
 	</body>
 </html>

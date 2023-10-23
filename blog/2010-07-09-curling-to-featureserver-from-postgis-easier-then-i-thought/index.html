@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>cURL&#39;ing to FeatureServer from PostGIS: Easier then I Thought</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,46 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>cURL&#39;ing to FeatureServer from PostGIS: Easier then I Thought</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2010-07-09">09 July 2010</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>So I've finished cutting a draft tileset using mapnik, <a href="http://mkgeomatics.com/apps/bus/bus.html">depicting bus routes in Bellingham, WA</a>. Now that the cartography is well in progress, I'd like to add some interactivity to the map. My first attempt at this will be to utilize MetaCarta (Chris Schmidt)'s <a href="http://featureserver.org/">FeatureServer</a>. <!-- more --> FeatureServer allows one to use standard HTTP verbs to GET representations of data, POST new data, or DELETE existing data. While querying data you can also pass additional URL parameters like a bounding box or attribute to select out a smaller subset of returned representations. I'll be POST'ing a bus stop dataset to FeatureServer as GeoJSON. Once the data are stored in FeatureServer, I'll be able to add popups based on a user's click of a bus stop. <!-- more --></p>
+<p>Getting data stored on my local PostGIS install to my remote FeatureServer instance turned out to be a three step process.</p>
+<p><strong>Step One:</strong> Convert local PostGIS bus stops layer to GeoJSON via OGR</p>
+<p>I had originally planned on writing a pg/plsql function to try and output a bash script. The script would cURL each feature individually to my FeatureServer instance. This proved to be way more work then I had expected. What was the solution? <a href="http://www.gdal.org/ogr/">OGR</a>, of course. OGR has read/write drivers for both <a href="http://www.gdal.org/ogr/drv_geojson.html">GeoJSON</a> and <a href="http://www.gdal.org/ogr/drv_pg.html">PostGIS</a>. This allows one to convert an entire dataset to GeoJSON with a single command (see below).</p>
+<p>[sourcecode language=&quot;bash&quot;]
+ogr2ogr -f &quot;GeoJSON&quot; ogrstops.json PG:&quot;host=localhost dbname=routing user=postgres password=*** port=5432&quot; &quot;wtastops(the_geom)&quot;
+[/sourcecode]</p>
+<p><strong>Step 2:</strong> Wrap &quot;coordinate&quot; elements in double brackets</p>
+<p>When initially trying to cURL the GeoJSON output to FeatureServer, I was receiving an error stating that a bounding box could not be determined for the first geometry in my dataset. After some trial-and-error, I soon realized that the OGR output FeatureCollection was wrapping each point feature's geometry in a single set of brackets. This type of behavior follows the GeoJSON <a href="http://geojson.org/geojson-spec.html#id9">specification for a FeatureCollection</a>, as far as I can tell. However, in order for FeatureServer to consume this dataset, each point feature is required to be wrapped in a second set of brackets. I used gedit to run the find/replace. Below is an example of a GeoJSON feature which FeatureServer can consume. This individual feature is part of a larger FeatureCollection.</p>
+<p>[sourcecode language=&quot;js&quot;]</p>
+<p>{ &quot;type&quot;: &quot;Feature&quot;,
+&quot;properties&quot;: {
+&quot;POINT_ID&quot;: &quot;1000&quot;,
+&quot;POINT_NAME&quot;: &quot;Fielding at 32nd&quot;,
+&quot;SHELTER&quot;: &quot;Yes&quot;, &quot;BENCH&quot;: &quot;No&quot; },
+&quot;geometry&quot;: {
+&quot;type&quot;: &quot;Point&quot;,
+&quot;coordinates&quot;: [[-122.474490,48.730021]]}
+}
+[/sourcecode]</p>
+<p><strong>Step 3:</strong> cURL GeoJSON to FeatureServer</p>
+<p>The last step is to actually POST the data to FeatureServer. For that, I used cURL.</p>
+<p>[sourcecode language=&quot;bash&quot;]</p>
+<p>curl -d @ogrstops.json http://mkgeomatics.com/cgi-bin/featureserver/featureserver.cgi/scribble/create.json</p>
+<p>[/sourcecode]</p>
+<p>Now that the features have been uploaded, we can view them via FeatureServer as <a href="http://mkgeomatics.com/cgi-bin/featureserver/featureserver.cgi/scribble/all.georss">GeoRSS</a>, <a href="http://mkgeomatics.com/cgi-bin/featureserver/featureserver.cgi/scribble/all.kml">KML</a>, <a href="http://mkgeomatics.com/cgi-bin/featureserver/featureserver.cgi/scribble/all.json">JSON</a>, <a href="http://mkgeomatics.com/cgi-bin/featureserver/featureserver.cgi/scribble/all.gml">GML</a>. Neat!</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2010-06-28-plpgsql-function-to-iterate-pgrouting/">PL/pgSQL function to Iterate pgRouting</a></li><li>Next: <a href="/blog/2011-02-25-hand-rolled-vector-tiles-tilestache/">Hand-Rolled Vector Tiles - TileStache</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2010-07-09-curling-to-featureserver-from-postgis-easier-then-i-thought/ -->
 	</body>
 </html>

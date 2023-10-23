@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Hand-Rolled Vector Tiles - TileStache</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+
+	--homepage-postlist-background-color: #4d49be;
+	--homepage-postlist-text-color: #fff;
+
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+
+		--homepage-postlist-text-color: var(--color-gray-20);
+
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	max-width: 40em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main {
+	padding: 1rem;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+header:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+pre:not([class*="language-"]) {
+	margin: .5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: capitalize;
+	font-style: italic;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.post-metadata time {
+	margin-right: 1em;
+}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+a[href].header-anchor:focus,
+a[href].header-anchor:hover {
+	text-decoration: underline;
+}
+a[href].header-anchor:focus,
+:hover > a[href].header-anchor {
+	color: #aaa;
+}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/* Create "responsive" images that resize with the viewport */
+
+img {
+	max-inline-size: 100%;
+	block-size: auto;
+}
+
+div.recentPosts {
+	background-color: var(--homepage-postlist-background-color);
+	color: var(--homepage-postlist-text-color);
+	padding: 1rem;
+}
+
+a[href].homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:visited.homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:hover.homepage-postlist-link,
+a[href]:active.homepage-postlist-link {
+	color: var(--color-gray-50);
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/" class="home-link">mattmakesmaps</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/">Home</a></li>
+					<li class="nav-item"><a href="/blog/">Blog</a></li>
+					<li class="nav-item"><a href="/cv/">CV</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>Hand-Rolled Vector Tiles - TileStache</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2011-02-25">25 February 2011</time></li>
+</ul>
+
+<p>A few weeks ago I found myself surfing the intertubes for instructions on how to serve up some vector tile goodness. That search came up pretty much empty, except for one glimmering <a href="http://gis.stackexchange.com/questions/3712/create-vector-geojson-tiles-for-polymaps">thread</a> of hope. The answer, <a href="http://tilestache.org/">TileStache</a> { &lt;-- Imagine that's a mustache on it's side.</p>
+<blockquote>
+<p>TileStache is a Python-based server application that can serve up map tiles based on rendered geographic data.</p>
+</blockquote>
+<!-- more -->
+<p>By design, TileStache can be used to serve up stylish TMS tiles using <a href="http://mapnik.org/">mapnik</a> map files, and can also be used to locally cache remote-services via <a href="http://tilestache.org/doc/#providers">proxy</a>. What I'm most interested in though, is it's ability to deploy vector tiles. So what are vector tiles? Think TMS tiles... but replace representations of the geometries through images, with <a href="http://geojson.org/">GeoJSON</a>. Pretty wild right? Specifically, the TileStache <a href="http://tilestache.org/doc/TileStache.Goodies.Providers.PostGeoJSON.html">PostGeoJSON Provider</a> can be used to connect TileStache to a PostGIS data source, and return a tile comprised entirely of GeoJSON data.</p>
+<p>For example, data from a PostGIS data source can be rendered as an image tile (.../10/16/357.png), like this:</p>
+<p><a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2011/02/tile.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2011/02/tile.png" alt=""></a></p>
+<p>But can also be represtented as a vector tile (.../10/16/357.json), like this:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token comment">// Subset of a single 256x256 pixel vector tile.</span>
+<span class="token punctuation">{</span>
+  <span class="token string-property property">"type"</span><span class="token operator">:</span> <span class="token string">"FeatureCollection"</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"features"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token string-property property">"geometry"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token string-property property">"type"</span><span class="token operator">:</span> <span class="token string">"MultiPolygon"</span><span class="token punctuation">,</span>
+        <span class="token string-property property">"coordinates"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+          <span class="token punctuation">[</span>
+            <span class="token punctuation">[</span>
+              <span class="token punctuation">[</span>
+                <span class="token operator">-</span><span class="token number">122.973093</span><span class="token punctuation">,</span>
+                <span class="token number">47.969842</span>
+              <span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token operator">...</span>
+              <span class="token punctuation">[</span>
+                <span class="token operator">-</span><span class="token number">122.973093</span><span class="token punctuation">,</span>
+                <span class="token number">47.969842</span>
+              <span class="token punctuation">]</span>
+            <span class="token punctuation">]</span>
+          <span class="token punctuation">]</span>
+        <span class="token punctuation">]</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token string-property property">"type"</span><span class="token operator">:</span> <span class="token string">"Feature"</span><span class="token punctuation">,</span>
+      <span class="token string-property property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token string-property property">"property_s"</span><span class="token operator">:</span> <span class="token string">"USFS"</span><span class="token punctuation">,</span>
+        <span class="token string-property property">"juris_name"</span><span class="token operator">:</span> <span class="token string">"Olympic National Forest"</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token string-property property">"id"</span><span class="token operator">:</span> <span class="token number">1280</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span></code></pre>
+<p>So what are the advantages of using vector tiles? You can already use <a href="http://dev.openlayers.org/docs/files/OpenLayers/Format/GeoJSON-js.html">OpenLayers' GeoJSON</a> format reader to populate a vector layer in OL. It's an issue of size. Highly complex geometries can be large in size, and requesting all that data at once can be time consuming. Vector tiles approach this problem using the same answer as TMS... only request those sections of data which you need at that time. By only requesting those tiles within the user's current extent + a small buffer, the need to download large geometries at once can be negated. Furthermore, just as TMS's can be pre-cached to disk (seeded), so can vector tiles.</p>
+<p>One example of this is serving up a combined NFS boundary dataset compiled by my good pal, Greg (<a href="http://www.chopshopgeo.com/blog/">http://www.chopshopgeo.com/blog/</a>). These boundaries are <strong>dense</strong> and displaying them at their full extent &amp; raw level of detail is expensive. But by breaking the vector representations of these geometries up into a standard tile scheme, only those tiles which we need are requested, and only when we need them. As a side note, in addition to tiling, I also simplified the boundaries, to promote faster load time at small-scales. The least granular vector representations display at the smallest zoom-scales, while the highest (raw, unsimplified) level of granularity displays only at the largest zoom-scales.</p>
+<p>[caption id=&quot;attachment_398&quot; align=&quot;alignnone&quot; width=&quot;665&quot; caption=&quot;NFS Boundaries Provided By ChopShopGeo&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2011/02/parks.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2011/02/parks.png" alt=""></a>[/caption]</p>
+<p>Additionally, using vector representations of geometry rather then cached images allows styling of those geometries on the fly. <a href="http://polymaps.org/">Polymaps</a>, the only display client I've found so far that can consume vector tiles out-of-the-box, renders these tiles as SVG elements. Because of this, unique styling can be applied via CSS; controlling the color, stroke, fill, etc. of each geometry in response to both attributes associated with the geometry (see image below) or user input... ala the <a href="http://polymaps.org/ex/statehood.html">Polymaps example page</a>.</p>
+<p>[caption id=&quot;attachment_393&quot; align=&quot;alignnone&quot; width=&quot;691&quot; caption=&quot;USGS real-time gauge stations. Darker dots represent stronger streamflow, lighter dots represent slower flow. You'll have to ignore the fact that I'm symbolizing streamflow without the streams.&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2011/02/usgs.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2011/02/usgs.png" alt=""></a>[/caption]</p>
+<p>The above example converts data from the <a href="http://waterservices.usgs.gov/rest/WOF-IV-Service.html">USGS Instantaneous Values Web Service</a> (part of the <a href="http://waterdata.usgs.gov/nwis/">USGS Water Date for the Nation program</a>) as a JSON response to GeoJSON. These data points are then symbolized dynamically using Polymaps. More on that later.</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token punctuation">{</span>
+<span class="token string-property property">"type"</span><span class="token operator">:</span> <span class="token string">"FeatureCollection"</span><span class="token punctuation">,</span>
+<span class="token string-property property">"features"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+<span class="token string-property property">"geometry"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+<span class="token string-property property">"type"</span><span class="token operator">:</span> <span class="token string">"MultiPolygon"</span><span class="token punctuation">,</span>
+<span class="token string-property property">"coordinates"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+<span class="token punctuation">[</span>
+<span class="token punctuation">[</span>
+<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">122.973093</span><span class="token punctuation">,</span> <span class="token number">47.969842</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">122.973093</span><span class="token punctuation">,</span> <span class="token number">47.969842</span><span class="token punctuation">]</span>
+<span class="token punctuation">]</span>
+<span class="token punctuation">]</span>
+<span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token literal-property property">http</span><span class="token operator">:</span> <span class="token comment">//jsbeautifier.org/</span>
+<span class="token string-property property">"type"</span><span class="token operator">:</span> <span class="token string">"Feature"</span><span class="token punctuation">,</span>
+<span class="token string-property property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+<span class="token string-property property">"property_s"</span><span class="token operator">:</span> <span class="token string">"USFS"</span><span class="token punctuation">,</span>
+<span class="token string-property property">"juris_name"</span><span class="token operator">:</span> <span class="token string">"Olympic National Forest"</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token string-property property">"id"</span><span class="token operator">:</span> <span class="token number">1280</span>
+<span class="token punctuation">}</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span></code></pre>
+
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2010-07-09-curling-to-featureserver-from-postgis-easier-then-i-thought/">cURL&#39;ing to FeatureServer from PostGIS: Easier then I Thought</a></li><li>Next: <a href="/blog/2011-11-28-moving-to-geodjango/">Moving to GeoDjango</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- Current page: /blog/2011-02-25-hand-rolled-vector-tiles-tilestache/ -->
+	</body>
+</html>

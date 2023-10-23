@@ -2,32 +2,272 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	
 	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-09-07-free-courses-in-gis/</loc>
+		<lastmod>2008-09-07</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-09-07-i-am-matt/</loc>
+		<lastmod>2008-09-07</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-09-08-plans/</loc>
+		<lastmod>2008-09-08</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-09-12-gdal-proj4-on-shared-webhost/</loc>
+		<lastmod>2008-09-12</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-09-14-python-gp-strangeness/</loc>
+		<lastmod>2008-09-14</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-09-14-web-based-grass/</loc>
+		<lastmod>2008-09-14</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-09-30-im-obsessed-with-douglas-peucker/</loc>
+		<lastmod>2008-09-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-10-03-nested-tuples-and-hours-of-patience/</loc>
+		<lastmod>2008-10-03</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-11-15-73/</loc>
+		<lastmod>2008-11-15</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-11-16-mapserver-update/</loc>
+		<lastmod>2008-11-16</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-11-18-wfs/</loc>
+		<lastmod>2008-11-18</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-11-18-wms-to-wfs/</loc>
+		<lastmod>2008-11-18</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-11-19-happy-gis-day/</loc>
+		<lastmod>2008-11-19</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-11-21-whew/</loc>
+		<lastmod>2008-11-21</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-11-22-attribution-css-and-irc/</loc>
+		<lastmod>2008-11-22</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-11-23-scapetoad-open-source-cartogram-generator/</loc>
+		<lastmod>2008-11-23</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-11-30-spherical-mercator-new-portfolio/</loc>
+		<lastmod>2008-11-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-12-01-stefan-steinger-foss-desktop-gis-overview/</loc>
+		<lastmod>2008-12-01</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-12-04-openstreetmaporg-mapping-party-this-weekend/</loc>
+		<lastmod>2008-12-04</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-12-08-osm-recap/</loc>
+		<lastmod>2008-12-08</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2008-12-20-tms-shaded-relief-for-osm-data-an-adventure-and-a-12/</loc>
+		<lastmod>2008-12-20</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2009-01-20-geocoding-with-openlayers-a-crash-course-in-firebug/</loc>
+		<lastmod>2009-01-20</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2009-01-24-osm-minutely-tile-updates-thanks-cloudmade/</loc>
+		<lastmod>2009-01-24</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2009-01-31-google-motion-charts-from-data-to-information/</loc>
+		<lastmod>2009-01-31</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2009-03-13-arcgis-rest-api-openlayers-unit-testing-fun-in-the-sun/</loc>
+		<lastmod>2009-03-13</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2009-04-05-spatiallite-my-first-look/</loc>
+		<lastmod>2009-04-05</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2009-04-07-cloudmade-tile-request-graphics/</loc>
+		<lastmod>2009-04-07</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2009-04-08-metacartas-map-rectifier-esri-devsummit-mashup-winner/</loc>
+		<lastmod>2009-04-08</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2009-04-22-visualizing-an-existing-mysql-database/</loc>
+		<lastmod>2009-04-22</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2009-04-27-esri-uc-student-assistant-sweet/</loc>
+		<lastmod>2009-04-27</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2010-01-11-pgrouting-on-ubuntu-netbook-remix-9-10/</loc>
+		<lastmod>2010-01-11</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2010-01-31-pgrouting-part-ii-postgis-geoserver/</loc>
+		<lastmod>2010-01-31</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2010-02-06-pgrouting-iii-php-openlayers-interface/</loc>
+		<lastmod>2010-02-06</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2010-06-28-plpgsql-function-to-iterate-pgrouting/</loc>
+		<lastmod>2010-06-28</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2010-07-09-curling-to-featureserver-from-postgis-easier-then-i-thought/</loc>
+		<lastmod>2010-07-09</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2011-02-25-hand-rolled-vector-tiles-tilestache/</loc>
+		<lastmod>2011-02-25</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2011-11-28-moving-to-geodjango/</loc>
+		<lastmod>2011-11-28</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2011-12-12-geodjango-standing-up-a-geojson-web-service/</loc>
+		<lastmod>2011-12-12</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2013-05-01-django-add-mapquest-tiles/</loc>
+		<lastmod>2013-05-01</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2013-06-16-auto-push-to-github-via-machine-user/</loc>
+		<lastmod>2013-06-16</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2013-07-10-fixing-arcgis-10-dot-1-python-console-numpy-import-error/</loc>
+		<lastmod>2013-07-10</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2013-07-17-mapbox-plus-github-equals-free-and-fast-web-maps/</loc>
+		<lastmod>2013-07-17</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2013-08-26-quickstart-gis-setup-on-ubuntu-linux-12-dot-04-lts/</loc>
+		<lastmod>2013-08-26</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2013-10-09-tilestache-rendering-topojson/</loc>
+		<lastmod>2013-10-09</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2013-10-15-tilestache-links-roundup/</loc>
+		<lastmod>2013-10-15</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2013-11-13-creating-label-points-with-openstreetmap-data/</loc>
+		<lastmod>2013-11-13</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2014-01-11-configure-postgis-with-travis-ci/</loc>
+		<lastmod>2014-01-11</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/blog/2014-01-15-using-pg-dump-with-postgis-topology/</loc>
+		<lastmod>2014-01-15</lastmod>
+	</url>
+	
+	<url>
 		<loc>https://mattmakesmaps.com/blog/2023-10-19-site-migration/</loc>
 		<lastmod>2023-10-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://mattmakesmaps.com/blog/</loc>
-		<lastmod>2023-10-20</lastmod>
+		<lastmod>2023-10-23</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://mattmakesmaps.com/cv/</loc>
-		<lastmod>2023-10-20</lastmod>
+		<lastmod>2023-10-23</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://mattmakesmaps.com/</loc>
-		<lastmod>2023-10-20</lastmod>
+		<lastmod>2023-10-23</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://mattmakesmaps.com/tags/</loc>
-		<lastmod>2023-10-20</lastmod>
+		<lastmod>2023-10-23</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://mattmakesmaps.com/tags/intro/</loc>
-		<lastmod>2023-10-20</lastmod>
+		<lastmod>2023-10-23</lastmod>
 	</url>
 </urlset>

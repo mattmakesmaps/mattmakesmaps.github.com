@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Creating Label Points With OpenStreetMap Data</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+
+	--homepage-postlist-background-color: #4d49be;
+	--homepage-postlist-text-color: #fff;
+
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+
+		--homepage-postlist-text-color: var(--color-gray-20);
+
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	max-width: 40em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main {
+	padding: 1rem;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+header:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+pre:not([class*="language-"]) {
+	margin: .5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: capitalize;
+	font-style: italic;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.post-metadata time {
+	margin-right: 1em;
+}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+a[href].header-anchor:focus,
+a[href].header-anchor:hover {
+	text-decoration: underline;
+}
+a[href].header-anchor:focus,
+:hover > a[href].header-anchor {
+	color: #aaa;
+}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/* Create "responsive" images that resize with the viewport */
+
+img {
+	max-inline-size: 100%;
+	block-size: auto;
+}
+
+div.recentPosts {
+	background-color: var(--homepage-postlist-background-color);
+	color: var(--homepage-postlist-text-color);
+	padding: 1rem;
+}
+
+a[href].homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:visited.homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:hover.homepage-postlist-link,
+a[href]:active.homepage-postlist-link {
+	color: var(--color-gray-50);
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/" class="home-link">mattmakesmaps</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/">Home</a></li>
+					<li class="nav-item"><a href="/blog/">Blog</a></li>
+					<li class="nav-item"><a href="/cv/">CV</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>Creating Label Points With OpenStreetMap Data</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2013-11-13">13 November 2013</time></li>
+</ul>
+
+<h2 id="tl-dr" tabindex="-1">tl;dr <a class="header-anchor" href="#tl-dr">#</a></h2>
+<pre class="language-sql" tabindex="0"><code class="language-sql"><span class="token comment">-- Use a CTE to create a table of water polygons, aggregating</span>
+<span class="token comment">-- overlapping polygons sharing the same name</span>
+<span class="token keyword">WITH</span> polys <span class="token keyword">AS</span> <span class="token punctuation">(</span>
+    <span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> <span class="token punctuation">(</span>ST_DUMP<span class="token punctuation">(</span>ST_BUFFER<span class="token punctuation">(</span>ST_Collect<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>geom <span class="token keyword">AS</span> single_geom
+    <span class="token keyword">FROM</span> osm_new_waterareas
+    <span class="token keyword">WHERE</span> name <span class="token operator">IS</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span>
+    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> name
+<span class="token punctuation">)</span>
+<span class="token comment">-- Generate a name and label point for each feature</span>
+<span class="token comment">-- Generate an accurate area attribute by casting to geography</span>
+<span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> ST_PointOnSurface<span class="token punctuation">(</span>single_geom<span class="token punctuation">)</span><span class="token punctuation">,</span>
+       ST_Area<span class="token punctuation">(</span>Geography<span class="token punctuation">(</span>ST_Transform<span class="token punctuation">(</span>single_geom<span class="token punctuation">,</span> <span class="token number">4326</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> area
+<span class="token keyword">FROM</span> polys<span class="token punctuation">;</span></code></pre>
+<!-- more -->
+<h2 id="overview" tabindex="-1">Overview <a class="header-anchor" href="#overview">#</a></h2>
+<p><a href="http://www.openstreetmap.org/">OpenStreetMap</a> is one the most amazing data projects I know of.
+The breadth of high-quality, high-precision features contained with the OSM Planet never ceases
+to impress me. That being said, the freedom of the OSM data model, which allows this high-level of
+flexibility and openness, is not without its problems. Having participated in the OSM edit-a-thon,
+I was inspired to deep dive into the OSM tagging ontology, and subsequent rendering workflows. As part
+of this exploration, one of the major problems I've run into was the generation of label points
+derived from Open Street Map data.</p>
+<p>The following example is illustrative of the primary problem faced when generating label points,
+overlapping geometries. The SQL statement below returns all features within an <a href="http://imposm.org">imposm</a>
+database's <code>osm_new_waterareas</code> table named, 'Lake Chelan'. Three geometries are returned, one
+representing the entire lake, and two others representing northern and southern sections of the lake.
+All three share a name of, <code>Lake Chelan</code>, but two are of type <code>water</code>, and one is of type <code>reservoir</code>.</p>
+<pre class="language-sql" tabindex="0"><code class="language-sql"><span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> <span class="token keyword">type</span><span class="token punctuation">,</span> osm_id
+<span class="token keyword">FROM</span> osm_new_waterareas
+<span class="token keyword">WHERE</span> name <span class="token operator">=</span> <span class="token string">'Lake Chelan'</span><span class="token punctuation">;</span>
+
+    name     <span class="token operator">|</span>   <span class="token keyword">type</span>    <span class="token operator">|</span>  osm_id   
+<span class="token comment">-------------+-----------+-----------</span>
+ Lake Chelan <span class="token operator">|</span> reservoir <span class="token operator">|</span>    <span class="token number">446718</span>
+ Lake Chelan <span class="token operator">|</span> water     <span class="token operator">|</span> <span class="token number">135297050</span>
+ Lake Chelan <span class="token operator">|</span> water     <span class="token operator">|</span>  <span class="token number">52045429</span></code></pre>
+<p>Click the map below to view each of the three geometries.</p>
+<p><code>gist 03d7f78a1591971ed2d8 chelan.geojson</code></p>
+<p>Rendering label points using PostGIS's <a href="http://postgis.org/docs/ST_PointOnSurface.html">ST_PointOnSurface()</a>
+function would yield three separate points, as illustrated below. I however, would like only a single
+label point for each feature.</p>
+<p><code>gist 9cf8b49844cb43dfae81 chelan.geojson</code></p>
+<h2 id="step-by-step" tabindex="-1">Step By Step <a class="header-anchor" href="#step-by-step">#</a></h2>
+<p>In addition to a single label point, I'd also like to attribute that label point with an area value,
+to be used as a toggle for display at varying zoom levels.</p>
+<p>The query at the beginning of the post generates this output table. Let's walk through the major parts
+that make up the <code>single_geom</code> parameter, step-by-step.</p>
+<h3 id="step-one-st-collect" tabindex="-1">Step One: ST_Collect() <a class="header-anchor" href="#step-one-st-collect">#</a></h3>
+<p>The <a href="http://postgis.net/docs/manual-1.4/ST_Collect.html">ST_Collect()</a> in PostGIS is an aggregate
+function. Just as a <code>GROUP BY</code> clause can be used to aggregate features sharing a common attribute
+value, <code>ST_Collect()</code> can be used to group geometries. In this case, we'll use it to group
+geometries that are associated with the same name. See the code snippet below.</p>
+<pre class="language-sql" tabindex="0"><code class="language-sql"><span class="token comment">-- Execute ST_Collect() Function, creating a MULTIPOLYGON</span>
+<span class="token comment">-- for all features sharing a common name.</span>
+<span class="token keyword">WITH</span> collected <span class="token keyword">as</span> <span class="token punctuation">(</span>
+    <span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> ST_Collect<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token keyword">geometry</span>
+    <span class="token keyword">FROM</span> osm_new_waterareas
+    <span class="token keyword">WHERE</span> name <span class="token operator">=</span> <span class="token string">'Lake Chelan'</span>
+    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> name
+<span class="token punctuation">)</span> <span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> ST_GeometryType<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ST_NRings<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span>
+<span class="token keyword">FROM</span> collected<span class="token punctuation">;</span>
+
+<span class="token comment">-- Results</span>
+    name     <span class="token operator">|</span> st_geometrytype <span class="token operator">|</span> st_nrings 
+<span class="token comment">-------------+-----------------+-----------</span>
+ Lake Chelan <span class="token operator">|</span> ST_MultiPolygon <span class="token operator">|</span>         <span class="token number">4</span></code></pre>
+<p>This produces the following MULTIPOLYGON result.</p>
+<p><code>gist 8d4cdbc307deb6d7977f</code></p>
+<h3 id="step-two-st-buffer" tabindex="-1">Step Two: ST_Buffer() <a class="header-anchor" href="#step-two-st-buffer">#</a></h3>
+<p>The <a href="http://www.postgis.org/docs/ST_Buffer.html">ST_Buffer()</a> function is used as somewhat of a hack.
+It has the special quality of creating from its inputs, a new OGC-compliant geometry. This means that
+when given a set of input geometries, and a '0' buffer-distance value, we are essentially left with a
+geometry clean geometry that represents the outer-most ring of our MULTIPOLYGON created during the
+<code>ST_Collect()</code> operation.</p>
+<pre class="language-sql" tabindex="0"><code class="language-sql"><span class="token comment">-- Add a 0-distance buffer to our above result, creating a</span>
+<span class="token comment">-- new single polygon representing the outer ring.</span>
+<span class="token keyword">WITH</span> coll_buff <span class="token keyword">as</span> <span class="token punctuation">(</span>
+    <span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> ST_Buffer<span class="token punctuation">(</span>ST_Collect<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token keyword">geometry</span>
+    <span class="token keyword">FROM</span> osm_new_waterareas
+    <span class="token keyword">WHERE</span> name <span class="token operator">=</span> <span class="token string">'Lake Chelan'</span>
+    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> name
+<span class="token punctuation">)</span> <span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> ST_GeometryType<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ST_NRings<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span>
+<span class="token keyword">FROM</span> coll_buff<span class="token punctuation">;</span>
+
+<span class="token comment">-- Results</span>
+    name     <span class="token operator">|</span> st_geometrytype <span class="token operator">|</span> st_nrings 
+<span class="token comment">-------------+-----------------+-----------</span>
+ Lake Chelan <span class="token operator">|</span> ST_Polygon      <span class="token operator">|</span>         <span class="token number">1</span></code></pre>
+<p>Now we're really looking good. We've got a single polygon that represents our water feature.</p>
+<p><code>gist b76fd3997f99086f6d24</code></p>
+<p>I could run <code>ST_PointOnSurface()</code> against the geometry above, and return a single label point. So what
+more needs to be done? The example above works because all records within my OSM planet file with water
+features named <code>Lake Chelan</code> happen to occur in the same spot. It's a very unique name. What happens
+when I run the same query against a more common name, <code>Twin Lakes</code>?</p>
+<pre class="language-sql" tabindex="0"><code class="language-sql"><span class="token comment">-- Re-execute with a much more common name</span>
+<span class="token keyword">WITH</span> coll_buff <span class="token keyword">as</span> <span class="token punctuation">(</span>
+    <span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> ST_Buffer<span class="token punctuation">(</span>ST_Collect<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token keyword">geometry</span>
+    <span class="token keyword">FROM</span> osm_new_waterareas
+    <span class="token keyword">WHERE</span> name <span class="token operator">=</span> <span class="token string">'Twin Lakes'</span>
+    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> name
+<span class="token punctuation">)</span> <span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> ST_GeometryType<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ST_NRings<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span>
+<span class="token keyword">FROM</span> coll_buff<span class="token punctuation">;</span>
+
+<span class="token comment">-- Our results generate a MULTIPOLYGON, not a POLYGON</span>
+    name    <span class="token operator">|</span> st_geometrytype <span class="token operator">|</span> st_nrings 
+<span class="token comment">------------+-----------------+-----------</span>
+ Twin Lakes <span class="token operator">|</span> ST_MultiPolygon <span class="token operator">|</span>       <span class="token number">272</span></code></pre>
+<p>A single record is created, however it is the aggregate MULTIPOLYGON of all features in the globe
+that happen to be named <code>Twin Lakes</code>. Executing <code>ST_PointOnSurface()</code> would return a single point
+geometry, not the 272 unique label points we need.</p>
+<h3 id="step-three-st-dump" tabindex="-1">Step Three: ST_Dump() <a class="header-anchor" href="#step-three-st-dump">#</a></h3>
+<p>Now that our <code>ST_Collect()</code> + <code>ST_Buffer()</code> combo has given us a mixed bag of POLYGON and
+MULTIPOLYGON geometries, it's explode these guys into separate features. For that, we'll be using
+the <a href="http://postgis.refractions.net/docs/ST_Dump.html">ST_Dump()</a> function. In the example of our
+Lake Chelan polygon, <code>ST_Dump()</code> will create for us our same polygon. However, for our example of
+the <code>Twin Lakes</code> MULTIPOLYGON with 272 rings, we'll get back 272 unique records. This will allow us
+to create a label point for each instance of <code>Twin Lakes</code></p>
+<p>ST_Dump is a bit tricky in that it doesn't simply return the exploded geom (MULTIPOLYGON --&gt; POLYGON),
+but rather a special <a href="http://postgis.net/docs/geometry_dump.html">geometry_dump</a> data type. From that
+resulting datatype, we'll select out the <code>geom</code> field, giving us our POLYGON.</p>
+<pre class="language-sql" tabindex="0"><code class="language-sql"><span class="token comment">-- ST_Dump - Lake Chelan Example</span>
+<span class="token comment">-- NOTE: Wrapping ST_Dump() call in parentheses, and returning the geom</span>
+<span class="token comment">-- field from the resulting geometry_dump.</span>
+<span class="token keyword">WITH</span> coll_buff <span class="token keyword">as</span> <span class="token punctuation">(</span>
+    <span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> <span class="token punctuation">(</span>ST_Dump<span class="token punctuation">(</span>ST_Buffer<span class="token punctuation">(</span>ST_Collect<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>geom <span class="token keyword">AS</span> <span class="token keyword">geometry</span>
+    <span class="token keyword">FROM</span> osm_new_waterareas
+    <span class="token keyword">WHERE</span> name <span class="token operator">=</span> <span class="token string">'Lake Chelan'</span>
+    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> name
+<span class="token punctuation">)</span> <span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> ST_GeometryType<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ST_NRings<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span>
+<span class="token keyword">FROM</span> coll_buff<span class="token punctuation">;</span>
+
+<span class="token comment">-- Returns a single feature as expected.</span>
+    name     <span class="token operator">|</span> st_geometrytype <span class="token operator">|</span> st_nrings 
+<span class="token comment">-------------+-----------------+-----------</span>
+ Lake Chelan <span class="token operator">|</span> ST_Polygon      <span class="token operator">|</span>         <span class="token number">1</span>
+
+
+<span class="token comment">-- ST_Dump - Twin Lakes Example</span>
+<span class="token keyword">WITH</span> coll_buff <span class="token keyword">as</span> <span class="token punctuation">(</span>
+    <span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> <span class="token punctuation">(</span>ST_Dump<span class="token punctuation">(</span>ST_Buffer<span class="token punctuation">(</span>ST_Collect<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>geom <span class="token keyword">AS</span> <span class="token keyword">geometry</span>
+    <span class="token keyword">FROM</span> osm_new_waterareas
+    <span class="token keyword">WHERE</span> name <span class="token operator">=</span> <span class="token string">'Twin Lakes'</span>
+    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> name
+<span class="token punctuation">)</span> <span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> ST_GeometryType<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ST_NRings<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span>
+<span class="token keyword">FROM</span> coll_buff<span class="token punctuation">;</span>
+
+<span class="token comment">-- Returns each of the 272 rings of the MULTIPOLYGON as</span>
+<span class="token comment">-- unique polygon features.</span>
+    name    <span class="token operator">|</span> st_geometrytype <span class="token operator">|</span> st_nrings 
+<span class="token comment">------------+-----------------+-----------</span>
+ Twin Lakes <span class="token operator">|</span> ST_Polygon      <span class="token operator">|</span>         <span class="token number">1</span>
+ Twin Lakes <span class="token operator">|</span> ST_Polygon      <span class="token operator">|</span>         <span class="token number">1</span>
+ Twin Lakes <span class="token operator">|</span> ST_Polygon      <span class="token operator">|</span>         <span class="token number">1</span>
+ Twin Lakes <span class="token operator">|</span> ST_Polygon      <span class="token operator">|</span>         <span class="token number">1</span>
+<span class="token comment">-- NOTE: Selection of results shown.</span></code></pre>
+<h3 id="step-four-generate-an-area-attribute" tabindex="-1">Step Four: Generate An Area Attribute <a class="header-anchor" href="#step-four-generate-an-area-attribute">#</a></h3>
+<p>In order to have some type of filtration attribute to filter the display of our labels
+at different zoom levels, we'll be calculating an area attribute. Since our data are in
+the Spherical Mercator projection common to all web maps, we have inherit problems
+generating accurate area calculations directly. One solution to this is to CAST our
+geometries into a PostGIS <a href="http://workshops.boundlessgeo.com/postgis-intro/geography.html">geography</a>
+data type.</p>
+<p>As a prerequisite to the Geometry --&gt; Geography cast, we need to first use
+<a href="http://www.postgis.org/docs/ST_Transform.html">ST_Transform</a> to convert our data from the
+Spherical Mercator projection to WGS84 Lat/Lng.</p>
+<p>The area calculation snippet looks like this</p>
+<pre class="language-sql" tabindex="0"><code class="language-sql">ST_Area<span class="token punctuation">(</span>Geography<span class="token punctuation">(</span>ST_Transform<span class="token punctuation">(</span>single_geom<span class="token punctuation">,</span> <span class="token number">4326</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> area</code></pre>
+<p>And wrapped into our larger label point SQL statement, looks like this.</p>
+<pre class="language-sql" tabindex="0"><code class="language-sql"><span class="token keyword">WITH</span> polys <span class="token keyword">AS</span> <span class="token punctuation">(</span>
+    <span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> <span class="token punctuation">(</span>ST_DUMP<span class="token punctuation">(</span>ST_BUFFER<span class="token punctuation">(</span>ST_Collect<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>geom <span class="token keyword">AS</span> single_geom
+    <span class="token keyword">FROM</span> osm_new_waterareas
+    <span class="token keyword">WHERE</span> name <span class="token operator">=</span> <span class="token string">'Lake Chelan'</span> 
+    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> name
+<span class="token punctuation">)</span>
+<span class="token comment">-- Generate a name and label point for each feature</span>
+<span class="token comment">-- Generate an accurate area attribute by casting to geography</span>
+<span class="token keyword">SELECT</span> name<span class="token punctuation">,</span> ST_PointOnSurface<span class="token punctuation">(</span>single_geom<span class="token punctuation">)</span><span class="token punctuation">,</span>
+       ST_Area<span class="token punctuation">(</span>Geography<span class="token punctuation">(</span>ST_Transform<span class="token punctuation">(</span>single_geom<span class="token punctuation">,</span> <span class="token number">4326</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> area
+<span class="token keyword">FROM</span> polys<span class="token punctuation">;</span></code></pre>
+<p>Just to drive home the importance of accurate area calculations, our call using the CAST
+to geography returns a value of 132.028 square kilometers, while using the raw Spherical
+Mercator geometry returns an area value of 295.106 square kilometers! Our geography-based
+area calculation is much more in line with the 135 square kilometer value
+<a href="http://en.wikipedia.org/wiki/Lake_Chelan">reported by wikipedia</a>.</p>
+<h2 id="wrap-up" tabindex="-1">Wrap-up <a class="header-anchor" href="#wrap-up">#</a></h2>
+<p>And finally, after all that effort, we get the point shown below.</p>
+<p><code>gist cb1f750979bbcf40a8e5</code></p>
+<h3 id="speeding-up-with-indexes" tabindex="-1">Speeding Up With Indexes <a class="header-anchor" href="#speeding-up-with-indexes">#</a></h3>
+<p>While this exercise is extremely fast on our small test dataset, scaling this up to an
+entire imposm OSM planet import is another thing entirely. To facilitate this process,
+both spatial and non-spatial indexes can be utilized.</p>
+<p>I created a partial btree index on the name column, a functional index on the transformation
+of geometric data to EPSG 4326, and a gist index already existed on the geometry column
+as part of the imposm import.</p>
+<pre class="language-sql" tabindex="0"><code class="language-sql"><span class="token comment">-- Create a partial index on names that are not null.</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> idx_waterareas_name_partial <span class="token keyword">ON</span> osm_new_waterareas <span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token keyword">WHERE</span> name <span class="token operator">IS</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">;</span>
+<span class="token comment">-- Create a functional index on the transformation</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> idx_waterareas_4326 <span class="token keyword">ON</span> osm_new_waterareas <span class="token keyword">USING</span> gist<span class="token punctuation">(</span>ST_Transform<span class="token punctuation">(</span><span class="token keyword">geometry</span><span class="token punctuation">,</span> <span class="token number">4326</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>This process, after applying indexes, took about 5.4 minutes to create. That is, to create a global
+set of label points for ~185,000 named water features within the OSM planet file, with both a name and
+dynamically calculated area attribute. This test was performed on modest desktop hardware, on a PostGIS
+instance that was already hot (had been running, been used for querying water area data as part
+of this experiment).</p>
+
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2013-10-15-tilestache-links-roundup/">TileStache-Links-Roundup</a></li><li>Next: <a href="/blog/2014-01-11-configure-postgis-with-travis-ci/">Configure PostGIS with Travis CI</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- Current page: /blog/2013-11-13-creating-label-points-with-openstreetmap-data/ -->
+	</body>
+</html>

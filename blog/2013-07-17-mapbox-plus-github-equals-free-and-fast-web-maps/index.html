@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>MapBox + Github = Free and Fast Web Maps</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,70 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>MapBox + Github = Free and Fast Web Maps</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2013-07-17">17 July 2013</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>With the announcement of Github's awesome support for <a href="http://www.mapbox.com/blog/github-mapbox-maps/">direct geojson renderingg</a>,
+folks can deploy an embeddable web map with a single git commit and push. This got me
+thinking about the potential of github, specifically <a href="http://pages.github.com/">github pages</a>,
+as a vehicle for the display of more customized web mapping applications. The result of that
+experiment is <a href="http://aknativenamesatlas.com">aknativenamesatlas.com</a>. <!-- more --></p>
+<p>I deployed the initial draft of this site in a few hours, thanks entirely not only to
+the power of MapBox and Github's hosting infrastructure, but also to the easy-to-use
+<a href="http://www.mapbox.com/map-sites/">mapping templates</a> provided by MapBox.</p>
+<p>This blog series will attempt to illustrate some of the major steps involved in the
+process of deploying this map. The general process however, is as follows.</p>
+<ol>
+<li>Style cartographic layers via TileMill, upload to MapBox.</li>
+<li>Create composite map of individual operation layers plus a base within MapBox.</li>
+<li>Fork MapBox's dc-properties-template via github.</li>
+<li>Edit forked repository to point to my layers of interest.</li>
+<li>Add CNAME record for custom URL to forked repository.</li>
+<li>Configure DNS to route custom domain name to github pages.</li>
+</ol>
+<p>This first post will cover the cartography, and more importantly, the on-the-fly compositing of
+layers.</p>
+<h1 id="cartography-and-compositing" tabindex="-1">Cartography &amp; Compositing <a class="header-anchor" href="#cartography-and-compositing">#</a></h1>
+<p>The primary tool used to create the cartographic look and feel of the individual data layers is
+<a href="http://www.mapbox.com/tilemill/">TileMill</a>. TileMill is a desktop cartographic design studio, allowing you to
+load your own datasets from a variety of spatial formats (SHP, SpatialLite, PostGIS), and style via a CSS-like
+language, <a href="http://www.mapbox.com/tilemill/docs/manual/carto/">CartoCSS</a>.</p>
+<p>I'll gloss over the details for styling maps in in TileMill, but they've got a great
+<a href="http://www.mapbox.com/tilemill/docs/crashcourse/introduction/">quick-start guide</a>.</p>
+<p>For my site, I ended up creating two projects in TileMill, one for each operational layer present in the final
+map. The first layer represents <a href="http://a.tiles.mapbox.com/v3/mattmakesmaps.language_points/page.html">place names</a>
+, symbolized as points. The second layer depicts <a href="http://a.tiles.mapbox.com/v3/mattmakesmaps.language_lines/page.html">language regions</a>
+, symbolized as lines, but the geometry are in actuality polygons (required for the display of attribute information via a hover event).</p>
+<p>Splitting these operational layers into separate projects in TileMill, and conversely separate web maps when uploaded to MapBox, allows
+us to mix and match these layers at will. Specifically, the <a href="http://www.mapbox.com/developers/api/#Map.resources">MapBox REST API</a>
+allows us to composite or layer individual maps into a single-tile, on-the-fly. If you're head hasn't been exploded, allow me to illustrate.</p>
+<p>The map on <a href="http://aknativenamesatlas.com">aknativenamesatlas.com</a> is a composite of multiple layers. A basemap, provided by mapbox, as well as two operational layers (a point layer and a line layer).</p>
+<p>A <a href="http://a.tiles.mapbox.com/v3/mattmakesmaps.map-9ipoh344/6/5/16.png">single tile</a> from this map looks like this:</p>
+<p><code>Archived Post. Original Image Unavailable.</code></p>
+<p>The URL is as follows: <a href="http://a.tiles.mapbox.com/v3/mattmakesmaps.map-9ipoh344/6/5/16.png">http://a.tiles.mapbox.com/v3/mattmakesmaps.map-9ipoh344/6/5/16.png</a>. Note the <code>mattmakesmaps.map-9ipoh3441</code> section of the URL. This is a combination of my user account, <code>mattmakesmaps</code> and the unique map id. This identifier indicates that I'm requesting the tile representing this specific map, again, a composite of multiple layers.</p>
+<p>We can however, query individual layers that make up this map. For example, the lines layer specifically has a URL endpoint of <a href="http://a.tiles.mapbox.com/v3/mattmakesmaps.language_lines/6/5/16.png">http://a.tiles.mapbox.com/v3/mattmakesmaps.language_lines/6/5/16.png</a>. It looks like this.</p>
+<p><code>Archived Post. Original Image Unavailable.</code></p>
+<p>Similarly, with the points layer: <a href="http://a.tiles.mapbox.com/v3/mattmakesmaps.language_points/6/5/16.png">http://a.tiles.mapbox.com/v3/mattmakesmaps.language_points/6/5/16.png</a>. NOTE: You'll have to squint to see the points. They don't show up very well with the black on dark blue background. OR, you can open the tile link above in a new tab.</p>
+<p><code>Archived Post. Original Image Unavailable.</code></p>
+<p>The real magic comes when we composite these individual layers together, on-the-fly. From the <a href="http://www.mapbox.com/developers/api/#Map.resources">docs</a></p>
+<blockquote>
+<p>By joining multiple ids with commas into a single :map parameter you can access the MapBox Hosting compositing API to layer multiple tile images, UTFgrids or aggregate the TileJSON of multiple maps into a single map.</p>
+</blockquote>
+<p>That looks something like this <a href="http://a.tiles.mapbox.com/v3/mattmakesmaps.language_lines,mattmakesmaps.language_points/6/5/16.png">http://a.tiles.mapbox.com/v3/mattmakesmaps.language_lines,mattmakesmaps.language_points/6/5/16.png</a>:</p>
+<p><code>Archived Post. Original Image Unavailable.</code></p>
+<p>Pretty cool. You can even flip the z-index in which the layers are composited by simply re-arranging their position in the URL.</p>
+<p>That's it for now. The next post will cover how to fork Mapbox's DC-Properties template, allowing us to visualize our maps, accessible via github pages.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2013-07-10-fixing-arcgis-10-dot-1-python-console-numpy-import-error/">Fixing ArcGIS 10.1 Numpy Import Error From Python Console</a></li><li>Next: <a href="/blog/2013-08-26-quickstart-gis-setup-on-ubuntu-linux-12-dot-04-lts/">Quickstart GIS Setup on Ubuntu Linux 12.04 LTS</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2013-07-17-mapbox-plus-github-equals-free-and-fast-web-maps/ -->
 	</body>
 </html>

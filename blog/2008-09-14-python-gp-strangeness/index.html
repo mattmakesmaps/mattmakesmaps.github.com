@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>Python GP Strangeness</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,63 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>Python GP Strangeness</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2008-09-14">14 September 2008</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>I had to explicitly set the workspace, list the ASCII files, THEN link the two into a single variable for use in the ASCIIToRaster tool. I could have sworn that all I needed to do was to pass along the ASCII variable right into the ASCIIToRaster tool, and it would automatically carry the file path along with it. Maybe that is only the case when you are working with fields, rather than rasters / feature classes?</p>
+<!-- more -->
+<pre class="language-python" tabindex="0"><code class="language-python"><span class="token comment">#Batch Convert ASCII to ESRI GRID</span>
+<span class="token comment">#Matthew Kenny</span>
+<span class="token comment">#September 14, 2008</span>
+<span class="token comment">#############################################################</span>
+<span class="token comment"># Import the arcgisscripting module</span>
+<span class="token keyword">import</span> sys<span class="token punctuation">,</span> arcgisscripting
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<span class="token comment"># Create the Geoprocessor object</span>
+gp <span class="token operator">=</span> arcgisscripting<span class="token punctuation">.</span>create<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Set the workspace</span>
+gp<span class="token punctuation">.</span>workspace <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token string">"F:/!South_Kona/DEM_XYZ_Tiled/Area1/Group5/ASCII/"</span><span class="token punctuation">)</span>
+
+<span class="token comment"># get list of all the ASCII files in the workspace</span>
+asciiList <span class="token operator">=</span> gp<span class="token punctuation">.</span>ListRasters<span class="token punctuation">(</span><span class="token string">"*DEM*"</span><span class="token punctuation">,</span> <span class="token string">"*"</span><span class="token punctuation">)</span>
+<span class="token builtin">ascii</span> <span class="token operator">=</span> asciiList<span class="token punctuation">.</span><span class="token builtin">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span> <span class="token string">"Starting with "</span> <span class="token operator">+</span> <span class="token builtin">ascii</span>
+
+<span class="token comment"># Set initial INPUT file</span>
+inputAscii <span class="token operator">=</span> gp<span class="token punctuation">.</span>workspace <span class="token operator">+</span> <span class="token string">"/"</span> <span class="token operator">+</span> <span class="token builtin">ascii</span>
+<span class="token keyword">print</span> inputAscii
+
+<span class="token comment"># Set initial OUTPUT file</span>
+raster <span class="token operator">=</span> gp<span class="token punctuation">.</span>workspace <span class="token operator">+</span> <span class="token string">"/GRID/"</span> <span class="token operator">+</span> <span class="token builtin">ascii</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token string">".img"</span>
+<span class="token keyword">print</span> raster
+
+<span class="token comment"># loop through list of feature classes</span>
+<span class="token keyword">while</span> <span class="token builtin">ascii</span><span class="token punctuation">:</span>
+<span class="token comment">#Execute ASCII to Raster</span>
+    gp<span class="token punctuation">.</span>ASCIIToRaster_conversion<span class="token punctuation">(</span>inputAscii<span class="token punctuation">,</span> raster<span class="token punctuation">,</span> <span class="token string">"INTEGER"</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span> <span class="token string">"File "</span> <span class="token operator">+</span> raster<span class="token operator">+</span> <span class="token string">" has been created."</span>
+    <span class="token builtin">ascii</span> <span class="token operator">=</span> asciiList<span class="token punctuation">.</span><span class="token builtin">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span> <span class="token string">"Moving onto "</span> <span class="token operator">+</span> <span class="token builtin">ascii</span>
+    inputAscii <span class="token operator">=</span> gp<span class="token punctuation">.</span>workspace <span class="token operator">+</span> <span class="token string">"/"</span> <span class="token operator">+</span> <span class="token builtin">ascii</span>
+    <span class="token keyword">print</span> <span class="token string">"new inputAscii: "</span> <span class="token operator">+</span> inputAscii
+    raster <span class="token operator">=</span> gp<span class="token punctuation">.</span>workspace <span class="token operator">+</span> <span class="token string">"/GRID/"</span> <span class="token operator">+</span> <span class="token builtin">ascii</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token string">".img"</span>
+    <span class="token keyword">print</span> <span class="token string">"new output Raster: "</span> <span class="token operator">+</span> raster
+<span class="token builtin">ascii</span> <span class="token operator">=</span> asciiList<span class="token punctuation">.</span>reset<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment">#remove geoprocessor object from memory</span>
+<span class="token keyword">del</span> gp</code></pre>
+
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2008-09-12-gdal-proj4-on-shared-webhost/">GDAL / PROJ.4 On Shared Webhost</a></li><li>Next: <a href="/blog/2008-09-14-web-based-grass/">Web-Based GRASS!</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2008-09-14-python-gp-strangeness/ -->
 	</body>
 </html>

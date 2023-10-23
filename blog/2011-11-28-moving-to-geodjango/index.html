@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>Moving to GeoDjango</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,33 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>Moving to GeoDjango</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2011-11-28">28 November 2011</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>I've been creating a simple GeoDjango application for managing environmental sampling metadata, and it's been a lot of fun so far. I've had experience working with many different forms of metadata tracking, from spreadsheets, to wikis, to online project management tools. All of them have their ups and downs, and it seems like there is always a dealbreaker with each organizational method.</p>
+<p>Spreadsheets are easy to edit, but lack any form of relational structure (two sets of data for the same report? i guess i'll just put two entries into the same cell).</p>
+<!-- more -->
+<p>[caption id=&quot;attachment_487&quot; align=&quot;alignnone&quot; width=&quot;464&quot; caption=&quot;sometimes spreadsheets just don't work...&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2011/11/Screenshot.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2011/11/Screenshot.png" alt=""></a>[/caption]</p>
+<p>Wikis are cool, allow easy access to information, but are (in certain cases) a pain for folks to edit. Take the experience of table creation. Dokuwiki, a generic wiki software, requires a series of  carefully placed carrots and pipes to delineate headers and columns. A common pain comes when adding a new value to a new row, in which that value exceeds the length of any previous cell. This requires the author to expand the column header, and all previously entered rows, re-aligning the pipes and carrots. Granted as a slightly OCD GIS Analyst, the sight of a well crafted text table fills me with no less wonder then when I saw Albert Bierstadt's <a href="http://www.seattleartmuseum.org/exhibit/exhibitDetail.asp?eventID=21084">&quot;Puget Sound on the Pacific Coast&quot;</a>, but it's just darn tedious at times. Additionally, as the log of sampling events grows larger, it gets harder to manage. Dokuwiki, AFAIK provides no ways to automatically resort entire sections of pages or records in tables based on alphabetical order, which would make searching for information on a particular page much faster as content becomes larger and larger.</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash">^ Column One                ^ Column Two                 ^
+<span class="token operator">|</span> Zee <span class="token string">'z'</span> string            <span class="token operator">|</span> This is a longer string    <span class="token operator">|</span>
+<span class="token operator">|</span> 2nd longer string of text <span class="token operator">|</span> 2nd short string           <span class="token operator">|</span>
+<span class="token operator">|</span> SuperShort                <span class="token operator">|</span> A string starting with <span class="token string">'A'</span> <span class="token operator">|</span></code></pre>
+<p>Online project management tools are interesting as well. They allow rapid collaboration between project members, and provide template functionality, allowing for status reports on recurring workflows to be easily generated (e.g., create a template for a report, spawn off an instance of a template for each new project). The downside to these services are that: they cost money, they also may not provide a normalized way to store data, and (of most interest to myself) they probably don't allow for the storage/visualization of spatial data.</p>
+<p>[caption id=&quot;attachment_488&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;10 megs free for one user? cool!&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2011/11/Screenshot-1.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2011/11/Screenshot-1-300x162.png" alt=""></a>[/caption]</p>
+<p>In comes GeoDjango. Over the next few posts, I think I'll record my experiences developing an application that allows the storage of metadata, within the context of environmental sampling efforts. The goal is to provide a web application which stores both tabular and spatial data in a normalized fashion, and easily visualize both in an informative way.</p>
+<p>[caption id=&quot;attachment_489&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Hey look Ma', it's GeoJSON!&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2011/11/Screenshot-2.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2011/11/Screenshot-2-300x147.png" alt=""></a>[/caption]</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2011-02-25-hand-rolled-vector-tiles-tilestache/">Hand-Rolled Vector Tiles - TileStache</a></li><li>Next: <a href="/blog/2011-12-12-geodjango-standing-up-a-geojson-web-service/">GeoDjango: Standing Up A GeoJSON Web-Service</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2011-11-28-moving-to-geodjango/ -->
 	</body>
 </html>

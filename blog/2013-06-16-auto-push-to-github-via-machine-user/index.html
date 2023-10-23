@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>Auto-Push to GitHub via Machine User</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,87 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>Auto-Push to GitHub via Machine User</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2013-06-16">16 June 2013</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>This post will review a workflow for automatically pushing data from a client machine to github.
+This can be useful if you want to automatically make publicly available data that are regularly processed on
+a local machine. <!-- more --> For my particular use case, I'm downloading data from the <a href="http://waterservices.usgs.gov/rest/IV-Test-Tool.html">USGS Instantaneus Values
+Web Service</a> , and would
+like to process those data locally for use in a d3 visualization. My d3 viz will eventually be
+hosted on github as well, so having a dynamically updated dataset stored on github made sense.
+I'm sure that it's possible to emulate this ETL workflow in pure JavaScript, but I wanted to see
+how to set this up, in the event that I found myself in a situation in which heavy pre-processing
+of data was required.</p>
+<p>The general steps are as follows:</p>
+<ol>
+<li>On the local machine, create a machine user and group.</li>
+<li>Create a corresponding github account for the machine user.</li>
+<li>Generate an SSH key machine user &amp; associate the public key of the machine user to its github account.</li>
+<li>Assign the github account to the repository of interest.</li>
+<li>Clone the repository of interest, making it group writable.</li>
+<li>On the local machine, create a cron job under the machine user to execute the processing script.</li>
+</ol>
+<h2 id="create-machine-user-and-group" tabindex="-1">Create Machine User and Group <a class="header-anchor" href="#create-machine-user-and-group">#</a></h2>
+<p>On my local machine, I start by creating a user and group for the purpose of pushing data to github.
+I'm doing this to isolate the amount of exposure that this user has to my wider system.</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token comment"># Create the user, rdi-git</span>
+$ <span class="token function">sudo</span> adduser rdi-git
+<span class="token comment"># You'll be prompted to enter a password as well.</span>
+<span class="token comment"># Create the group, git</span>
+$ <span class="token function">sudo</span> addgroup <span class="token function">git</span>
+<span class="token comment"># Add our new user (rdi-git) to the new group (git)</span>
+$ <span class="token function">sudo</span> <span class="token function">usermod</span> <span class="token parameter variable">-a</span> <span class="token parameter variable">-G</span> <span class="token function">git</span> rdi-git</code></pre>
+<h2 id="create-a-github-account-for-machine-user" tabindex="-1">Create a Github Account for Machine User <a class="header-anchor" href="#create-a-github-account-for-machine-user">#</a></h2>
+<p>After having created the machine users on my local box, the next step is to create an analogous
+user on <a href="https://github.com">github</a>.</p>
+<h2 id="generate-ssh-key-and-assign-to-github-user" tabindex="-1">Generate SSH Key &amp; Assign to Github User <a class="header-anchor" href="#generate-ssh-key-and-assign-to-github-user">#</a></h2>
+<p>From the local machine, make sure that you're logged in as the newly created machine user.</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash">$ <span class="token function">sudo</span> <span class="token function">su</span> rdi-git</code></pre>
+<p>At this point, I defer to the great instructions on the Github help docs for <a href="https://help.github.com/articles/generating-ssh-keys">generating an ssh key</a>.</p>
+<h2 id="assign-github-account-as-collaborator-to-repo-of-interest" tabindex="-1">Assign Github Account As Collaborator to Repo of Interest <a class="header-anchor" href="#assign-github-account-as-collaborator-to-repo-of-interest">#</a></h2>
+<p>Next, I add our github user, rdi-git, as a collaborator on my repository of interest. Here is a link on
+the <a href="https://help.github.com/articles/how-do-i-add-a-collaborator">Github help docs</a>.</p>
+<h2 id="clone-the-repository-of-interest-add-assign-permissions" tabindex="-1">Clone the Repository of Interest, add Assign Permissions <a class="header-anchor" href="#clone-the-repository-of-interest-add-assign-permissions">#</a></h2>
+<p>I'm creating a <code>/projects/</code> folder, in which I'll clone my repo. I'd like to ensure that this folder, and
+subsequently all repos contained within it, are associated with git group. This <a href="http://unix.stackexchange.com/questions/12842/make-all-new-files-in-a-directory-accessible-to-a-group">stackoverflow</a> outlines the required commands.</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token comment"># Make the directory</span>
+$ <span class="token builtin class-name">cd</span> /
+$ <span class="token function">mkdir</span> projects
+$ <span class="token builtin class-name">cd</span> /projects
+<span class="token comment"># Change perms to group writable. See Above SO post.</span>
+$ <span class="token builtin class-name">umask</span> 002            <span class="token comment"># allow group write; everyone must do this</span>
+$ <span class="token function">chgrp</span> <span class="token function">git</span> <span class="token builtin class-name">.</span>          <span class="token comment"># set directory group to gitG</span>
+$ <span class="token function">chmod</span> g+s <span class="token builtin class-name">.</span>          <span class="token comment"># files created in directory will be in group git</span>
+<span class="token comment"># Clone our repo of interest, using ssh</span>
+$ git@github.com:mattmakesmaps/robo-d3.git </code></pre>
+<h2 id="create-the-cron-job" tabindex="-1">Create the Cron Job <a class="header-anchor" href="#create-the-cron-job">#</a></h2>
+<p>The repo I've just cloned contains the <a href="https://github.com/mattmakesmaps/robo-d3/blob/master/scripts/waterservices_parser.py">processing script</a> I'll be running.
+Our processed data will also be stored and pushed back to this repository.</p>
+<p>I'd like to have my processing script run once every hour, on the hour. We setup the cron job by first entering
+crontab.</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token comment"># Login as machine user, cron job will be run under this id.</span>
+$ <span class="token function">sudo</span> <span class="token function">su</span> rdi-git
+$ <span class="token function">crontab</span> <span class="token parameter variable">-e</span></code></pre>
+<p>Here is an excerpt of the machine user's cron jobs, with the new job added at the bottom.</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token comment"># For more information see the manual pages of crontab(5) and cron(8)</span>
+<span class="token comment">#</span>
+<span class="token comment"># m h  dom mon dow   command</span>
+<span class="token number">0</span> * * * * python /projects/robo-d3/scripts/waterservices_parser.py <span class="token operator">></span> ~/robo-d3.log <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span></code></pre>
+<p>We essential say, on the minute zero, of every hour, for every day, month, and weekday, run the command 'python /path/to/script'. The tail indicates that we're outputting both STDOUT and the ERROR log to <code>/home/rdi-git/robo-d3.log</code></p>
+<p>And there we go. If we check out the <a href="https://github.com/mattmakesmaps/robo-d3/commits/master">commit logs</a> we can
+see that our github user, rdi-git, has been pushing every hour on the hour. Woo-hoo!</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2013-05-01-django-add-mapquest-tiles/">Hack GeoDjango Admin with Mapquest Tiles</a></li><li>Next: <a href="/blog/2013-07-10-fixing-arcgis-10-dot-1-python-console-numpy-import-error/">Fixing ArcGIS 10.1 Numpy Import Error From Python Console</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2013-06-16-auto-push-to-github-via-machine-user/ -->
 	</body>
 </html>

@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>Quickstart GIS Setup on Ubuntu Linux 12.04 LTS</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,92 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>Quickstart GIS Setup on Ubuntu Linux 12.04 LTS</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2013-08-26">26 August 2013</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>I had to recently setup a clean Ubuntu 12.04 LTS workstation for GIS
+data processing. For the simplicity and speed, I decided to go with
+packaged versions of many of the required GIS software. Many of the
+packages are derived from the <a href="https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable">ubuntugis-unstable</a> repository.</p>
+<p>What follows below are a blow-by-blow of my installation notes
+grouped by software package. Either code snippets or links to relevant
+blog posts.<!-- More --></p>
+<p>This is certainly only a high-level guide. If anyone has any other
+suggestions or alternatives, please feel free to list them.</p>
+<p><strong>NOTE:</strong> The order of these installs reflects the actual order in
+which I installed them.</p>
+<h2 id="non-gis-essentials" tabindex="-1">Non-GIS Essentials <a class="header-anchor" href="#non-gis-essentials">#</a></h2>
+<h3 id="install-ssh" tabindex="-1">Install SSH <a class="header-anchor" href="#install-ssh">#</a></h3>
+<p><a href="http://en.wikipedia.org/wiki/Secure_Shell">SSH</a> or Secure Shell,
+is essential for remote server administration.</p>
+<p><code>$ sudo apt-get install openssh-server</code></p>
+<h3 id="increase-history-size" tabindex="-1">Increase History Size <a class="header-anchor" href="#increase-history-size">#</a></h3>
+<p>The default history size is pretty low. Increasing the size allows us
+to do search for that oft-used terminal command right when you need it
+most. What was the name of that server I ssh'd into last month?
+Piping history to grep can do the trick. <code>$ history | grep -i &quot;ssh&quot;</code></p>
+<pre class="language-bash" tabindex="0"><code class="language-bash">$ <span class="token function">vim</span> ~/.bashrc
+<span class="token assign-left variable"><span class="token environment constant">HISTSIZE</span></span><span class="token operator">=</span><span class="token number">10000</span>
+<span class="token assign-left variable"><span class="token environment constant">HISTFILESIZE</span></span><span class="token operator">=</span><span class="token number">20000</span></code></pre>
+<h3 id="python-virtual-environments" tabindex="-1">Python Virtual Environments <a class="header-anchor" href="#python-virtual-environments">#</a></h3>
+<p>Used this <a href="https://gist.github.com/panuta/3075882">awesome gist</a> by
+github user <a href="https://github.com/panuta">panuta</a>.</p>
+<p>Didn't follow, but a good reference: <a href="http://askubuntu.com/questions/244641/how-to-set-up-and-use-a-virtual-python-environment-in-ubuntu">http://askubuntu.com/questions/244641/how-to-set-up-and-use-a-virtual-python-environment-in-ubuntu</a></p>
+<h3 id="apache" tabindex="-1">Apache <a class="header-anchor" href="#apache">#</a></h3>
+<pre><code>$ sudo apt-get install apache2
+</code></pre>
+<h2 id="gis-packages" tabindex="-1">GIS Packages <a class="header-anchor" href="#gis-packages">#</a></h2>
+<h3 id="connect-to-the-ubuntugis-unstable-ppa" tabindex="-1">Connect to the UbuntuGIS-Unstable PPA <a class="header-anchor" href="#connect-to-the-ubuntugis-unstable-ppa">#</a></h3>
+<p>In order to access many of these packages, we need to connect the
+system to the UbuntuGIS-Unstable PPA.</p>
+<pre><code>$ sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+$ sudo apt-get update
+</code></pre>
+<h3 id="gdal-fiona" tabindex="-1">GDAL/Fiona <a class="header-anchor" href="#gdal-fiona">#</a></h3>
+<p>GDAL/OGR are the defacto Open Source GIS swiss army knife.
+<a href="https://github.com/sgillies/Fiona">Fiona</a> provides easy-to-use
+Python bindings for use in your projects.</p>
+<pre><code>$ sudo apt-get install libgdal-dev gdal-bin
+$ workon gis-base
+$ sudo apt-get install python2.7-dev
+$ pip install Fiona
+</code></pre>
+<h3 id="postgres-postgis" tabindex="-1">Postgres/PostGIS <a class="header-anchor" href="#postgres-postgis">#</a></h3>
+<p>The ubuntu unstable repository provides pre-packaged binaries combining both Postgres and Postgis.</p>
+<p>As of August 2013, GDAL version 1.10 for some reason doesn't include libgdal1, replaced by libgdalh. See: <a href="http://lists.osgeo.org/pipermail/ubuntu/2013-July/000757.html">http://lists.osgeo.org/pipermail/ubuntu/2013-July/000757.html</a>
+This appearently is causing some issues with packages installations, including Postgres/PostGIS. The steps below appear to work.</p>
+<pre><code>$ sudo apt-get install libgdal1-dev
+$ sudo apt-get install postgresql-9.1-postgis-2.0
+</code></pre>
+<p>If you need any of the postgis util scripts, e.g. <code>postgres_restore.pl</code> used for restoring a postgres database (across differing versions
+of postgis), I believe the only way to get these is by making from source.</p>
+<pre><code>$ sudo apt-get install proj
+$ wget http://download.osgeo.org/postgis/source/postgis-2.0.3.tar.g
+$ tar -zxvf postgis-2.0.3.tar.gz
+$ cd postgis-2.0.3/
+$ ./configure
+$ make
+</code></pre>
+<p>Finally, if you need to change your Postgresql data dir to another
+disk, this guide provides good advice: <a href="http://www.whiteboardcoder.com/2012/04/change-postgres-datadirectory-folder.html">http://www.whiteboardcoder.com/2012/04/change-postgres-datadirectory-folder.html</a></p>
+<h3 id="imposm-2-5-0" tabindex="-1">Imposm 2.5.0 <a class="header-anchor" href="#imposm-2-5-0">#</a></h3>
+<p>If you're rendering OSM data, imposm is one of the fastest ways
+to get data from an OSM Planet Extract into PostGIS.</p>
+<p>I followed the instructions within the <a href="http://imposm.org/docs/imposm/latest/install.html#requirements">Imposm documentation</a></p>
+<p>Note: Installed imposm directly into my virtualenv &quot;gis-base&quot;</p>
+<h3 id="quantum-gis" tabindex="-1">Quantum GIS <a class="header-anchor" href="#quantum-gis">#</a></h3>
+<pre class="language-bash" tabindex="0"><code class="language-bash">$ <span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> qgis</code></pre>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2013-07-17-mapbox-plus-github-equals-free-and-fast-web-maps/">MapBox + Github = Free and Fast Web Maps</a></li><li>Next: <a href="/blog/2013-10-09-tilestache-rendering-topojson/">TileStache: Generate [Topo|Geo]JSON Vector Tiles</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2013-08-26-quickstart-gis-setup-on-ubuntu-linux-12-dot-04-lts/ -->
 	</body>
 </html>

@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>ArcGIS REST API / OpenLayers / Unit Testing = Fun In The Sun</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,35 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>ArcGIS REST API / OpenLayers / Unit Testing = Fun In The Sun</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2009-03-13">13 March 2009</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>Until today, I had never truly appreciated the value of unit testing. I recently had the need to bring <a href="http://dev.openlayers.org/sandbox/august/openlayers/openlayers-2.6/examples/ags/index.html">these ArcGIS REST controls</a>, designed for version 2.6 of OpenLayers, into the current development version. Having no real idea how to get started on this process, I looked to the unit tests as a guide <!-- more --> to what needed to be changed. One might be asking why this was necessary, when the team over at Avencia just put together a great <a href="http://trac.openlayers.org/ticket/1749">ArcGIS REST Plugin</a> that has made its way into the trunk for the upcoming 2.8 release. The answer is that both plugins do different things well. The older AGSControls can perform 'Identify' and 'Geoprocessing' operations rather well, while the Avencia plugin does a great job at displaying and querying a subset of a layer resource.</p>
+<p>In any event, the <a href="http://straytree.com/TestAnotherWay/doc/index.html">Test.AnotherWay</a> suite, used by OpenLayers, provides an easy-to-navigate interface for debugging javascript code.</p>
+<p>In two steps I was able to begin the debugging process.</p>
+<p>First, adding the unit test for the AGSControl to the 'list-tests.html' file located in the 'tests' folder of a development version of OpenLayers. This unit test, written by the developer, needs to manually downloaded and incorporated into the standard series of tests that come with OpenLayers. As we can see from the image below, this particular test was written as an html file and placed into the 'Control' sub-directory of the 'tests' directory.</p>
+<p>[caption id=&quot;attachment_256&quot; align=&quot;alignnone&quot; width=&quot;224&quot; caption=&quot;Above: Adding a link to the unit test for use by Test.AnotherWay&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/03/list_test.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/03/list_test.png" alt="Adding a link to the unit test for use by Test.AnotherWay"></a>[/caption]</p>
+<p>After adding the test, we open up 'run-tests.html' in the browser and select 'AgsControl' from the list. After the test has executed, the results are provided to us. With the red light of failure burning bright, we might think to abandon all hope. We are, however, given the cause and location of the failure, an invaluable clue as to where to start debugging. Time to soldier on.</p>
+<p>[caption id=&quot;attachment_257&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Above: Unit Test Failure&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/03/ags_fail.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/03/ags_fail-300x98.png" alt="Above: Unit Test Failure"></a>[/caption]</p>
+<p>Using these test results as a road map, even I can eventually debug a plugin. The green light of success offers a reassuring reminder that all is well in the GIS world.</p>
+<p>[caption id=&quot;attachment_259&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Above: Successful Unit Test&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/03/ags_success1.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/03/ags_success1-300x112.png" alt="Above: Successful Unit Test"></a>[/caption]</p>
+<p>I've taken away a few things from this experience. Firstly, I'm again deeply impressed by the time and effort that developers in the Open Source community are putting into these projects. The only reason that I could even dream of modifying any of this source code is due to the fact that the developer of the AGSControls provided such detailed unit tests. These allowed me to wrap my brain around what was going on with the code, and how it could be updated. Taking the time to not only write code, but to also provide tools so that others can understand it and modify it with ease is something that I think I'll always be impressed with. And of course, I'll be continuing to rely on unit tests as debugging tools as i continue my exploration of javascript programming.</p>
+<p>In the words of <a href="http://www.davebouwman.net/">Dave Bouwman</a>, who has a whopping fourteen posts in his tag cloud on the subject:</p>
+<blockquote>
+<p>Unit testing is quite possibly the single best practice for ensuring that your code is bug free (or very nearly bug free!).</p>
+</blockquote>
+<p>His 'fundamentals' article provides a great introduction on the subject: which can be read <a href="http://www.davebouwman.net/fundamentals/unittesting.aspx">here</a>.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2009-01-31-google-motion-charts-from-data-to-information/">Google Motion Charts: From Data To Information </a></li><li>Next: <a href="/blog/2009-04-05-spatiallite-my-first-look/">SpatialLite: My First Look</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2009-03-13-arcgis-rest-api-openlayers-unit-testing-fun-in-the-sun/ -->
 	</body>
 </html>

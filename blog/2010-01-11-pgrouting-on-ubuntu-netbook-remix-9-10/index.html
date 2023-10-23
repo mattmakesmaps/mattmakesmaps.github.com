@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>pgRouting On Ubuntu Netbook Remix 9.10</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,47 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>pgRouting On Ubuntu Netbook Remix 9.10</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2010-01-11">11 January 2010</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>While working through Regina Obe and Leo Hsu's <a href="http://www.postgis.us">PostGIS In Action</a> I thought that I'd jump into the world of routing. My plan was to develop a sample application that could be used to plan bicycle routes throughout the city of Seattle. A quick google search proved that someone has already done it, and done it very well! <a href="http://www.ridethecity.com/">http://www.ridethecity.com/</a> provides cycling routes using OSM data for many major cities, Seattle included. <!-- more --></p>
+<p>Undeterred and inspired, i decided to compile the <a href="http://pgrouting.postlbs.org/">pgRouting</a> set of tools for PostGIS and give them a whirl.</p>
+<p>My primary tutorial for moving through the install and execution of functions came from the 2009 FOSS4G Tokyo &amp; Osaka workshop entitled, &quot;<a href="http://www.google.com/url?sa=t&amp;source=web&amp;ct=res&amp;cd=7&amp;ved=0CCMQFjAG&amp;url=http%3A%2F%2Fwww.osgeo.jp%2Fwordpress%2Fwp-content%2Fuploads%2F2009%2F11%2Fworkshop_manual.pdf&amp;ei=4vdLS63EKIGSsgPFrsGIDA&amp;usg=AFQjCNEoTXqRqtS8fpDXbNLo6H2Nk3cEyg&amp;sig2=RLw7qVqUev7k8pdvzCjXeQ">FOSS4G routing with pgRouting tools and OpenStreetMap road data.</a>&quot; Although my installation on Ubuntu Netbook Remix (UNR) 9.10 required a little different setup, this guide definitely got me 99% of the way there.</p>
+<p>The majority of my installation woes were caused by the different pathways used on my UNR install of PostgreSQL vs. what are apparently the standard paths.</p>
+<p>After attempting to execute cmake to compile pgRouting, I'd be presented with an error stating that the 'POSTGRESQL_INCLUDE_DIR' was not found. A locate command pointed me to the correct path for my PostgreSQL installation. By modifying the FindPostgreSQL.cmake file to search for the correct path, I was back in business.</p>
+<p>Following the workshop instructions, I then attempted to create the database directly from the terminal, which yielded the following result.</p>
+<p>[sourcecode language=&quot;bash&quot;]matt@matt-netbook:~$ createdb -U postgres routing
+createdb: could not connect to database postgres: could not connect to server: No such file or directory
+Is the server running locally and accepting
+connections on Unix domain socket &quot;/var/run/postgresql/.s.PGSQL.5432&quot;?[/sourcecode]</p>
+<p>After reading the documentation associated with &quot;createdb&quot;, i tried adding the &quot;-h&quot; flag pointing to &quot;localhost&quot;, which solved the problem.</p>
+<p>The final error which I ran into had to do with the &quot;$libdir&quot; environment variable. While trying to register the pgRouting functions in my new database, I'd be presented with the following:</p>
+<p>[sourcecode language=&quot;bash&quot;]psql:/usr/share/postlbs/routing_core.sql:32: ERROR:  could not access file &quot;$libdir/librouting&quot;: No such file or directory
+psql:/usr/share/postlbs/routing_core.sql:43: ERROR:  could not access file &quot;$libdir/librouting&quot;: No such file or directory
+psql:/usr/share/postlbs/routing_core.sql:53: ERROR:  could not access file &quot;$libdir/librouting&quot;: No such file or directory[/sourcecode]</p>
+<p>Getting impatient at this point (i wanted to route!) I modified the SQL files to reference the explicit path of my PostgreSQL lib directory. Once that was done, I had a working routing database!</p>
+<p>Loading the sample data, creating the indexes, and executing the queries was amazingly straightforward. To test visualizing the data, I exported one of the tutorial queries directly into a new table.</p>
+<p>[sourcecode language=&quot;SQL&quot;]SELECT * INTO export
+FROM dijkstra_sp('ways', 10, 20);[/sourcecode]</p>
+<p>[caption id=&quot;attachment_316&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;The route depicted in red as seen in QGIS.&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2010/01/qgis_routing.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2010/01/qgis_routing-300x175.png" alt="qgis_routing"></a>[/caption]</p>
+<p>Just for kicks, I tried exporting the data as GeoJSON and visualzing it via OpenLayers.</p>
+<p>The following SQL query aggregates the exported line segments into a single GeoJSON object:</p>
+<p>[sourcecode language=&quot;SQL&quot;]SELECT ST_AsGeoJSON(ST_UNION(the_geom)) AS geom_union
+FROM export;[/sourcecode]</p>
+<p>Using the <a href="http://openlayers.org/dev/examples/vector-formats.html">vector-formats</a> OL example, which displays GeoJSON in either EPSG 4326 or 102113, I was able to visualize the line segment with no problem.</p>
+<p>[caption id=&quot;attachment_317&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;GeoJSON representation of line segment generated using pgRouting, displayed in OpenLayers&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2010/01/openlayers_vector_formats.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2010/01/openlayers_vector_formats-300x175.png" alt=""></a>[/caption]</p>
+<p>Well that's all for one day. So it looks like the bike riding app is out, but I'm sure that there will be many more interesting ideas for pgRouting that will come to mind as I continue to explore PostGIS.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2009-04-27-esri-uc-student-assistant-sweet/">ESRI UC Student Assistant, Sweet!</a></li><li>Next: <a href="/blog/2010-01-31-pgrouting-part-ii-postgis-geoserver/">pgRouting Part II: PostGIS + Geoserver</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2010-01-11-pgrouting-on-ubuntu-netbook-remix-9-10/ -->
 	</body>
 </html>

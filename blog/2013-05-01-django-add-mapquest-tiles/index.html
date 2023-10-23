@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>Hack GeoDjango Admin with Mapquest Tiles</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,94 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>Hack GeoDjango Admin with Mapquest Tiles</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2013-05-01">01 May 2013</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>The <a href="http://geodjango.org/">GeoDjango model</a> admin provides a great <a href="http://openlayers.org/">OpenLayers</a> interface, allowing a user to create geographic features (points, lines, polygons) directly via a web map. Out-of-the-box,
+GeoDjango ships with a base GeoAdmin class, using the default OL world borders layer,
+as well as a subclass for OSM streets data. The OSM layer is great, and provides a good base
+for most use cases. That being said, for <a href="https://github.com/mattmakesmaps/PntTrax">PntTrax</a>, I needed aerial tiles. <!-- more -->My application deals
+primarily with the storage of field collected (GPS, field notes, aerial markup, etc.) data.
+Our data occur primarily in non-urban areas, where natural features provide a much
+better context for orientation then would be expected with any streets layer, OSM or otherwise.
+Mapquest provides a good set of aerial tiles, that can be easily integrated into OpenLayers.</p>
+<p>It's easier to place a point on this:</p>
+<p><code>Archived Post. Original Image Unavailable.</code></p>
+<p>Then this:</p>
+<p><code>Archived Post. Original Image Unavailable.</code></p>
+<p>Hacking the admin to display the <a href="http://developer.mapquest.com/web/products/open/map">Mapquest aerial tiles</a> is a pretty straightforward process.
+From the gis contrib package, we'll modify <a href="https://github.com/django/django/blob/master/django/contrib/gis/admin/options.py">options.py</a> and its <a href="https://github.com/django/django/blob/master/django/contrib/gis/admin/__init__.py">__init__.py</a>, subclassing the OSMGeoAdmin. Within the <a href="https://github.com/django/django/tree/master/django/contrib/gis/templates/gis/admin">templates
+folder</a>,
+we'll create two new files, a html template file, that actually points to a javascript file
+containing a reference to the Mapquest Open Aerial tiles service.</p>
+<h2 id="creating-mapquestgeoadminsubclass" tabindex="-1">Creating mapquestGeoAdminSubclass <a class="header-anchor" href="#creating-mapquestgeoadminsubclass">#</a></h2>
+<p>The <a href="https://github.com/django/django/blob/master/django/contrib/gis/admin/options.py#L132-L139">OSMGeoAdmin class</a> is a subclass of the base GeoModelAdmin. The GeoModelAdmin contains a set of
+configuration parameters for the map, covering basic setup. The OSMGeoAdmin class utilizes
+many of those configuration parameters, but configures the map for a spherical mercator projection.
+Since our Mapquest Aerial Tiles also require a spherical mercator projection, our class will
+be a subclass of the OSMGeoAdmin.</p>
+<p>We add the following code below the OSMGeoAdmin class definition.</p>
+<pre class="language-python" tabindex="0"><code class="language-python">    <span class="token comment"># Subclass OSMGeoAdmin, pointing to the To-Be-Created</span>
+    <span class="token comment"># Mapquest template file.`</span>
+    <span class="token keyword">class</span> <span class="token class-name">mapquestGeoAdmin</span><span class="token punctuation">(</span>OSMGeoAdmin<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        map_template <span class="token operator">=</span> <span class="token string">'gis/admin/mapquest.html'</span></code></pre>
+<h2 id="modify-the-gis-admin-package-s-init-py" tabindex="-1">Modify the GIS Admin Package's __init__.py <a class="header-anchor" href="#modify-the-gis-admin-package-s-init-py">#</a></h2>
+<p>The <code>__init__.py</code> file imports the <code>OSMGeoAdmin</code> class, let's modify it to include our
+new subclass</p>
+<pre class="language-python" tabindex="0"><code class="language-python">    <span class="token comment"># From this</span>
+    <span class="token keyword">from</span> django<span class="token punctuation">.</span>contrib<span class="token punctuation">.</span>gis<span class="token punctuation">.</span>admin<span class="token punctuation">.</span>options <span class="token keyword">import</span> OSMGeoAdmin
+    <span class="token comment"># To this</span>
+    <span class="token keyword">from</span> django<span class="token punctuation">.</span>contrib<span class="token punctuation">.</span>gis<span class="token punctuation">.</span>admin<span class="token punctuation">.</span>options <span class="token keyword">import</span> OSMGeoAdmin<span class="token punctuation">,</span> mapquestGeoAdmin</code></pre>
+<h2 id="create-mapquest-js" tabindex="-1">Create mapquest.js <a class="header-anchor" href="#create-mapquest-js">#</a></h2>
+<p>Again, using the OpenStreetMap implementation as a reference, we can see that <code>osm.js</code> extends the basic <code>openlayers.js</code> file, but replaces the contents of the <code>base layer</code>
+block with an a reference to the OpenStreetMap layer.</p>
+<p>We'll create a similar file in this package called <code>mapquest.js</code>. The contents are as
+follows:</p>
+<pre><code>{# Source: http://openlayers.org/dev/examples/mapquest.html #}
+{% extends &quot;gis/admin/openlayers.js&quot; %}
+{% block base_layer %}
+        new OpenLayers.Layer.XYZ(
+            &quot;Imagery&quot;,
+            [
+                &quot;http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png&quot;,
+                &quot;http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png&quot;,
+                &quot;http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png&quot;,
+                &quot;http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.png&quot;
+            ],
+            {
+                attribution: &quot;Tiles Courtesy of &lt;a href='http://open.mapquest.co.uk/' target='_blank'&gt;MapQuest&lt;/a&gt;. Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency. &lt;img src='http://developer.mapquest.com/content/osm/mq_logo.png' border='0'&gt;&quot;,
+                transitionEffect: &quot;resize&quot;
+            }
+        )
+{% endblock %}
+</code></pre>
+<h2 id="create-mapquest-html" tabindex="-1">Create mapquest.html <a class="header-anchor" href="#create-mapquest-html">#</a></h2>
+<p>In the same folder, we'll create an html template file, pointing to our javascript file.
+We'll call the file <code>mapquest.html</code>. Here are the contents:</p>
+<pre><code>{% extends &quot;gis/admin/openlayers.html&quot; %}
+{% block openlayers %}{% include &quot;gis/admin/mapquest.js&quot; %}{% endblock %}
+</code></pre>
+<h2 id="in-admin-py-reference-mapquestgeoadmin" tabindex="-1">In admin.py, Reference mapquestGeoAdmin <a class="header-anchor" href="#in-admin-py-reference-mapquestgeoadmin">#</a></h2>
+<p>The last step is to replace references to <code>GeoModelAdmin</code> or <code>OSMGeoAdmin</code> to
+<code>mapquestGeoAdmin</code>.</p>
+<pre class="language-python" tabindex="0"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">PntTraxGeoAdmin</span><span class="token punctuation">(</span>admin<span class="token punctuation">.</span>mapquestGeoAdmin<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""Base Class for Geometry Table Admin"""</span>
+    list_display <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token string">'name'</span><span class="token punctuation">,</span><span class="token string">'collectDate'</span><span class="token punctuation">,</span><span class="token string">'group'</span><span class="token punctuation">,</span><span class="token string">'featurePurpose'</span><span class="token punctuation">,</span><span class="token string">'collectionMethod'</span><span class="token punctuation">)</span>
+    list_editable <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token string">'featurePurpose'</span><span class="token punctuation">,</span><span class="token string">'group'</span><span class="token punctuation">,</span><span class="token string">'collectionMethod'</span><span class="token punctuation">)</span>
+    list_filter <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token string">'featurePurpose'</span><span class="token punctuation">,</span><span class="token string">'group__name'</span><span class="token punctuation">)</span></code></pre>
+<p>And there you go. Your Django GeoAdmin interface is now rocking aerial tiles courtesy
+of Mapquest.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2011-12-12-geodjango-standing-up-a-geojson-web-service/">GeoDjango: Standing Up A GeoJSON Web-Service</a></li><li>Next: <a href="/blog/2013-06-16-auto-push-to-github-via-machine-user/">Auto-Push to GitHub via Machine User</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2013-05-01-django-add-mapquest-tiles/ -->
 	</body>
 </html>

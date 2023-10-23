@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>WFS!</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,37 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>WFS!</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2008-11-18">18 November 2008</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>Wow, i actually have a working WFS server now. I was able to successfully use QGIS to call upon the same mapfile using both  'WMS' and 'WFS' service types. As you can see in the image below, a static baselayer, 'COUNTY' (actually a dissolved shp designed to show the physical outline of Washington State) is displayed as WMS layer, as well as WFS layer, 'NATPARK', capable of actually identifiying features. <!-- more --></p>
+<p>[caption id=&quot;attachment_97&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;QGIS Screenshot: Selected feature in yellow, Identified feature in pinkish-outline.&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/11/wfs_identify.jpeg"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/11/wfs_identify-300x221.jpg" alt="wfs_identify"></a>[/caption]</p>
+<p>I'm amazed at the ability of Mapserver to take a shapefile, turn it into GML, and send it almost magically to ANY program that can interpret it.  I'm finally wrapping my noggin around the whole concept of XML, and just how powerful it can be.</p>
+<p>So what were my primary issues? Well, it took me about an hour to realize that I was running my, 'DescribeFeatureType' request on the mapfile entitled 'WA_WGS84.map' rather than 'WA_WFS_WGS84.map'. So that was my own error. Then I realized that while the KEY field for each of these shapefiles in ArcGIS is simply, 'FID', this **cannot **be used for the 'gml_featureid' metadata requirement in the mapfile. Another primary key such as, 'PARKID' must instead be used, and the GML file will actually create its own, 'FID' based on this.</p>
+<p>Some other key lessons from today:</p>
+<ul>
+<li>
+<p>ESRI ArcGIS does not support WFS out of the box, as it does WMS. To enable the GML simple features profile, try out this <a href="http://webhelp.esri.com/arcgisdesktop/9.2/index.cfm?id=5607&amp;pid=5604&amp;topicname=Using_the_GML_simple_features_profile">ESRI Help Article</a>.</p>
+</li>
+<li>
+<p>Querying your WFS server in-browser using the, 'getfeature' and 'getcapabilities' requests is a really simple and effective way of determining which required pieces of information are missing from your XML. Mapserver will actually create a comment in-line saying which required pieces of metadata are missing.</p>
+</li>
+<li>
+<p>Creating metadata abstracts for both WFS and WMS in your mapfile is a simple way to view how your GIS software is consuming the data. For example, the only reason i realized that I was actually using QGIS to display my WFS mapfile as a WMS was through the use both of the &quot;wms_abstract&quot; and &quot;wfs_abstract&quot; metadata tags.</p>
+</li>
+</ul>
+<p>What's next? Wrap an openlayers display around this with selection and identify capabilities.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2008-11-16-mapserver-update/">Mapserver [Update]</a></li><li>Next: <a href="/blog/2008-11-18-wms-to-wfs/">WMS To WFS</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2008-11-18-wfs/ -->
 	</body>
 </html>

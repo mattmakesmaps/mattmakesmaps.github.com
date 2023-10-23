@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>Web-Based GRASS!</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,38 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>Web-Based GRASS!</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2008-09-14">14 September 2008</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>Whoo-hoo! After a number of tweaks, I finally was able to install command-line GRASS GIS onto this site. I've been working off of Aaron Racicot's <a href="http://www.reprojected.com/geoblog/how-tos/gis-on-a-shared-hosting-environment-the-magic-of-not-having-root/">tutorial</a> for about a week now. Actually being able to understand and fix some of the errors in the ./configure process is feeling pretty rewarding. I had to manually set the pathways for FFTW and TK using --with-fftw-includes and --with-tclktk-includes respectively. Also, ran into <!-- more --> an issue with NAD2BIN not being explicitly laid out as well, but I was lucky enough to find a forum post stating that I needed to use the command, 'export NAD2BIN=/home/.../bin/nad2bin'.</p>
+<p>I'm not all that familiar with the command line syntax of GRASS, so I actually had to use a local install to view some sample syntax, and modify it for use on the web instance. Pretty fun.</p>
+<p>I'm wondering if there is anyway for a user to access the geoprocessing functionality of this GRASS install w/o logging into the server. Furthermore, could it be possible to tie this into a mapserver / openlayers install? It would be amazing to recreate this <a href="http://resources.esri.com/help/9.3/arcgisserver/apis/javascript/arcgis/help/jssamples_start.htm#jssamples/GPviewShed.html">ESRI on-the-fly geoprocessing example</a> using only open source GIS tools.</p>
+<p>Anyways, it's a pretty cool feeling to be able to upload a file to the server, run a geoprocessing task on it, and download the results back to my machine!</p>
+<blockquote>
+<p>GRASS 6.2.3 (spearfish):~/usr/local/bin &gt; r.shaded.relief map=elevation.dem shadedmap=shade_test altitude=30 azimuth=270 zmult=2 scale=1
+Calculating shading, please stand by.
+100%
+Color table for [shade_test] set to grey</p>
+</blockquote>
+<p>Shaded relief map created and named [shade_test].
+GRASS 6.2.3 (spearfish):~/usr/local/bin &gt; r.out.tiff input=shade_test output=/home/matthewkenny/usr/local/gis_workspace/shade_out compression=none
+WARNING: The map &lt;shade_test&gt; in mapset <user1> is a floating point map.
+Decimal values will be rounded to integer!
+GRASS 6.2.3 (spearfish):~/usr/local/bin &gt;</p>
+<p>And the output image downloaded back to my computer:</p>
+<p><a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/09/shade_out.jpg"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/09/shade_out-300x225.jpg" alt=""></a></p>
+<p><a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/09/shade_out.tif"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/09/shade_out.tif" alt=""></a></p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2008-09-14-python-gp-strangeness/">Python GP Strangeness</a></li><li>Next: <a href="/blog/2008-09-30-im-obsessed-with-douglas-peucker/">I&#39;m Obsessed With Douglas-Peucker</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2008-09-14-web-based-grass/ -->
 	</body>
 </html>

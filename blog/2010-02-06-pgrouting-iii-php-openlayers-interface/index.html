@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>pgRouting III: PHP + OpenLayers Interface</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,78 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>pgRouting III: PHP + OpenLayers Interface</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2010-02-06">06 February 2010</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>With the routing <a href="http://www.mkgeomatics.com/wordpress/?p=312">database configured and populated</a>, and with <a href="http://www.mkgeomatics.com/wordpress/?p=322">geoserver rendering the WMS</a>, now the focus can shift on designing the actual display and functionality.</p>
+<p>The conceptual plan is as follows: <!-- more --></p>
+<ul>
+<li>
+<p>Extract the geometry of a user's click on the map.</p>
+</li>
+<li>
+<p>Pass the extracted geometry to a PHP script, via an HTTP GET request.</p>
+</li>
+<li>
+<p>Use the PHP script to pass the geometry as part of an SQL query against the PostGIS/pgRouting database.</p>
+</li>
+<li>
+<p>Return the geometry from the database as <a href="http://geojson.org/">GeoJSON</a>, and deserialize it into an OpenLayers vector layer feature.</p>
+</li>
+</ul>
+<p>The code to extract a user's clicked coordinates was taken from <a href="http://openlayers.org/dev/examples/click.html">this</a> OpenLayers example. It was then modified to pass the xy coordinates to a second function, designed to create a URL which will execute a PHP script.</p>
+<p>[sourcecode language=&quot;javascript&quot;]trigger: function(e) {
+var xy = map.getLonLatFromViewPortPx(e.xy);
+executeSQL(xy);
+}[/sourcecode]</p>
+<p>Passing the XY variable to the executeSQL() function, we are able to now seperate out the individual X and Y coordinates, and apply them to their respective parameters in our URL string.</p>
+<p>[sourcecode language=&quot;javascript&quot;]// Build the URL
+var json_url = &quot;http://localhost/near_vertex_astar.php?&quot;;
+json_url += &quot;x=&quot; + escape(xy.lon);
+json_url += &quot;&amp;y=&quot; + escape(xy.lat);[/sourcecode]</p>
+<p>Having constructed the URL, we are now ready to use it to populate an OpenLayers vector layer with data.</p>
+<p>[sourcecode language=&quot;javascript&quot;]// Make a fresh vector layer, pulling features from our script URL
+json_layer = new OpenLayers.Layer.Vector(&quot;GeoJSON&quot;, {
+styleMap: myStyles,
+strategies: [new OpenLayers.Strategy.Fixed()],
+protocol: new OpenLayers.Protocol.HTTP({
+url: json_url,
+format: new OpenLayers.Format.GeoJSON()
+})
+});[/sourcecode]</p>
+<p>Alright! So where are we at right now? A user has clicked the map, and that click's geometry has been extracted and sent to a PHP script on the server for further work. The PHP script will execute SQL in the PostGIS/pgRouting data base to do the following:</p>
+<ul>
+<li>
+<p>Find the closest vertex in our routing network to the user's map click. This will be used as a source vertex.</p>
+</li>
+<li>
+<p>Find all firestations within 5km of the vertex (which have been pre-attributed with the closest vertex on the routing network to their location).</p>
+</li>
+<li>
+<p>Calculate the cost (as defined by total length of the route) from the source vertex to each fire station (really the routing network vertex).</p>
+</li>
+<li>
+<p>Return back as GeoJSON only the geometry for the route with the lowest cost.</p>
+</li>
+</ul>
+<p>Why all the hassle with determining the cost? Can't you just use PostGIS' ST_DWithin() function to find the closet firestation to our user's click and create the route? Well you could, but it might not always be the shortest route.</p>
+<p>[caption id=&quot;attachment_339&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Euclidean distance versus Manhattan. Which one is shorter?&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2010/02/distance.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2010/02/distance-300x279.png" alt="Euclidean distance versus Manhattan. Which one is shorter?"></a>[/caption]</p>
+<p>This behavior can be respresented in the routing network with the example below. Two different routes are generated from the same source vertex based on the combination of routing algorithm and account for route cost. On the left, the <a href="http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">dijkstra algorithm</a> is used to return the route to the closest fire station as the result of an ST_DWithin() query. On the right, the A-Star algorithm is used, and the route costs of all fire stations within a buffer are taken into account. As we can see, a different route and a different station are returned.</p>
+<p><a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2010/02/dj_left_astar_right1.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2010/02/dj_left_astar_right1-1024x338.png" alt="Comparing the two search algorithms and cost relationships."></a></p>
+<p>A link to the JS and PHP scripts can be found at the end of this post. This definitely is not the most elegant solution to working with routing, but in terms of an experiment it was a great learning exercise. I'm really excited to dive deeper into PostGIS and pgRouting. The next step in the process will be incorporating OSM data, and adding in addition attributes which affect cost (speed limits, one-way streets, etc).</p>
+<p>View the <a href="http://mkgeomatics.com/apps/syntaxhighlighter/astar_php.html">PHP</a>.</p>
+<p>View the <a href="http://mkgeomatics.com/apps/syntaxhighlighter/astar.html">OL JS</a>.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2010-01-31-pgrouting-part-ii-postgis-geoserver/">pgRouting Part II: PostGIS + Geoserver</a></li><li>Next: <a href="/blog/2010-06-28-plpgsql-function-to-iterate-pgrouting/">PL/pgSQL function to Iterate pgRouting</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2010-02-06-pgrouting-iii-php-openlayers-interface/ -->
 	</body>
 </html>

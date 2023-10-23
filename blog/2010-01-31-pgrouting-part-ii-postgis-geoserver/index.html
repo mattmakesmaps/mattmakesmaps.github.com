@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>pgRouting Part II: PostGIS + Geoserver</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,52 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>pgRouting Part II: PostGIS + Geoserver</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2010-01-31">31 January 2010</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>Since compiling <a href="http://pgrouting.postlbs.org/">Orkney's pgRouting extension</a> to PostgreSQL/PostGIS, I've decided to try my hand at creating a simple web interface to poke into the database. The current setup is as follows: <!-- more --></p>
+<ul>
+<li>
+<p>Display: OpenLayers</p>
+</li>
+<li>
+<p>Renderer: Geoserver (via non-cached WMS)</p>
+</li>
+<li>
+<p>Spatial Backend: PostGIS/pgRouting enabled PostgreSQL</p>
+</li>
+<li>
+<p>Data: <a href="http://www.cob.org/services/maps/gis/index.aspx">Public GIS data</a> from the city of Bellingham, Washington's GIS department.</p>
+</li>
+</ul>
+<p>For the sake of brevity, (but really because both TOPP has created some <a href="http://workshops.opengeo.org/opengeo-stack/">fantastic guides</a>) I won't go into the specifics of installing all the pieces. Just as an FYI, remember to set your 'JAVA_HOME' environment variable and make sure that you don't have things trying to use the same port!</p>
+<p>The Bellingham data is currently stored in <a href="http://www.spatialreference.org/ref/esri/102748/">NAD83 State Plane WA North Feet</a>, a typical projection for this area. This projection however, is not part of the EPSG projection set, and as such is not included in a vanilla install of PostGIS.</p>
+<p>In order to add this to the collection of spatial reference systems used by my PostGIS install, I went with the ridiculously cool <a href="http://spatialreference.org">spatialreference.org</a> site (A <a href="http://crschmidt.net/">crschmidt</a>, <a href="http://dbsgeo.com/">dbsgeo</a>, <a href="http://hobu.biz/">hobu</a>, and <a href="http://umbrellaconsulting.com/">umbrella</a> joint, hah). Navigating to the projection's page gives me the option to generate an <a href="http://www.spatialreference.org/ref/esri/102748/postgis/">INSERT</a> statement, adding the projection's info into my database.</p>
+<p>To load shapefiles into the PostGIS database, I chose to use the SPIT plugin for QGIS. Loading the data was fairly straightforward. I had an issue with a datefield that was present in the source shapefile, and had to delete the column manually using Open Office Database. I haven't found a way to delete fields from a shapefile using QGIS.</p>
+<p>[caption id=&quot;attachment_327&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;The SPIT Interface&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2010/01/spit.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2010/01/spit-300x175.png" alt="spit"></a>[/caption]</p>
+<p>After uploading the streets data into my PostGIS database, the next step was to transform the geometry into the Web Mercator 900913 Projection. This was done using standard PostGIS functions, adding a new, second, geometry column to the existing streets table. This reprojected data was then exported from my staging PostGIS database as a shapefile using the QGIS, 'Save As Shapefile' tool, and re-imported into my production database (with the routing functions).</p>
+<p>With data stored in the web mercator projection, inside of our PostGIS/pgRouting database, the next step was to add the layers to Geoserver. Using Geoserver 2.x, the process included the following steps (all done through the web-admin).</p>
+<ul>
+<li>
+<p>Add the new data store pointing the PostGIS database.</p>
+</li>
+<li>
+<p>Add new layers (resources) which point to the tables of interest in our PostGIS database.</p>
+</li>
+</ul>
+<p>After creating the connections between PostGIS and Geoserver, the creation of WMS services is taken care of, allowing us to roll them into OpenLayers with relative ease.</p>
+<p>I guess this got a little off-topic from what I originally wanted to write about. I think that I'll save the actual breakdown of my OL code (taking a user's map click to and using it to calculate a route to the nearest fire-station as determined by manhattan distance, as opposed to euclidean distance) for another day.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2010-01-11-pgrouting-on-ubuntu-netbook-remix-9-10/">pgRouting On Ubuntu Netbook Remix 9.10</a></li><li>Next: <a href="/blog/2010-02-06-pgrouting-iii-php-openlayers-interface/">pgRouting III: PHP + OpenLayers Interface</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2010-01-31-pgrouting-part-ii-postgis-geoserver/ -->
 	</body>
 </html>

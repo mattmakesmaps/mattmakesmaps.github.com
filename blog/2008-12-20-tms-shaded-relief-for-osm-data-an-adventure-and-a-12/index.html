@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>TMS: Shaded Relief for OSM Data (An Adventure and A 1/2)</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,34 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>TMS: Shaded Relief for OSM Data (An Adventure and A 1/2)</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2008-12-20">20 December 2008</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>After reading <a href="http://stamen.com/">Michal Migurski's</a> excellent post, '<a href="http://mike.teczno.com/notes/hillshading.html">making friends with hillshading</a>' I decided to try my own hand at producing a TMS-compatible hillshade layer for OSM. Motivated by both the high resolution LiDAR data which I happen to have access to, and the lack of access to ArcDesktop during the winter intersession... I set out on the FOSSGIS path. <!-- more --></p>
+<p>[caption id=&quot;attachment_205&quot; align=&quot;alignnone&quot; width=&quot;259&quot; caption=&quot;The resulting overlay&quot;]<a href="http://www.mkgeomatics.com/apps/openlayers/tiles/ol_working.html"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/12/picture-1-259x300.png" alt="The resulting overlay"></a>[/caption]</p>
+<p>The final output was created in a primarily two-step process. The hillshade was created using Matt Perry's <a href="http://www.perrygeo.net/wordpress/?p=7">GDAL DEM tools</a>. This command line addition to the GDAL suite of tools negated having to import the DEM into a new GRASS location, and exporting the resulting hillshade back out as another format.</p>
+<p>The majority of the work, the tiling that is, was done using <a href="http://www.klokan.cz/projects/gdal2tiles/">GDAL2Tiles</a>. This Google Summer of Code project operates under a command line utility which will take your slick GDAL-compatible raster dataset as input, and export a set of tiles exactly to your specs. What's more is the capability to automatically generate google maps and OpenLayers viewing pages which can be directly uploaded to a webspace.</p>
+<p>Finally, applying a slight transparency to the OSM layer allowed for the shaded relief to appear from behind. Quick-and-Dirty, <a href="http://mkgeomatics.com/apps/openlayers/tiles/ol_working.html">but it works</a>!</p>
+<p>The pain came when trying to compare the local TMS overlay using OSM vs. Google Maps base data. While using Google Maps street data, we clearly see the LiDAR building footprints align with the vector street centerlines. But switching over to OSM data, we see a drastic skew between the two.</p>
+<p>[caption id=&quot;attachment_206&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Google Street Data: Properly Aligned Local TMS&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/12/picture-21.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/12/picture-21-300x209.png" alt="Google Street Data: Properly Aligned Local TMS"></a>[/caption]</p>
+<p>[caption id=&quot;attachment_209&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;OSM Data: Note Hawaii Belt Road's location compared to its LiDAR footprint.&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/12/picture-4.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/12/picture-4-300x297.png" alt="OSM Data: Note Hawaii Belt Rd's location compared to its LiDAR footprint."></a>[/caption]</p>
+<p>Initially, I assumed that the problem was the result of some projection issues (EPSG: 4326 vs EPSG: 900913), until I realized that all data sets (LiDAR, Google, and OSM) had matching coastlines. Any distortion resulting from the affine transformation between WGS84 and Spherical Mercator would have clearly showed up along the coast as well as the streets.</p>
+<p>A quick look at the <a href="http://wiki.openstreetmap.org/wiki/Potlatch">Potlatch</a> editor revealed the inaccuracy of the TIGER line files used in this section of the map:</p>
+<p>[caption id=&quot;attachment_210&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Potlatch: TIGER data is a good, but not great.&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/12/potlatch.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2008/12/potlatch-300x273.png" alt="Potlatch: TIGER data is a good, but not great."></a>[/caption]</p>
+<p>All-in-all I was extremely impressed with the speed and efficency of using the <a href="http://www.perrygeo.net/wordpress/?p=7">GDAL DEM Tools</a> as well as <a href="http://www.klokan.cz/projects/gdal2tiles/">GDAL2Tiles</a>. Both projects are great representations of what can be done by individuals who choose to build upon existing FOSSGIS projects, and give back to the community.</p>
+<p>Additional Note:
+A GRASS-based approach to creating a TMS layer is possible, and has been outlined in <a href="sunbird.jrc.it/pvgis/doc/paper/2008_OSGeo5_TiledMapServices.pdf">this paper</a> appearing in the OSGeo Journal.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2008-12-08-osm-recap/">OSM Recap</a></li><li>Next: <a href="/blog/2009-01-20-geocoding-with-openlayers-a-crash-course-in-firebug/">Geocoding with OpenLayers: A Crash Course In Firebug</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2008-12-20-tms-shaded-relief-for-osm-data-an-adventure-and-a-12/ -->
 	</body>
 </html>

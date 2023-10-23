@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>Geocoding with OpenLayers: A Crash Course In Firebug</title>
+		<meta name="description" content="Matthew Matt Kenny GIS and woodworking blog.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,54 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>Geocoding with OpenLayers: A Crash Course In Firebug</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2009-01-20">20 January 2009</time></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>The vacation is over. A new job and a new semester are already providing plenty of opportunities to explore those crazy technologies of the geoweb.</p>
+<p>A need to incorporate the <a href="http://developer.yahoo.com/maps/rest/V1/geocode.html">Yahoo Geocoder</a> into a new OpenLayers app has proved to be a great learning experience in the navigation of the development version of OL. <!-- more --> The <a href="http://trac.openlayers.org/ticket/1784">YahooGeocoder.js</a> addin, created by OL community member, 'sbenthall', requires two prerequisites to run: A <a href="http://trac.openlayers.org/wiki/FrequentlyAskedQuestions#ProxyHost">proxy.cgi script</a> as well as a Yahoo Developer API key. Why would this RESTful service require a proxy, you might find yourself asking? Well, because even though you can query it in a RESTful fashion, the data is returned in an XML shell, requiring a proxy to allow complete the XMLHttpRequest. Yahoo has a great article for novice web programmers like myself explaining the role of  Web Proxies, which can be found <a href="http://developer.yahoo.com/javascript/howto-proxy.html">here</a>.</p>
+<p>A quick overview of the primary steps to add the YahooGeocoder.js addin are as follows:</p>
+<ol>
+<li>
+<p>Sign up for a Yahoo APP Key to enable access to their geocoding service.</p>
+</li>
+<li>
+<p>Add the proxy.cgi script to your webserver's 'cgi-bin'. Note: When navigating to the proxy.cgi's url, you might encounter, 'access denied' errors. If you do, make sure that you have the proper permissions set for your cgi-bin directory. This can be done using the terminal command, 'chmod 755' targeting cgi-bin directory.</p>
+</li>
+<li>
+<p>Edit the proxy.cgi script to include 'local.yahooapis.com' in the list of 'allowedHosts'.</p>
+</li>
+</ol>
+<p>[caption id=&quot;attachment_228&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Above: Modified 'proxy.cgi'&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/01/proxy_hosts.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/01/proxy_hosts-300x54.png" alt="proxy_hosts"></a>[/caption]</p>
+<ol start="4">
+<li>
+<p>Add the YahooGeocoder.js file to the OpenLayers 'lib/OpenLayers/Control' folder.</p>
+</li>
+<li>
+<p>Add &quot;OpenLayers/Control/YahooGeocoder.js&quot; to the variable array, 'jsfiles' inside the &quot;lib/OpenLayers.js&quot; library.</p>
+</li>
+</ol>
+<p>[caption id=&quot;attachment_229&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Above: Modified 'lib/OpenLayers.js'&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/01/control_add.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/01/control_add-300x149.png" alt="control_add"></a>[/caption]</p>
+<ol start="6">
+<li>Test the geocoder's functionality using the supplied .HTML file. (Hopefully it should work!)</li>
+</ol>
+<p>[caption id=&quot;attachment_230&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Above: Geocoder Result with Properly Formed XML Response.&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/01/good_xml_return1.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/01/good_xml_return1-300x217.png" alt="good_xml_return1"></a>[/caption]</p>
+<p>Six simple steps, but it can be challenging if you haven't tried to install any addins to the OL library before.</p>
+<p>In the above image, the firebug window can be seen returning a properly formed XML Response, having successfully executed the geocoding function. If you enlarge the image, we can compare this to the raw XML-Response using a properly constructed query. Note in both the response captured from firebug (above) as well as the raw XML (below) the presence of the address: 510 High Street, Bellingham WA, broken down into it's individual units along with the geocoded result.</p>
+<p>[caption id=&quot;attachment_231&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Above: Basic XML Return&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/01/basic_xml.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/01/basic_xml-300x221.png" alt="basic_xml"></a>[/caption]</p>
+<p>Further diving into the capabilities of firebug, we can use the DOM inspector to ensure that the various parameters required to properly execute the Yahoo Geocoder are in place. Note in the image below the presence of such necessary information as the APP ID Key, Projection, and Class, for the ygc variable. If any of these parameters happened to be incorrectly set, it would be displayed in this view.</p>
+<p>[caption id=&quot;attachment_232&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Above: The Firebug DOM Inspector&quot;]<a href="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/01/dom_inspector.png"><img src="http://www.mkgeomatics.com/wordpress/wp-content/uploads/2009/01/dom_inspector-300x91.png" alt="dom_inspector"></a>[/caption]</p>
+<p>I'm finally starting to appreciate the power of firebug as a development tool, which just so happens to coincide with my ability to understand it at a basic level. Hopefully as my experience in GIS Web Development grows, so will be ability to use the higher-end functions of this tool.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2008-12-20-tms-shaded-relief-for-osm-data-an-adventure-and-a-12/">TMS: Shaded Relief for OSM Data (An Adventure and A 1/2)</a></li><li>Next: <a href="/blog/2009-01-24-osm-minutely-tile-updates-thanks-cloudmade/">OSM &#39;Minutely&#39; Tile Updates: Thanks CloudMade!</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2009-01-20-geocoding-with-openlayers-a-crash-course-in-firebug/ -->
 	</body>
 </html>
