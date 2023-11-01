@@ -4,12 +4,69 @@
 	<subtitle>Matthew Matt Kenny GIS and woodworking blog.</subtitle>
 	<link href="https://mattmakesmaps.com/feed/feed.xml" rel="self"/>
 	<link href="https://mattmakesmaps.com/"/>
-	<updated>2023-10-19T00:00:00Z</updated>
+	<updated>2023-11-01T00:00:00Z</updated>
 	<id>https://mattmakesmaps.com/</id>
 	<author>
 		<name>Matt Kenny</name>
 		<email></email>
 	</author>
+	
+	<entry>
+		<title>FLDIGI on Mac With Digirig and Baofeng HT</title>
+		<link href="https://mattmakesmaps.com/blog/2023-11-01-fldigi-baofeng/"/>
+		<updated>2023-11-01T00:00:00Z</updated>
+		<id>https://mattmakesmaps.com/blog/2023-11-01-fldigi-baofeng/</id>
+		<content type="html">&lt;p&gt;I participated for the first time in the weekly &lt;a href=&quot;https://www.psdhn.org/&quot;&gt;Puget Sound Digital Ham Net&lt;/a&gt;
+this past Monday. This net specializes in sending digital data over the 2m and 70cm amateur radio bands
+as opposed to traditional voice communication. This allows for text and image files to be sent over
+a variety of different &amp;quot;digital modes&amp;quot;, although the most common for the group appeared to be
+&lt;a href=&quot;http://www.w1hkj.com/modes/mfsk.htm&quot;&gt;multi-frequency shift keyed&lt;/a&gt; aka &lt;code&gt;MFSK128&lt;/code&gt;,
+where the 128 indicates 128 baud or symbols per second. Pretty amazing to be able to send data across
+Seattle without the internet.&lt;/p&gt;
+&lt;p&gt;With the help of &lt;a href=&quot;https://www.qrz.com/db/KB7SDM&quot;&gt;Ryan KB7SDM&lt;/a&gt; and a great
+&lt;a href=&quot;https://www.youtube.com/watch?v=zSX64XwJ0E4&quot;&gt;getting started presentation&lt;/a&gt;
+a group member had put together, I was able to receive and decode other participants&#39; messages
+using the &lt;a href=&quot;http://www.w1hkj.com/&quot;&gt;&lt;code&gt;fldigi&lt;/code&gt; software suite&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here is an example of a message transmitted by a net member, received by my radio, and decoded on my
+macbook pro using &lt;code&gt;fldigi&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://mattmakesmaps.com/img/a6MA4y-4Pf-320.webp 320w, https://mattmakesmaps.com/img/a6MA4y-4Pf-600.webp 600w, https://mattmakesmaps.com/img/a6MA4y-4Pf-960.webp 960w, https://mattmakesmaps.com/img/a6MA4y-4Pf-1280.webp 1280w, https://mattmakesmaps.com/img/a6MA4y-4Pf-1600.webp 1600w, https://mattmakesmaps.com/img/a6MA4y-4Pf-1920.webp 1920w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;source type=&quot;image/jpeg&quot; srcset=&quot;https://mattmakesmaps.com/img/a6MA4y-4Pf-320.jpeg 320w, https://mattmakesmaps.com/img/a6MA4y-4Pf-600.jpeg 600w, https://mattmakesmaps.com/img/a6MA4y-4Pf-960.jpeg 960w, https://mattmakesmaps.com/img/a6MA4y-4Pf-1280.jpeg 1280w, https://mattmakesmaps.com/img/a6MA4y-4Pf-1600.jpeg 1600w, https://mattmakesmaps.com/img/a6MA4y-4Pf-1920.jpeg 1920w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;img alt=&quot;Screenshot of fldigi software displaying decoded message.&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://mattmakesmaps.com/img/a6MA4y-4Pf-320.jpeg&quot; width=&quot;1920&quot; height=&quot;1242&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;Receiving was as easy as tuning my radio to the net frequency, and turning on my mac&#39;s microphone to
+capture the sound from the radio&#39;s speaker. With regards to transmitting however, I wanted to be able
+to connect the radio to directly the computer. This ensures maximum fidelity in the transmission,
+and also allows the software to directly control the radio, &amp;quot;keying&amp;quot; or opening and closing the radio
+for transmit only while sending a message. Alternatively, I&#39;d have to manually key the radio myself.&lt;/p&gt;
+&lt;p&gt;In comes the &lt;a href=&quot;https://digirig.net/&quot;&gt;digirig&lt;/a&gt; a tiny piece of hardware that sits between the
+radio and computer, and essentially acts as a usb soundcard enables software control of the radio
+itself.&lt;/p&gt;
+&lt;p&gt;Below you can see my handheld radio, a baofeng UV-5R, and the digirig interface. The digirig is connected
+to the radio via an audio cable that plugs into both the radio&#39;s speaker and microphone jacks, allowing
+for transmit and receive into the macbook pro. The digirig itself is connected to the computer via usb-c.&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://mattmakesmaps.com/img/KwSYhcmrto-320.webp 320w, https://mattmakesmaps.com/img/KwSYhcmrto-600.webp 600w, https://mattmakesmaps.com/img/KwSYhcmrto-960.webp 960w, https://mattmakesmaps.com/img/KwSYhcmrto-1280.webp 1280w, https://mattmakesmaps.com/img/KwSYhcmrto-1600.webp 1600w, https://mattmakesmaps.com/img/KwSYhcmrto-1920.webp 1920w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;source type=&quot;image/jpeg&quot; srcset=&quot;https://mattmakesmaps.com/img/KwSYhcmrto-320.jpeg 320w, https://mattmakesmaps.com/img/KwSYhcmrto-600.jpeg 600w, https://mattmakesmaps.com/img/KwSYhcmrto-960.jpeg 960w, https://mattmakesmaps.com/img/KwSYhcmrto-1280.jpeg 1280w, https://mattmakesmaps.com/img/KwSYhcmrto-1600.jpeg 1600w, https://mattmakesmaps.com/img/KwSYhcmrto-1920.jpeg 1920w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;img alt=&quot;A baofeng uv-5r handheld ham radio connected to a digirig interface.&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://mattmakesmaps.com/img/KwSYhcmrto-320.jpeg&quot; width=&quot;1920&quot; height=&quot;2560&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;Actually configuring the &lt;code&gt;fldigi&lt;/code&gt; software to key the radio via the digirig was a little tricky.
+&lt;a href=&quot;https://forum.digirig.net/t/digirig-flrig-baofeng/580/4&quot;&gt;This post&lt;/a&gt; on the digirig forum
+helped clear it up, however.&lt;/p&gt;
+&lt;p&gt;I had to set my &lt;code&gt;fldigi&lt;/code&gt; software&#39;s &lt;code&gt;Hardware PTT&lt;/code&gt; controls to the following (open image in a new tab
+to enlarge):&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://mattmakesmaps.com/img/oIxHPV3M4i-320.webp 320w, https://mattmakesmaps.com/img/oIxHPV3M4i-600.webp 600w, https://mattmakesmaps.com/img/oIxHPV3M4i-960.webp 960w, https://mattmakesmaps.com/img/oIxHPV3M4i-1280.webp 1280w, https://mattmakesmaps.com/img/oIxHPV3M4i-1600.webp 1600w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;source type=&quot;image/jpeg&quot; srcset=&quot;https://mattmakesmaps.com/img/oIxHPV3M4i-320.jpeg 320w, https://mattmakesmaps.com/img/oIxHPV3M4i-600.jpeg 600w, https://mattmakesmaps.com/img/oIxHPV3M4i-960.jpeg 960w, https://mattmakesmaps.com/img/oIxHPV3M4i-1280.jpeg 1280w, https://mattmakesmaps.com/img/oIxHPV3M4i-1600.jpeg 1600w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;img alt=&quot;fldigi configuration menu for baofeng use.&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://mattmakesmaps.com/img/oIxHPV3M4i-320.jpeg&quot; width=&quot;1600&quot; height=&quot;912&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;Basically the magic here is:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Check &lt;code&gt;Use separate serial port PTT&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Check &lt;code&gt;Use RTS&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Set &lt;code&gt;Device&lt;/code&gt; to &lt;code&gt;/dev/cu.usbserial-1120&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The first setting, &lt;code&gt;Use separate serial port PTT&lt;/code&gt; I believe enables &lt;code&gt;fldigi&lt;/code&gt; to use the new serial port
+which the digirig hardware creates.&lt;/p&gt;
+&lt;p&gt;The second setting, &lt;code&gt;Use RTS&lt;/code&gt; tells &lt;code&gt;fldigi&lt;/code&gt; to transmit a &lt;code&gt;Ready to Transmit Signal&lt;/code&gt; to the radio, which
+actually keys up the radio and begins the transmission.&lt;/p&gt;
+&lt;p&gt;The third setting, for the device, simply selects the digirig from the list of connected devices on
+the mac. There are two varients listed for each device, with &lt;code&gt;cu&lt;/code&gt; or &lt;code&gt;tty&lt;/code&gt; prefixes.
+e.g &lt;code&gt;/dev/cu.usbserial-1120&lt;/code&gt; or &lt;code&gt;/dev/tty.usbserial-1120&lt;/code&gt;. This &lt;a href=&quot;https://stackoverflow.com/questions/8632586/whats-the-difference-between-dev-tty-and-dev-cu-on-macos&quot;&gt;stack overflow post&lt;/a&gt;
+explains the difference between the two. &lt;code&gt;cu&lt;/code&gt; appears to be used for outbound connections on linux
+systems.&lt;/p&gt;
+&lt;p&gt;I was able to successfully transmit over simplex with this setup, and am looking forward to trying
+out more modes in a future iteration of the Puget Sound Digital Hams Net.&lt;/p&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>New Site - From Jekyll to Eleventy</title>

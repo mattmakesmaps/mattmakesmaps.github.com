@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New Site - From Jekyll to Eleventy</title>
-		<meta name="description" content="Porting site from Jekyll to Eleventy">
+		<title>FLDIGI on Mac With Digirig and Baofeng HT</title>
+		<meta name="description" content="Setup of fldigi software with digirig and baofeng ht">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,42 +495,70 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>New Site - From Jekyll to Eleventy</h1>
+<h1>FLDIGI on Mac With Digirig and Baofeng HT</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-10-19">19 October 2023</time></li>
-	<li><a href="/tags/intro/" class="post-tag">intro</a></li>
+	<li><time datetime="2023-11-01">01 November 2023</time></li>
+	<li><a href="/tags/ham-radio/" class="post-tag">ham radio</a></li>
 </ul>
 
-<p>I've rebuilt this site using the <a href="https://www.11ty.dev/">Eleventy</a> static site generator.</p>
-<p>The previous version ran on <a href="https://jekyllrb.com/">jekyll</a>, whoose out-of-the-box integration
-with <a href="https://pages.github.com/">Github Pages</a> felt revolutionary when I made the switch
-from WordPress years ago.</p>
-<p>This site is based on the <a href="https://github.com/11ty/eleventy-base-blog">eleventy-base-blog</a> template
-(which appears to be an official release).</p>
-<p>Source files are hosted on the <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com">mattmakesmaps.github.com</a>
-project repo's <code>master</code> branch, with <a href="https://github.com/mattmakesmaps/mattmakesmaps.github.com/actions/runs/6556377877">github actions</a>
-used to build and deploy content from the <code>gh-pages</code> branch. At Tableau, I used Travis CI and JetBrains' TeamCity for builds, and getting started with Github Actions felt very similar.</p>
-<p>With the old Jekyll content also being markdown entries, I'll be able to migrate as much or as
-little of my old content as I choose over the next few weeks.</p>
-<p>Below is an example of a Github Actions run deploying the site. 35s for a free build
-(since the repo is public) is perfect for my purposes.</p>
-<p><picture><source type="image/webp" srcset="/img/q4kJHwBnN7-320.webp 320w, /img/q4kJHwBnN7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/q4kJHwBnN7-320.jpeg 320w, /img/q4kJHwBnN7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot showing the github actions build pipeline. Total runtime is 35 seconds." loading="lazy" decoding="async" src="/img/q4kJHwBnN7-320.jpeg" width="600" height="646"></picture></p>
-<p>With regards to images, I wasn't familiar with the current standard
-<a href="https://developers.google.com/speed/webp">webp format</a> nor the best practice of generating multiple sized
-versions of each image, optimizing loading performance across a variety of potential screen sizes.
-The latter is refered as <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images">responsive images</a>.</p>
-<p>The Eleventy framework handles this well out-of-the-box, allowing you generate custom export functions
-that handle all aspects of output resolution and formats. I found the following to be a
-great tutorial: <a href="https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/">https://www.aleksandrhovhannisyan.com/blog/eleventy-image-plugin/</a></p>
+<p>I participated for the first time in the weekly <a href="https://www.psdhn.org/">Puget Sound Digital Ham Net</a>
+this past Monday. This net specializes in sending digital data over the 2m and 70cm amateur radio bands
+as opposed to traditional voice communication. This allows for text and image files to be sent over
+a variety of different &quot;digital modes&quot;, although the most common for the group appeared to be
+<a href="http://www.w1hkj.com/modes/mfsk.htm">multi-frequency shift keyed</a> aka <code>MFSK128</code>,
+where the 128 indicates 128 baud or symbols per second. Pretty amazing to be able to send data across
+Seattle without the internet.</p>
+<p>With the help of <a href="https://www.qrz.com/db/KB7SDM">Ryan KB7SDM</a> and a great
+<a href="https://www.youtube.com/watch?v=zSX64XwJ0E4">getting started presentation</a>
+a group member had put together, I was able to receive and decode other participants' messages
+using the <a href="http://www.w1hkj.com/"><code>fldigi</code> software suite</a>.</p>
+<p>Here is an example of a message transmitted by a net member, received by my radio, and decoded on my
+macbook pro using <code>fldigi</code>.</p>
+<p><picture><source type="image/webp" srcset="/img/a6MA4y-4Pf-320.webp 320w, /img/a6MA4y-4Pf-600.webp 600w, /img/a6MA4y-4Pf-960.webp 960w, /img/a6MA4y-4Pf-1280.webp 1280w, /img/a6MA4y-4Pf-1600.webp 1600w, /img/a6MA4y-4Pf-1920.webp 1920w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/a6MA4y-4Pf-320.jpeg 320w, /img/a6MA4y-4Pf-600.jpeg 600w, /img/a6MA4y-4Pf-960.jpeg 960w, /img/a6MA4y-4Pf-1280.jpeg 1280w, /img/a6MA4y-4Pf-1600.jpeg 1600w, /img/a6MA4y-4Pf-1920.jpeg 1920w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot of fldigi software displaying decoded message." loading="lazy" decoding="async" src="/img/a6MA4y-4Pf-320.jpeg" width="1920" height="1242"></picture></p>
+<p>Receiving was as easy as tuning my radio to the net frequency, and turning on my mac's microphone to
+capture the sound from the radio's speaker. With regards to transmitting however, I wanted to be able
+to connect the radio to directly the computer. This ensures maximum fidelity in the transmission,
+and also allows the software to directly control the radio, &quot;keying&quot; or opening and closing the radio
+for transmit only while sending a message. Alternatively, I'd have to manually key the radio myself.</p>
+<p>In comes the <a href="https://digirig.net/">digirig</a> a tiny piece of hardware that sits between the
+radio and computer, and essentially acts as a usb soundcard enables software control of the radio
+itself.</p>
+<p>Below you can see my handheld radio, a baofeng UV-5R, and the digirig interface. The digirig is connected
+to the radio via an audio cable that plugs into both the radio's speaker and microphone jacks, allowing
+for transmit and receive into the macbook pro. The digirig itself is connected to the computer via usb-c.</p>
+<p><picture><source type="image/webp" srcset="/img/KwSYhcmrto-320.webp 320w, /img/KwSYhcmrto-600.webp 600w, /img/KwSYhcmrto-960.webp 960w, /img/KwSYhcmrto-1280.webp 1280w, /img/KwSYhcmrto-1600.webp 1600w, /img/KwSYhcmrto-1920.webp 1920w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/KwSYhcmrto-320.jpeg 320w, /img/KwSYhcmrto-600.jpeg 600w, /img/KwSYhcmrto-960.jpeg 960w, /img/KwSYhcmrto-1280.jpeg 1280w, /img/KwSYhcmrto-1600.jpeg 1600w, /img/KwSYhcmrto-1920.jpeg 1920w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="A baofeng uv-5r handheld ham radio connected to a digirig interface." loading="lazy" decoding="async" src="/img/KwSYhcmrto-320.jpeg" width="1920" height="2560"></picture></p>
+<p>Actually configuring the <code>fldigi</code> software to key the radio via the digirig was a little tricky.
+<a href="https://forum.digirig.net/t/digirig-flrig-baofeng/580/4">This post</a> on the digirig forum
+helped clear it up, however.</p>
+<p>I had to set my <code>fldigi</code> software's <code>Hardware PTT</code> controls to the following (open image in a new tab
+to enlarge):</p>
+<p><picture><source type="image/webp" srcset="/img/oIxHPV3M4i-320.webp 320w, /img/oIxHPV3M4i-600.webp 600w, /img/oIxHPV3M4i-960.webp 960w, /img/oIxHPV3M4i-1280.webp 1280w, /img/oIxHPV3M4i-1600.webp 1600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/oIxHPV3M4i-320.jpeg 320w, /img/oIxHPV3M4i-600.jpeg 600w, /img/oIxHPV3M4i-960.jpeg 960w, /img/oIxHPV3M4i-1280.jpeg 1280w, /img/oIxHPV3M4i-1600.jpeg 1600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="fldigi configuration menu for baofeng use." loading="lazy" decoding="async" src="/img/oIxHPV3M4i-320.jpeg" width="1600" height="912"></picture></p>
+<p>Basically the magic here is:</p>
+<ul>
+<li>Check <code>Use separate serial port PTT</code></li>
+<li>Check <code>Use RTS</code></li>
+<li>Set <code>Device</code> to <code>/dev/cu.usbserial-1120</code></li>
+</ul>
+<p>The first setting, <code>Use separate serial port PTT</code> I believe enables <code>fldigi</code> to use the new serial port
+which the digirig hardware creates.</p>
+<p>The second setting, <code>Use RTS</code> tells <code>fldigi</code> to transmit a <code>Ready to Transmit Signal</code> to the radio, which
+actually keys up the radio and begins the transmission.</p>
+<p>The third setting, for the device, simply selects the digirig from the list of connected devices on
+the mac. There are two varients listed for each device, with <code>cu</code> or <code>tty</code> prefixes.
+e.g <code>/dev/cu.usbserial-1120</code> or <code>/dev/tty.usbserial-1120</code>. This <a href="https://stackoverflow.com/questions/8632586/whats-the-difference-between-dev-tty-and-dev-cu-on-macos">stack overflow post</a>
+explains the difference between the two. <code>cu</code> appears to be used for outbound connections on linux
+systems.</p>
+<p>I was able to successfully transmit over simplex with this setup, and am looking forward to trying
+out more modes in a future iteration of the Puget Sound Digital Hams Net.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2014-01-15-using-pg-dump-with-postgis-topology/">Using pg_dump with PostGIS Topology</a></li><li>Next: <a href="/blog/2023-11-01-fldigi-baofeng/">FLDIGI on Mac With Digirig and Baofeng HT</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2023-10-19-site-migration/">New Site - From Jekyll to Eleventy</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-10-19-site-migration/ -->
+		<!-- Current page: /blog/2023-11-01-fldigi-baofeng/ -->
 	</body>
 </html>
