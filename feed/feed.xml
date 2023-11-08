@@ -52,10 +52,19 @@ section above.&lt;/p&gt;
 &lt;h1 id=&quot;project-setup&quot; tabindex=&quot;-1&quot;&gt;Project Setup &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/&quot;&gt;#&lt;/a&gt;&lt;/h1&gt;
 &lt;h2 id=&quot;python-environment-with-pipenv&quot; tabindex=&quot;-1&quot;&gt;Python Environment With Pipenv &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Cloning an existing project with a &lt;code&gt;Pipfile&lt;/code&gt;, run &lt;code&gt;pipenv install --dev&lt;/code&gt;. This creates
-a new virtualenv and installs dependencies.&lt;/li&gt;
-&lt;li&gt;Create a new project, just install the first dependency with &lt;code&gt;pipenv install &amp;lt;package foo&amp;gt;&lt;/code&gt;
-from the project&#39;s root dir. That will generate the new virtual env.&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Cloning an existing project with a &lt;code&gt;Pipfile&lt;/code&gt;, run &lt;code&gt;pipenv install --dev&lt;/code&gt;. This creates
+a new virtualenv and installs dependencies.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Create a new project, just install the first dependency with &lt;code&gt;pipenv install &amp;lt;package foo&amp;gt;&lt;/code&gt;
+from the project&#39;s root dir. That will generate the new virtual env.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; For better cross-compatibility with other systems, update the &lt;code&gt;Pipfile&lt;/code&gt; to reference
+Python &lt;code&gt;3&lt;/code&gt; as opposed to a specific version e.g &lt;code&gt;3.11&lt;/code&gt;. See this
+example &lt;a href=&quot;https://github.com/mattmakesmaps/kvru-utils/blob/main/mp3-convert/Pipfile#L13&quot;&gt;CL&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;visual-studio-code-launch-configuration&quot; tabindex=&quot;-1&quot;&gt;Visual Studio Code Launch Configuration &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;The following is an example script launch configuration. Note the relative path

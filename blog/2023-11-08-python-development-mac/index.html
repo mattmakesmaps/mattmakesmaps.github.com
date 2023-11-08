@@ -538,10 +538,19 @@ section above.</p>
 <h1 id="project-setup" tabindex="-1">Project Setup <a class="header-anchor" href="#project-setup">#</a></h1>
 <h2 id="python-environment-with-pipenv" tabindex="-1">Python Environment With Pipenv <a class="header-anchor" href="#python-environment-with-pipenv">#</a></h2>
 <ul>
-<li>Cloning an existing project with a <code>Pipfile</code>, run <code>pipenv install --dev</code>. This creates
-a new virtualenv and installs dependencies.</li>
-<li>Create a new project, just install the first dependency with <code>pipenv install &lt;package foo&gt;</code>
-from the project's root dir. That will generate the new virtual env.</li>
+<li>
+<p>Cloning an existing project with a <code>Pipfile</code>, run <code>pipenv install --dev</code>. This creates
+a new virtualenv and installs dependencies.</p>
+</li>
+<li>
+<p>Create a new project, just install the first dependency with <code>pipenv install &lt;package foo&gt;</code>
+from the project's root dir. That will generate the new virtual env.</p>
+</li>
+<li>
+<p><strong>NOTE:</strong> For better cross-compatibility with other systems, update the <code>Pipfile</code> to reference
+Python <code>3</code> as opposed to a specific version e.g <code>3.11</code>. See this
+example <a href="https://github.com/mattmakesmaps/kvru-utils/blob/main/mp3-convert/Pipfile#L13">CL</a></p>
+</li>
 </ul>
 <h2 id="visual-studio-code-launch-configuration" tabindex="-1">Visual Studio Code Launch Configuration <a class="header-anchor" href="#visual-studio-code-launch-configuration">#</a></h2>
 <p>The following is an example script launch configuration. Note the relative path
