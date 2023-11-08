@@ -59,6 +59,10 @@ a new virtualenv and installs dependencies.
 - Create a new project, just install the first dependency with `pipenv install <package foo>`
 from the project's root dir. That will generate the new virtual env.
 
+- **NOTE:** For better cross-compatibility with other systems, update the `Pipfile` to reference
+Python `3` as opposed to a specific version e.g `3.11`. See this
+example [CL](https://github.com/mattmakesmaps/kvru-utils/blob/main/mp3-convert/Pipfile#L13)
+
 ## Visual Studio Code Launch Configuration
 
 The following is an example script launch configuration. Note the relative path
