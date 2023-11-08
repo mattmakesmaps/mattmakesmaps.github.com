@@ -4,12 +4,85 @@
 	<subtitle>Matthew Matt Kenny GIS and woodworking blog.</subtitle>
 	<link href="https://mattmakesmaps.com/feed/feed.xml" rel="self"/>
 	<link href="https://mattmakesmaps.com/"/>
-	<updated>2023-11-01T00:00:00Z</updated>
+	<updated>2023-11-08T00:00:00Z</updated>
 	<id>https://mattmakesmaps.com/</id>
 	<author>
 		<name>Matt Kenny</name>
 		<email></email>
 	</author>
+	
+	<entry>
+		<title>Python Dev Setup on Mac | Gotchas Documented</title>
+		<link href="https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/"/>
+		<updated>2023-11-08T00:00:00Z</updated>
+		<id>https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/</id>
+		<content type="html">&lt;h1 id=&quot;tool-installation&quot; tabindex=&quot;-1&quot;&gt;Tool Installation &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/&quot;&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&quot;python-base-install&quot; tabindex=&quot;-1&quot;&gt;Python Base Install &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Install &lt;a href=&quot;https://brew.sh/#install&quot;&gt;Homebrew&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Install Python 3 via homebrew: &lt;code&gt;brew install python&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;At this point, you can use &lt;code&gt;python3&lt;/code&gt; and &lt;code&gt;pip3&lt;/code&gt; commands, but for &lt;code&gt;pipenv&lt;/code&gt; you&#39;ll need
+to symlink &lt;code&gt;pip&lt;/code&gt; and &lt;code&gt;python&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;To do this, note the &lt;code&gt;caveat&lt;/code&gt; message produced by &lt;code&gt;brew install python&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Python has been installed as
+  /opt/homebrew/bin/python3
+
+Unversioned symlinks `python`, `python-config`, `pip` etc. pointing to
+`python3`, `python3-config`, `pip3` etc., respectively, have been installed into
+  /opt/homebrew/opt/python@3.11/libexec/bin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We need to add the following to the end our &lt;code&gt;~/.zshrc&lt;/code&gt; file (Per this
+&lt;a href=&quot;https://stackoverflow.com/questions/11530090/adding-a-new-entry-to-the-path-variable-in-zsh&quot;&gt;SO Post&lt;/a&gt;):&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# point python to python3
+path+=(&#39;/opt/homebrew/opt/python@3.11/libexec/bin&#39;)
+export PATH
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;pipenv&quot; tabindex=&quot;-1&quot;&gt;Pipenv &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Get &lt;code&gt;pipenv&lt;/code&gt; setup to manage dependencies and virtual environments.
+Reference &lt;a href=&quot;https://docs.python-guide.org/dev/virtualenvs/&quot;&gt;Hitchiker&#39;s Guide to Python&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; The link above contains a previous section on Python base install. These instructions didn&#39;t
+address symlinking &lt;code&gt;python&lt;/code&gt; to &lt;code&gt;python3&lt;/code&gt;. Instead of using these, follow notes in &lt;code&gt;Python Base Install&lt;/code&gt;
+section above.&lt;/p&gt;
+&lt;h2 id=&quot;vs-code&quot; tabindex=&quot;-1&quot;&gt;VS Code &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Linter: &lt;a href=&quot;https://marketplace.visualstudio.com/items?itemName=ms-python.pylint&quot;&gt;Pylint Extension&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Code formatter: &lt;a href=&quot;https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter&quot;&gt;Black Formatter Extension&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;project-setup&quot; tabindex=&quot;-1&quot;&gt;Project Setup &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/&quot;&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&quot;python-environment-with-pipenv&quot; tabindex=&quot;-1&quot;&gt;Python Environment With Pipenv &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Cloning an existing project with a &lt;code&gt;Pipfile&lt;/code&gt;, run &lt;code&gt;pipenv install --dev&lt;/code&gt;. This creates
+a new virtualenv and installs dependencies.&lt;/li&gt;
+&lt;li&gt;Create a new project, just install the first dependency with &lt;code&gt;pipenv install &amp;lt;package foo&amp;gt;&lt;/code&gt;
+from the project&#39;s root dir. That will generate the new virtual env.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;visual-studio-code-launch-configuration&quot; tabindex=&quot;-1&quot;&gt;Visual Studio Code Launch Configuration &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The following is an example script launch configuration. Note the relative path
+to the script file in &lt;code&gt;program&lt;/code&gt; and the command line args in &lt;code&gt;args&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    &amp;quot;version&amp;quot;: &amp;quot;0.2.0&amp;quot;,
+    &amp;quot;configurations&amp;quot;: [
+        {
+            &amp;quot;name&amp;quot;: &amp;quot;mp3-convert.py with test args&amp;quot;,
+            &amp;quot;type&amp;quot;: &amp;quot;python&amp;quot;,
+            &amp;quot;request&amp;quot;: &amp;quot;launch&amp;quot;,
+            &amp;quot;program&amp;quot;: &amp;quot;${workspaceFolder}/mp3-convert/mp3-convert.py&amp;quot;,
+            &amp;quot;console&amp;quot;: &amp;quot;integratedTerminal&amp;quot;,
+            &amp;quot;justMyCode&amp;quot;: true,
+            &amp;quot;args&amp;quot;: [
+                &amp;quot;${workspaceFolder}/test_data/source&amp;quot;,
+                &amp;quot;${workspaceFolder}/test_data/dest&amp;quot;
+            ]
+        }
+    ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>FLDIGI on Mac With Digirig and Baofeng HT</title>

@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>FLDIGI on Mac With Digirig and Baofeng HT</title>
-		<meta name="description" content="Setup of fldigi software with digirig and baofeng ht">
+		<title>Python Dev Setup on Mac | Gotchas Documented</title>
+		<meta name="description" content="Notes on setting up VS Code for Python on Mac">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,70 +495,86 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>FLDIGI on Mac With Digirig and Baofeng HT</h1>
+<h1>Python Dev Setup on Mac | Gotchas Documented</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-11-01">01 November 2023</time></li>
-	<li><a href="/tags/ham-radio/" class="post-tag">ham radio</a></li>
+	<li><time datetime="2023-11-08">08 November 2023</time></li>
+	<li><a href="/tags/python/" class="post-tag">python</a></li>
 </ul>
 
-<p>I participated for the first time in the weekly <a href="https://www.psdhn.org/">Puget Sound Digital Ham Net</a>
-this past Monday. This net specializes in sending digital data over the 2m and 70cm amateur radio bands
-as opposed to traditional voice communication. This allows for text and image files to be sent over
-a variety of different &quot;digital modes&quot;, although the most common for the group appeared to be
-<a href="http://www.w1hkj.com/modes/mfsk.htm">multi-frequency shift keyed</a> aka <code>MFSK128</code>,
-where the 128 indicates 128 baud or symbols per second. Pretty amazing to be able to send data across
-Seattle without the internet.</p>
-<p>With the help of <a href="https://www.qrz.com/db/KB7SDM">Ryan KB7SDM</a> and a great
-<a href="https://www.youtube.com/watch?v=zSX64XwJ0E4">getting started presentation</a>
-a group member had put together, I was able to receive and decode other participants' messages
-using the <a href="http://www.w1hkj.com/"><code>fldigi</code> software suite</a>.</p>
-<p>Here is an example of a message transmitted by a net member, received by my radio, and decoded on my
-macbook pro using <code>fldigi</code>.</p>
-<p><picture><source type="image/webp" srcset="/img/a6MA4y-4Pf-320.webp 320w, /img/a6MA4y-4Pf-600.webp 600w, /img/a6MA4y-4Pf-960.webp 960w, /img/a6MA4y-4Pf-1280.webp 1280w, /img/a6MA4y-4Pf-1600.webp 1600w, /img/a6MA4y-4Pf-1920.webp 1920w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/a6MA4y-4Pf-320.jpeg 320w, /img/a6MA4y-4Pf-600.jpeg 600w, /img/a6MA4y-4Pf-960.jpeg 960w, /img/a6MA4y-4Pf-1280.jpeg 1280w, /img/a6MA4y-4Pf-1600.jpeg 1600w, /img/a6MA4y-4Pf-1920.jpeg 1920w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot of fldigi software displaying decoded message." loading="lazy" decoding="async" src="/img/a6MA4y-4Pf-320.jpeg" width="1920" height="1242"></picture></p>
-<p>Receiving was as easy as tuning my radio to the net frequency, and turning on my mac's microphone to
-capture the sound from the radio's speaker. With regards to transmitting however, I wanted to be able
-to connect the radio to directly the computer. This ensures maximum fidelity in the transmission,
-and also allows the software to directly control the radio, &quot;keying&quot; or opening and closing the radio
-for transmit only while sending a message. Alternatively, I'd have to manually key the radio myself.</p>
-<p>In comes the <a href="https://digirig.net/">digirig</a> a tiny piece of hardware that sits between the
-radio and computer, and essentially acts as a usb soundcard enables software control of the radio
-itself.</p>
-<p>Below you can see my handheld radio, a baofeng UV-5R, and the digirig interface. The digirig is connected
-to the radio via an audio cable that plugs into both the radio's speaker and microphone jacks, allowing
-for transmit and receive into the macbook pro. The digirig itself is connected to the computer via usb-c.</p>
-<p><picture><source type="image/webp" srcset="/img/KwSYhcmrto-320.webp 320w, /img/KwSYhcmrto-600.webp 600w, /img/KwSYhcmrto-960.webp 960w, /img/KwSYhcmrto-1280.webp 1280w, /img/KwSYhcmrto-1600.webp 1600w, /img/KwSYhcmrto-1920.webp 1920w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/KwSYhcmrto-320.jpeg 320w, /img/KwSYhcmrto-600.jpeg 600w, /img/KwSYhcmrto-960.jpeg 960w, /img/KwSYhcmrto-1280.jpeg 1280w, /img/KwSYhcmrto-1600.jpeg 1600w, /img/KwSYhcmrto-1920.jpeg 1920w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="A baofeng uv-5r handheld ham radio connected to a digirig interface." loading="lazy" decoding="async" src="/img/KwSYhcmrto-320.jpeg" width="1920" height="2560"></picture></p>
-<p>Actually configuring the <code>fldigi</code> software to key the radio via the digirig was a little tricky.
-<a href="https://forum.digirig.net/t/digirig-flrig-baofeng/580/4">This post</a> on the digirig forum
-helped clear it up, however.</p>
-<p>I had to set my <code>fldigi</code> software's <code>Hardware PTT</code> controls to the following (open image in a new tab
-to enlarge):</p>
-<p><picture><source type="image/webp" srcset="/img/oIxHPV3M4i-320.webp 320w, /img/oIxHPV3M4i-600.webp 600w, /img/oIxHPV3M4i-960.webp 960w, /img/oIxHPV3M4i-1280.webp 1280w, /img/oIxHPV3M4i-1600.webp 1600w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/oIxHPV3M4i-320.jpeg 320w, /img/oIxHPV3M4i-600.jpeg 600w, /img/oIxHPV3M4i-960.jpeg 960w, /img/oIxHPV3M4i-1280.jpeg 1280w, /img/oIxHPV3M4i-1600.jpeg 1600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="fldigi configuration menu for baofeng use." loading="lazy" decoding="async" src="/img/oIxHPV3M4i-320.jpeg" width="1600" height="912"></picture></p>
-<p>Basically the magic here is:</p>
+<h1 id="tool-installation" tabindex="-1">Tool Installation <a class="header-anchor" href="#tool-installation">#</a></h1>
+<h2 id="python-base-install" tabindex="-1">Python Base Install <a class="header-anchor" href="#python-base-install">#</a></h2>
 <ul>
-<li>Check <code>Use separate serial port PTT</code></li>
-<li>Check <code>Use RTS</code></li>
-<li>Set <code>Device</code> to <code>/dev/cu.usbserial-1120</code></li>
+<li>Install <a href="https://brew.sh/#install">Homebrew</a></li>
+<li>Install Python 3 via homebrew: <code>brew install python</code></li>
 </ul>
-<p>The first setting, <code>Use separate serial port PTT</code> I believe enables <code>fldigi</code> to use the new serial port
-which the digirig hardware creates.</p>
-<p>The second setting, <code>Use RTS</code> tells <code>fldigi</code> to transmit a <code>Ready to Transmit Signal</code> to the radio, which
-actually keys up the radio and begins the transmission.</p>
-<p>The third setting, for the device, simply selects the digirig from the list of connected devices on
-the mac. There are two varients listed for each device, with <code>cu</code> or <code>tty</code> prefixes.
-e.g <code>/dev/cu.usbserial-1120</code> or <code>/dev/tty.usbserial-1120</code>. This <a href="https://stackoverflow.com/questions/8632586/whats-the-difference-between-dev-tty-and-dev-cu-on-macos">stack overflow post</a>
-explains the difference between the two. <code>cu</code> appears to be used for outbound connections on linux
-systems.</p>
-<p>I was able to successfully transmit over simplex with this setup, and am looking forward to trying
-out more modes in a future iteration of the Puget Sound Digital Hams Net.</p>
+<p>At this point, you can use <code>python3</code> and <code>pip3</code> commands, but for <code>pipenv</code> you'll need
+to symlink <code>pip</code> and <code>python</code>.</p>
+<p>To do this, note the <code>caveat</code> message produced by <code>brew install python</code>:</p>
+<pre><code>Python has been installed as
+  /opt/homebrew/bin/python3
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2023-10-19-site-migration/">New Site - From Jekyll to Eleventy</a></li><li>Next: <a href="/blog/2023-11-08-python-development-mac/">Python Dev Setup on Mac | Gotchas Documented</a></li>
+Unversioned symlinks `python`, `python-config`, `pip` etc. pointing to
+`python3`, `python3-config`, `pip3` etc., respectively, have been installed into
+  /opt/homebrew/opt/python@3.11/libexec/bin
+</code></pre>
+<p>We need to add the following to the end our <code>~/.zshrc</code> file (Per this
+<a href="https://stackoverflow.com/questions/11530090/adding-a-new-entry-to-the-path-variable-in-zsh">SO Post</a>):</p>
+<pre><code># point python to python3
+path+=('/opt/homebrew/opt/python@3.11/libexec/bin')
+export PATH
+</code></pre>
+<h2 id="pipenv" tabindex="-1">Pipenv <a class="header-anchor" href="#pipenv">#</a></h2>
+<p>Get <code>pipenv</code> setup to manage dependencies and virtual environments.
+Reference <a href="https://docs.python-guide.org/dev/virtualenvs/">Hitchiker's Guide to Python</a></p>
+<p><strong>NOTE:</strong> The link above contains a previous section on Python base install. These instructions didn't
+address symlinking <code>python</code> to <code>python3</code>. Instead of using these, follow notes in <code>Python Base Install</code>
+section above.</p>
+<h2 id="vs-code" tabindex="-1">VS Code <a class="header-anchor" href="#vs-code">#</a></h2>
+<ul>
+<li>Linter: <a href="https://marketplace.visualstudio.com/items?itemName=ms-python.pylint">Pylint Extension</a></li>
+<li>Code formatter: <a href="https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter">Black Formatter Extension</a></li>
+</ul>
+<h1 id="project-setup" tabindex="-1">Project Setup <a class="header-anchor" href="#project-setup">#</a></h1>
+<h2 id="python-environment-with-pipenv" tabindex="-1">Python Environment With Pipenv <a class="header-anchor" href="#python-environment-with-pipenv">#</a></h2>
+<ul>
+<li>Cloning an existing project with a <code>Pipfile</code>, run <code>pipenv install --dev</code>. This creates
+a new virtualenv and installs dependencies.</li>
+<li>Create a new project, just install the first dependency with <code>pipenv install &lt;package foo&gt;</code>
+from the project's root dir. That will generate the new virtual env.</li>
+</ul>
+<h2 id="visual-studio-code-launch-configuration" tabindex="-1">Visual Studio Code Launch Configuration <a class="header-anchor" href="#visual-studio-code-launch-configuration">#</a></h2>
+<p>The following is an example script launch configuration. Note the relative path
+to the script file in <code>program</code> and the command line args in <code>args</code>.</p>
+<pre><code>{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    &quot;version&quot;: &quot;0.2.0&quot;,
+    &quot;configurations&quot;: [
+        {
+            &quot;name&quot;: &quot;mp3-convert.py with test args&quot;,
+            &quot;type&quot;: &quot;python&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;program&quot;: &quot;${workspaceFolder}/mp3-convert/mp3-convert.py&quot;,
+            &quot;console&quot;: &quot;integratedTerminal&quot;,
+            &quot;justMyCode&quot;: true,
+            &quot;args&quot;: [
+                &quot;${workspaceFolder}/test_data/source&quot;,
+                &quot;${workspaceFolder}/test_data/dest&quot;
+            ]
+        }
+    ]
+}
+</code></pre>
+
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2023-11-01-fldigi-baofeng/">FLDIGI on Mac With Digirig and Baofeng HT</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-11-01-fldigi-baofeng/ -->
+		<!-- Current page: /blog/2023-11-08-python-development-mac/ -->
 	</body>
 </html>
