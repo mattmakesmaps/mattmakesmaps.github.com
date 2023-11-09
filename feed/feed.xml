@@ -17,6 +17,7 @@
 		<updated>2023-11-08T00:00:00Z</updated>
 		<id>https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/</id>
 		<content type="html">&lt;h1 id=&quot;tool-installation&quot; tabindex=&quot;-1&quot;&gt;Tool Installation &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/&quot;&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;Here are some personal notes on getting Python setup for my new Mac.&lt;/p&gt;
 &lt;h2 id=&quot;python-base-install&quot; tabindex=&quot;-1&quot;&gt;Python Base Install &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-11-08-python-development-mac/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Install &lt;a href=&quot;https://brew.sh/#install&quot;&gt;Homebrew&lt;/a&gt;&lt;/li&gt;
