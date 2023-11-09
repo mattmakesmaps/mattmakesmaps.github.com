@@ -8,6 +8,8 @@ tags: python
 
 # Tool Installation
 
+Here are some personal notes on getting Python setup for my new Mac.
+
 ## Python Base Install
 
 - Install [Homebrew](https://brew.sh/#install)
