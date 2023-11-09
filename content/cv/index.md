@@ -7,8 +7,8 @@ eleventyNavigation:
 # CV
 
 - [Linkedin](https://www.linkedin.com/in/mattmakesmaps/)
-- [Github](https://github.com/mattmakesmaps)
-
+- [Github](https://github.cojm/mattmakesmaps)
+- [Resume PDF](./mkenny_resume_2023.pdf)
 ## Presentations and Workshops
 
 **Note:** CUGOS == [Cascadia Users of Geospatial Open Source](https://cugos.org/)

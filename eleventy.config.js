@@ -18,6 +18,9 @@ module.exports = function(eleventyConfig) {
 		"./node_modules/prismjs/themes/prism-okaidia.css": "/css/prism-okaidia.css"
 	});
 
+	// Copy PDF files from `content` to `_site` preserving directory structure.
+	eleventyConfig.addPassthroughCopy("**/*.pdf")
+
 	// Run Eleventy when these files change:
 	// https://www.11ty.dev/docs/watch-serve/#add-your-own-watch-targets
 
