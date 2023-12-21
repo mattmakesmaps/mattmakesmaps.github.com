@@ -3,7 +3,7 @@ title: Yaesu FTM-6000R Manually Program A Repeater
 draft: false
 description: Manually Program A Repeater on a Yaesu FTM-6000R Mobile Radio
 date: 2023-12-20
-tags: ham, yaesu
+tags: ham radio
 ---
 
 # Manually Program a Repeater into the Yaesu FTM-6000R
