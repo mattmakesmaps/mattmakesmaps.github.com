@@ -4,12 +4,57 @@
 	<subtitle>Matthew Matt Kenny GIS and woodworking blog.</subtitle>
 	<link href="https://mattmakesmaps.com/feed/feed.xml" rel="self"/>
 	<link href="https://mattmakesmaps.com/"/>
-	<updated>2023-11-08T00:00:00Z</updated>
+	<updated>2023-12-20T00:00:00Z</updated>
 	<id>https://mattmakesmaps.com/</id>
 	<author>
 		<name>Matt Kenny</name>
 		<email></email>
 	</author>
+	
+	<entry>
+		<title>Yaesu FTM-6000R Manually Program A Repeater</title>
+		<link href="https://mattmakesmaps.com/blog/2023-12-20-ftm-6000r-repeater-programming/"/>
+		<updated>2023-12-20T00:00:00Z</updated>
+		<id>https://mattmakesmaps.com/blog/2023-12-20-ftm-6000r-repeater-programming/</id>
+		<content type="html">&lt;h1 id=&quot;manually-program-a-repeater-into-the-yaesu-ftm-6000r&quot; tabindex=&quot;-1&quot;&gt;Manually Program a Repeater into the Yaesu FTM-6000R &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-12-20-ftm-6000r-repeater-programming/&quot;&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;This post documents how to manually program a repeater into the &lt;a href=&quot;https://www.yaesu.com/indexVS.cfm?cmd=DisplayProducts&amp;amp;ProdCatID=249&amp;amp;encProdID=3BEE472B7584ACA7C6A71F41B8ADCEC9&amp;amp;DivisionID=65&amp;amp;isArchived=0&quot;&gt;Yaesu FTM-6000R&lt;/a&gt; transceiver. The &lt;a href=&quot;https://www.yaesu.com/downloadFile.cfm?FileID=17164&amp;amp;FileCatID=150&amp;amp;FileName=FTM%2D6000R%5FE%5FOM%5FENG%5FEH079M200%5F2110G%2DBS.pdf&amp;amp;FileContentType=application%2Fpdf&quot;&gt;basic&lt;/a&gt; and &lt;a href=&quot;https://www.yaesu.com/downloadFile.cfm?FileID=17165&amp;amp;FileCatID=150&amp;amp;FileName=FTM%2D6000R%5FE%5FAM%5FENG%5F2110%2DA.pdf&amp;amp;FileContentType=application%2Fpdf&quot;&gt;advanced&lt;/a&gt; manuals don&#39;t clearly spell it out, so I&#39;m hopeful this tutorial will fill that gap for myself and other owners of this rig.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TL;DR:&lt;/strong&gt; Save the frequency in memory first. Then, from the newly created memory, set the memory to tone encoding (Menu 24 &lt;code&gt;SQL.TYPE&lt;/code&gt;) and then set the tone frequency (Menu 25 &lt;code&gt;SQL.COD&lt;/code&gt;). You&#39;ll only be modifying the settings for the individual memory slot.&lt;/p&gt;
+&lt;h2 id=&quot;walkthrough&quot; tabindex=&quot;-1&quot;&gt;Walkthrough &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-12-20-ftm-6000r-repeater-programming/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The example repeater I&#39;ll be programming is WW7PSR for the
+&lt;a href=&quot;https://web.psrg.org/&quot;&gt;Puget Sound Repeater Group&lt;/a&gt; (PSGR).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Frequency: 146.960MHz&lt;/li&gt;
+&lt;li&gt;Offset: -0.6MHz&lt;/li&gt;
+&lt;li&gt;CTCSS Tone: 103.5Hz&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;Power on the radio&lt;/li&gt;
+&lt;li&gt;Enter VFO mode by pressing the &lt;code&gt;V/M mw&lt;/code&gt; button until the memory &lt;code&gt;M&lt;/code&gt; button in the upper-left corner is not displayed.&lt;/li&gt;
+&lt;li&gt;Key in desired frequency using the mic.&lt;/li&gt;
+&lt;li&gt;Save the frequency to memory (The following procedure can be found from pg. 18 of the &lt;a href=&quot;https://www.yaesu.com/downloadFile.cfm?FileID=17164&amp;amp;FileCatID=150&amp;amp;FileName=FTM%2D6000R%5FE%5FOM%5FENG%5FEH079M200%5F2110G%2DBS.pdf&amp;amp;FileContentType=application%2Fpdf&quot;&gt;manual&lt;/a&gt;), &lt;code&gt;Writing to memory&lt;/code&gt;). Note at this point we aren’t worrying about setting the tone.
+&lt;ul&gt;
+&lt;li&gt;Press and hold the &lt;code&gt;[V/M mw] key. The &lt;/code&gt;M` icon in the upper-left hand corner should be flashing along with the three digit memory slot representing the lowest unused memory.&lt;/li&gt;
+&lt;li&gt;Rotate the dial to the desired memory slot, or leave it alone if you want to use the lowest unused memory slot.&lt;/li&gt;
+&lt;li&gt;Press and hold the `[V/M mw] key to save the memory.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;M&lt;/code&gt; icon should now be solid, and you should see the corresponding frequency and memory slot number.&lt;/li&gt;
+&lt;li&gt;To set the tone, press and hold the &lt;code&gt;F Menu&lt;/code&gt; button and select menu &lt;code&gt;24: SQL.TYPE&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Press the VFO to enter the &lt;code&gt;SQL.TYPE&lt;/code&gt; menu, and rotate until you see &lt;code&gt;TON.ENC&lt;/code&gt;. Press the VFO to confirm.&lt;/li&gt;
+&lt;li&gt;At this point, the memory channel is set to use a CTCSS tone, but we haven’t configured the tone frequency.
+&lt;ul&gt;
+&lt;li&gt;Using the &lt;code&gt;F Menu&lt;/code&gt; button, dial in menu &lt;code&gt;25 SQL.COD&lt;/code&gt;. Press the VFO to enter the menu.&lt;/li&gt;
+&lt;li&gt;Rotate the VFO to dial in the correct CTCSS Tone (in our case 103.5Hz) and press the VFO to confirm your selection.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The memory slot should now be updated to not only include the frequency and offset of interest, but also the tone frequency. Steps 6-8 above can be repeated on any memory slot to set the tone for that specific memory slot.&lt;/p&gt;
+&lt;h2 id=&quot;repeater-offset&quot; tabindex=&quot;-1&quot;&gt;Repeater Offset &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-12-20-ftm-6000r-repeater-programming/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;In this example, the &lt;code&gt;-0.6MHz&lt;/code&gt; offset was already configured automatically by the radio based on the frequency. If you need to change this, you can dial in the saved memory slot and use Menu &lt;code&gt;20 RPT.SET&lt;/code&gt; to change the offset direction, and menu &lt;code&gt;21 RPT.OTR&lt;/code&gt; to set the magnitude of the Repeater Shift.&lt;/p&gt;
+&lt;h2 id=&quot;a-note-regarding-menus&quot; tabindex=&quot;-1&quot;&gt;A note regarding menus. &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2023-12-20-ftm-6000r-repeater-programming/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The FTM-6000R has two layers of menus accessible from the &lt;code&gt;F Menu&lt;/code&gt; button. A quick press drops you into a “favorites” subset. A press-and-hold gets you into the full menu set, but hides those that are already in the “favorites”. If you don’t see a menu item you’re looking for, try switching from the “favorites” menu to the full menu set, or vice-versa.&lt;/p&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>Python Dev Setup on Mac | Gotchas Documented</title>

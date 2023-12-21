@@ -257,6 +257,11 @@
 	</url>
 	
 	<url>
+		<loc>https://mattmakesmaps.com/blog/2023-12-20-ftm-6000r-repeater-programming/</loc>
+		<lastmod>2023-12-20</lastmod>
+	</url>
+	
+	<url>
 		<loc>https://mattmakesmaps.com/blog/</loc>
 		<lastmod>2023-12-21</lastmod>
 	</url>
@@ -277,17 +282,17 @@
 	</url>
 	
 	<url>
-		<loc>https://mattmakesmaps.com/tags/ham-radio/</loc>
-		<lastmod>2023-12-21</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://mattmakesmaps.com/tags/intro/</loc>
 		<lastmod>2023-12-21</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://mattmakesmaps.com/tags/python/</loc>
+		<lastmod>2023-12-21</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/tags/ham-radio/</loc>
 		<lastmod>2023-12-21</lastmod>
 	</url>
 	
