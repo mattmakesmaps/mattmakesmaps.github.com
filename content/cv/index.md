@@ -7,12 +7,14 @@ eleventyNavigation:
 # CV
 
 - [Linkedin](https://www.linkedin.com/in/mattmakesmaps/)
-- [Github](https://github.cojm/mattmakesmaps)
+- [Github](https://github.com/mattmakesmaps)
 - [Resume PDF](./mkenny_resume_2023.pdf)
+
 ## Presentations and Workshops
 
 **Note:** CUGOS == [Cascadia Users of Geospatial Open Source](https://cugos.org/)
 
+- [_Build a TinyGS Cube Satellite Receiver_][7] - CUGOS 2024
 - [_Intercept Weather Satellite Images From Space_][1] - CUGOS 2018
 - [_From an OSM Way to a Highway Shield_][2] - Co-Presented at State of the Map US 2016
 - [_GIS and Decision Making_][3] - TechDiversified Workshop 2016
@@ -31,3 +33,4 @@ eleventyNavigation:
 [4]: https://drive.google.com/file/d/1EGhUNqtOHpjKpedjf17I5Jyh4hyG26yH/view?usp=share_link
 [5]: https://drive.google.com/file/d/1PpvUT1tm1gKgJb8kJfxhqxkoDM1IW3jp/view?usp=sharing
 [6]: https://drive.google.com/file/d/1WX_YBCr-ctJiE8nHPQrMTwrFrqgto3yq/view?usp=share_link
+[7]: https://mattmakesmaps.com/blog/2024-01-22-tinygs-overview/
