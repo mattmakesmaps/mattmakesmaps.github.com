@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Yaesu FTM-6000R Manually Program A Repeater</title>
-		<meta name="description" content="Manually Program A Repeater on a Yaesu FTM-6000R Mobile Radio">
+		<title>Build a TinyGS Cube Satellite Receiver</title>
+		<meta name="description" content="Overview of the TinyGS project and home receiving station.">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
 		<meta name="generator" content="Eleventy v2.0.1">
@@ -495,58 +495,62 @@ a[href]:active.homepage-postlist-link {
 
 		<main id="skip">
 			
-<h1>Yaesu FTM-6000R Manually Program A Repeater</h1>
+<h1>Build a TinyGS Cube Satellite Receiver</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-12-20">20 December 2023</time></li>
-	<li><a href="/tags/ham-radio/" class="post-tag">ham radio</a></li>
+	<li><time datetime="2024-01-22">22 January 2024</time></li>
+	<li><a href="/tags/ham-radio/" class="post-tag">ham radio</a>, </li>
+	<li><a href="/tags/tinygs/" class="post-tag">tinygs</a>, </li>
+	<li><a href="/tags/satellite/" class="post-tag">satellite</a></li>
 </ul>
 
-<h1 id="manually-program-a-repeater-into-the-yaesu-ftm-6000r" tabindex="-1">Manually Program a Repeater into the Yaesu FTM-6000R <a class="header-anchor" href="#manually-program-a-repeater-into-the-yaesu-ftm-6000r">#</a></h1>
-<p>This post documents how to manually program a repeater into the <a href="https://www.yaesu.com/indexVS.cfm?cmd=DisplayProducts&amp;ProdCatID=249&amp;encProdID=3BEE472B7584ACA7C6A71F41B8ADCEC9&amp;DivisionID=65&amp;isArchived=0">Yaesu FTM-6000R</a> transceiver. The <a href="https://www.yaesu.com/downloadFile.cfm?FileID=17164&amp;FileCatID=150&amp;FileName=FTM%2D6000R%5FE%5FOM%5FENG%5FEH079M200%5F2110G%2DBS.pdf&amp;FileContentType=application%2Fpdf">basic</a> and <a href="https://www.yaesu.com/downloadFile.cfm?FileID=17165&amp;FileCatID=150&amp;FileName=FTM%2D6000R%5FE%5FAM%5FENG%5F2110%2DA.pdf&amp;FileContentType=application%2Fpdf">advanced</a> manuals don't clearly spell it out, so I'm hopeful this tutorial will fill that gap for myself and other owners of this rig.</p>
-<p><strong>TL;DR:</strong> Save the frequency in memory first. Then, from the newly created memory, set the memory to tone encoding (Menu 24 <code>SQL.TYPE</code>) and then set the tone frequency (Menu 25 <code>SQL.COD</code>). You'll only be modifying the settings for the individual memory slot.</p>
-<h2 id="walkthrough" tabindex="-1">Walkthrough <a class="header-anchor" href="#walkthrough">#</a></h2>
-<p>The example repeater I'll be programming is WW7PSR for the
-<a href="https://web.psrg.org/">Puget Sound Repeater Group</a> (PSGR).</p>
+<p>As an amateur radio enthusiast, I've long been interested in DIY reception of satellite signals. Previously, I've succeeded at pulling down live <a href="https://docs.google.com/presentation/d/e/2PACX-1vR-d59s4KdPILqCsMLZ8jk274in0BSCQZYdrsFT7-e8vsb0iXxtu3cfHsKewWCVdejAvG5Ju19OGkWD/pub?start=false&amp;loop=false&amp;delayms=3000&amp;slide=id.p">NOAA weather satellite imagery</a>, and failed at retrieving NOAA GOES satellite full disk earth imagery.</p>
+<p>At the end of 2023, I built a small cubesat telemetry receiver (or ground station) connected to the <a href="https://www.tinygs.com">TinyGS project</a>.</p>
+<p>The result of my station build can be seen at my station's <a href="https://tinygs.com/station/KI7ZTH@6866355156">homepage on the TinyGS web app</a>.</p>
+<p><picture><source type="image/webp" srcset="/img/v1EWZ1lZQI-320.webp 320w, /img/v1EWZ1lZQI-600.webp 600w, /img/v1EWZ1lZQI-960.webp 960w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/v1EWZ1lZQI-320.jpeg 320w, /img/v1EWZ1lZQI-600.jpeg 600w, /img/v1EWZ1lZQI-960.jpeg 960w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot of recent telemetry packets from my backyard station." loading="lazy" decoding="async" src="/img/v1EWZ1lZQI-320.jpeg" width="960" height="941"></picture></p>
+<p>Above, you can see the positions of the most recently received telemetry packets.</p>
+<p>Each packet of binary data received by my station (and the thousands of others globally) are published to the TinyGS backend MQTT infrastructure where they are decoded and stored in a separate backed (which I'm not familiar with). <a href="https://aws.amazon.com/what-is/mqtt/#:~:text=MQTT%20is%20a%20standards%2Dbased,constrained%20network%20with%20limited%20bandwidth.">MQTT</a> is an IoT backend &quot;broker&quot; in a publish/subscribe model, in which my ground station acts as a publisher and other parts of the TinyGS storage infrastructure (presumably) are subscribers.</p>
+<p>The magic of this project revolves around the LoRa communication protocol that allows for long distance, weak signal, communication from the cube satellites to terrestrial ground stations. LoRa is a <a href="https://en.wikipedia.org/wiki/Spread_spectrum">spread spectrum protocol</a> (up to 500 kHz in bandwidth) that allows for signals to be extracted deep below the <a href="https://en.wikipedia.org/wiki/Noise_floor">noise floor</a>.</p>
+<p>The video below provides a great &quot;Hello World&quot; on the protocol.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dxYY097QNs0?si=OM7XgorcbyMACoJQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<h2 id="building-your-own" tabindex="-1">Building your own <a class="header-anchor" href="#building-your-own">#</a></h2>
+<p>I've iterated a few times on this station setup, and am pretty happy with its current configuration, as pictured below.</p>
+<p><strong>TODO:</strong> Picture</p>
+<p>Essentially, the system is composed of a 1/4 wave ground plane antenna, an ESP32 board flashed with the TinyGS Firmware, wrapped up in a weatherproof box. Below you'll find notes on various parts of the construction.</p>
+<h3 id="antenna-construction" tabindex="-1">Antenna Construction <a class="header-anchor" href="#antenna-construction">#</a></h3>
+<p>I already had a DIY quarter-wave ground plane antenna lying around, tuned for the 2m band. Since these antenna elements were longer then what is required for this project (around the 70cm band), all I needed to do was actually cut the elements to length. My antenna was made out of simple 14 gauge copper wire, but it could also be made out of aluminum rods which looks nicer and is probably more robust.</p>
+<p>The following video gives a good overview on how to construct an antenna for this project. It's also where I cribbed the correct lengths to trim my antenna elements.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/6cVYsHCLKq8?si=YO6IH8GMQ-eP4Mba" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<h3 id="hardware-and-software" tabindex="-1">Hardware and Software <a class="header-anchor" href="#hardware-and-software">#</a></h3>
+<p>The project centers around an ESP32 based LoRa board, of which there are many different implementations. The particular one I went with is called the <a href="https://www.aliexpress.us/item/2255801140943675.html">official TTGO Meshtastic T-Beam V1.1 ESP32 433/868/915/923Mhz WiFi Bluetooth ESP32 GPS NEO-6M SMA 18650 Battery Holder With OLED</a>. There are cheaper ones available, but I decided to use this one since it had the capability to run off of <a href="https://www.amazon.com/Rechargeable-Flashlights-Headlights-Surveillance-Equipment/dp/B0BN1ZVS5X/ref=sr_1_4?keywords=18650+battery&amp;qid=1705962273&amp;sr=8-4">18650 rechargable batteries</a></p>
+<p>With the board in hand, installing the project software is as easy as following the <a href="https://github.com/G4lile0/tinyGS/wiki/Quick-Start">instructions on the TinyGS project page</a>.</p>
+<h3 id="enclosure-and-power" tabindex="-1">Enclosure and Power <a class="header-anchor" href="#enclosure-and-power">#</a></h3>
+<p>I used the following parts to build the current version of the enclosure, which has survived well in the wet Seattle winter.</p>
 <ul>
-<li>Frequency: 146.960MHz</li>
-<li>Offset: -0.6MHz</li>
-<li>CTCSS Tone: 103.5Hz</li>
+<li><a href="https://www.amazon.com/dp/B07RC83LTZ">Enclosure - A small plastic box</a></li>
+<li><a href="https://www.amazon.com/dp/B0CC898NH5">Cable Glands - Provide weatherproof holes for cable routing</a></li>
+<li><a href="https://www.amazon.com/gp/product/B0000AZ9HG">Electrical Tape - to waterproof antenna connection</a></li>
+<li><a href="https://www.amazon.com/dp/B07Z7SNH4T">25 foot USB cable - for mains power)</a></li>
 </ul>
-<ol>
-<li>Power on the radio</li>
-<li>Enter VFO mode by pressing the <code>V/M mw</code> button until the memory <code>M</code> button in the upper-left corner is not displayed.</li>
-<li>Key in desired frequency using the mic.</li>
-<li>Save the frequency to memory (The following procedure can be found from pg. 18 of the <a href="https://www.yaesu.com/downloadFile.cfm?FileID=17164&amp;FileCatID=150&amp;FileName=FTM%2D6000R%5FE%5FOM%5FENG%5FEH079M200%5F2110G%2DBS.pdf&amp;FileContentType=application%2Fpdf">manual</a>), <code>Writing to memory</code>). Note at this point we aren’t worrying about setting the tone.
+<p>I switched to mains power via USB since the 18650 batteries only lasted about 3-4 hours per charge. I'd avoid using these batteries unless the small runtime works for your needs.</p>
+<p>Additionally, I had to mount the antenna to the box somehow. I first used a small piece of scrap wood, but later glued together small strips of plastic to form a vertical antenna mount. Any scraps will do.</p>
+<p>As you can see in the picture below, you can really just get creative with what's lying around. Here is a previous setup using a tupperware container and some scrap wood... setup in the University of Washington's Red Square.</p>
+<p><picture><source type="image/webp" srcset="/img/7RzZzOCCVp-320.webp 320w, /img/7RzZzOCCVp-600.webp 600w, /img/7RzZzOCCVp-960.webp 960w, /img/7RzZzOCCVp-1280.webp 1280w" sizes="90vw, (min-width: 1280px) 1156px"><source type="image/jpeg" srcset="/img/7RzZzOCCVp-320.jpeg 320w, /img/7RzZzOCCVp-600.jpeg 600w, /img/7RzZzOCCVp-960.jpeg 960w, /img/7RzZzOCCVp-1280.jpeg 1280w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot of recent telemetry packets from my backyard station." loading="lazy" decoding="async" src="/img/7RzZzOCCVp-320.jpeg" width="1280" height="960"></picture></p>
+<h2 id="conclusions" tabindex="-1">Conclusions <a class="header-anchor" href="#conclusions">#</a></h2>
+<p>There are so many interesting aspects of this project to hack on. Some of which include.</p>
 <ul>
-<li>Press and hold the <code>[V/M mw] key. The </code>M` icon in the upper-left hand corner should be flashing along with the three digit memory slot representing the lowest unused memory.</li>
-<li>Rotate the dial to the desired memory slot, or leave it alone if you want to use the lowest unused memory slot.</li>
-<li>Press and hold the `[V/M mw] key to save the memory.</li>
+<li>Exploring different antenna configurations. Compare your results to those of <a href="https://tinygs.com/station/W7RCS@6500205772">your neighbors</a>!</li>
+<li>Figuring out how raw binary packets are <a href="https://github.com/4m1g0/tinygs-decoders/tree/master">decoded via the tinygs-decoders project</a>.</li>
+<li>Building <a href="https://www.youtube.com/watch?v=jwsSpdWuTwk">your own MQTT workflow</a> to preserve packets that your station has received.</li>
 </ul>
-</li>
-<li>The <code>M</code> icon should now be solid, and you should see the corresponding frequency and memory slot number.</li>
-<li>To set the tone, press and hold the <code>F Menu</code> button and select menu <code>24: SQL.TYPE</code>.</li>
-<li>Press the VFO to enter the <code>SQL.TYPE</code> menu, and rotate until you see <code>TON.ENC</code>. Press the VFO to confirm.</li>
-<li>At this point, the memory channel is set to use a CTCSS tone, but we haven’t configured the tone frequency.
-<ul>
-<li>Using the <code>F Menu</code> button, dial in menu <code>25 SQL.COD</code>. Press the VFO to enter the menu.</li>
-<li>Rotate the VFO to dial in the correct CTCSS Tone (in our case 103.5Hz) and press the VFO to confirm your selection.</li>
-</ul>
-</li>
-</ol>
-<p>The memory slot should now be updated to not only include the frequency and offset of interest, but also the tone frequency. Steps 6-8 above can be repeated on any memory slot to set the tone for that specific memory slot.</p>
-<h2 id="repeater-offset" tabindex="-1">Repeater Offset <a class="header-anchor" href="#repeater-offset">#</a></h2>
-<p>In this example, the <code>-0.6MHz</code> offset was already configured automatically by the radio based on the frequency. If you need to change this, you can dial in the saved memory slot and use Menu <code>20 RPT.SET</code> to change the offset direction, and menu <code>21 RPT.OTR</code> to set the magnitude of the Repeater Shift.</p>
-<h2 id="a-note-regarding-menus" tabindex="-1">A note regarding menus. <a class="header-anchor" href="#a-note-regarding-menus">#</a></h2>
-<p>The FTM-6000R has two layers of menus accessible from the <code>F Menu</code> button. A quick press drops you into a “favorites” subset. A press-and-hold gets you into the full menu set, but hides those that are already in the “favorites”. If you don’t see a menu item you’re looking for, try switching from the “favorites” menu to the full menu set, or vice-versa.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/blog/2023-11-08-python-development-mac/">Python Dev Setup on Mac | Gotchas Documented</a></li><li>Next: <a href="/blog/2024-01-22-tinygs-overview/">Build a TinyGS Cube Satellite Receiver</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2023-12-20-ftm-6000r-repeater-programming/">Yaesu FTM-6000R Manually Program A Repeater</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- Current page: /blog/2023-12-20-ftm-6000r-repeater-programming/ -->
+		<!-- Current page: /blog/2024-01-22-tinygs-overview/ -->
 	</body>
 </html>

@@ -4,12 +4,59 @@
 	<subtitle>Matthew Matt Kenny GIS and woodworking blog.</subtitle>
 	<link href="https://mattmakesmaps.com/feed/feed.xml" rel="self"/>
 	<link href="https://mattmakesmaps.com/"/>
-	<updated>2023-12-20T00:00:00Z</updated>
+	<updated>2024-01-22T00:00:00Z</updated>
 	<id>https://mattmakesmaps.com/</id>
 	<author>
 		<name>Matt Kenny</name>
 		<email></email>
 	</author>
+	
+	<entry>
+		<title>Build a TinyGS Cube Satellite Receiver</title>
+		<link href="https://mattmakesmaps.com/blog/2024-01-22-tinygs-overview/"/>
+		<updated>2024-01-22T00:00:00Z</updated>
+		<id>https://mattmakesmaps.com/blog/2024-01-22-tinygs-overview/</id>
+		<content type="html">&lt;p&gt;As an amateur radio enthusiast, I&#39;ve long been interested in DIY reception of satellite signals. Previously, I&#39;ve succeeded at pulling down live &lt;a href=&quot;https://docs.google.com/presentation/d/e/2PACX-1vR-d59s4KdPILqCsMLZ8jk274in0BSCQZYdrsFT7-e8vsb0iXxtu3cfHsKewWCVdejAvG5Ju19OGkWD/pub?start=false&amp;amp;loop=false&amp;amp;delayms=3000&amp;amp;slide=id.p&quot;&gt;NOAA weather satellite imagery&lt;/a&gt;, and failed at retrieving NOAA GOES satellite full disk earth imagery.&lt;/p&gt;
+&lt;p&gt;At the end of 2023, I built a small cubesat telemetry receiver (or ground station) connected to the &lt;a href=&quot;https://www.tinygs.com&quot;&gt;TinyGS project&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The result of my station build can be seen at my station&#39;s &lt;a href=&quot;https://tinygs.com/station/KI7ZTH@6866355156&quot;&gt;homepage on the TinyGS web app&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://mattmakesmaps.com/img/v1EWZ1lZQI-320.webp 320w, https://mattmakesmaps.com/img/v1EWZ1lZQI-600.webp 600w, https://mattmakesmaps.com/img/v1EWZ1lZQI-960.webp 960w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;source type=&quot;image/jpeg&quot; srcset=&quot;https://mattmakesmaps.com/img/v1EWZ1lZQI-320.jpeg 320w, https://mattmakesmaps.com/img/v1EWZ1lZQI-600.jpeg 600w, https://mattmakesmaps.com/img/v1EWZ1lZQI-960.jpeg 960w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;img alt=&quot;Screenshot of recent telemetry packets from my backyard station.&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://mattmakesmaps.com/img/v1EWZ1lZQI-320.jpeg&quot; width=&quot;960&quot; height=&quot;941&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;Above, you can see the positions of the most recently received telemetry packets.&lt;/p&gt;
+&lt;p&gt;Each packet of binary data received by my station (and the thousands of others globally) are published to the TinyGS backend MQTT infrastructure where they are decoded and stored in a separate backed (which I&#39;m not familiar with). &lt;a href=&quot;https://aws.amazon.com/what-is/mqtt/#:~:text=MQTT%20is%20a%20standards%2Dbased,constrained%20network%20with%20limited%20bandwidth.&quot;&gt;MQTT&lt;/a&gt; is an IoT backend &amp;quot;broker&amp;quot; in a publish/subscribe model, in which my ground station acts as a publisher and other parts of the TinyGS storage infrastructure (presumably) are subscribers.&lt;/p&gt;
+&lt;p&gt;The magic of this project revolves around the LoRa communication protocol that allows for long distance, weak signal, communication from the cube satellites to terrestrial ground stations. LoRa is a &lt;a href=&quot;https://en.wikipedia.org/wiki/Spread_spectrum&quot;&gt;spread spectrum protocol&lt;/a&gt; (up to 500 kHz in bandwidth) that allows for signals to be extracted deep below the &lt;a href=&quot;https://en.wikipedia.org/wiki/Noise_floor&quot;&gt;noise floor&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The video below provides a great &amp;quot;Hello World&amp;quot; on the protocol.&lt;/p&gt;
+&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/dxYY097QNs0?si=OM7XgorcbyMACoJQ&quot; title=&quot;YouTube video player&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;h2 id=&quot;building-your-own&quot; tabindex=&quot;-1&quot;&gt;Building your own &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2024-01-22-tinygs-overview/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I&#39;ve iterated a few times on this station setup, and am pretty happy with its current configuration, as pictured below.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TODO:&lt;/strong&gt; Picture&lt;/p&gt;
+&lt;p&gt;Essentially, the system is composed of a 1/4 wave ground plane antenna, an ESP32 board flashed with the TinyGS Firmware, wrapped up in a weatherproof box. Below you&#39;ll find notes on various parts of the construction.&lt;/p&gt;
+&lt;h3 id=&quot;antenna-construction&quot; tabindex=&quot;-1&quot;&gt;Antenna Construction &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2024-01-22-tinygs-overview/&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;I already had a DIY quarter-wave ground plane antenna lying around, tuned for the 2m band. Since these antenna elements were longer then what is required for this project (around the 70cm band), all I needed to do was actually cut the elements to length. My antenna was made out of simple 14 gauge copper wire, but it could also be made out of aluminum rods which looks nicer and is probably more robust.&lt;/p&gt;
+&lt;p&gt;The following video gives a good overview on how to construct an antenna for this project. It&#39;s also where I cribbed the correct lengths to trim my antenna elements.&lt;/p&gt;
+&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/6cVYsHCLKq8?si=YO6IH8GMQ-eP4Mba&quot; title=&quot;YouTube video player&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+&lt;h3 id=&quot;hardware-and-software&quot; tabindex=&quot;-1&quot;&gt;Hardware and Software &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2024-01-22-tinygs-overview/&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;The project centers around an ESP32 based LoRa board, of which there are many different implementations. The particular one I went with is called the &lt;a href=&quot;https://www.aliexpress.us/item/2255801140943675.html&quot;&gt;official TTGO Meshtastic T-Beam V1.1 ESP32 433/868/915/923Mhz WiFi Bluetooth ESP32 GPS NEO-6M SMA 18650 Battery Holder With OLED&lt;/a&gt;. There are cheaper ones available, but I decided to use this one since it had the capability to run off of &lt;a href=&quot;https://www.amazon.com/Rechargeable-Flashlights-Headlights-Surveillance-Equipment/dp/B0BN1ZVS5X/ref=sr_1_4?keywords=18650+battery&amp;amp;qid=1705962273&amp;amp;sr=8-4&quot;&gt;18650 rechargable batteries&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;With the board in hand, installing the project software is as easy as following the &lt;a href=&quot;https://github.com/G4lile0/tinyGS/wiki/Quick-Start&quot;&gt;instructions on the TinyGS project page&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;enclosure-and-power&quot; tabindex=&quot;-1&quot;&gt;Enclosure and Power &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2024-01-22-tinygs-overview/&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;I used the following parts to build the current version of the enclosure, which has survived well in the wet Seattle winter.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.amazon.com/dp/B07RC83LTZ&quot;&gt;Enclosure - A small plastic box&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.amazon.com/dp/B0CC898NH5&quot;&gt;Cable Glands - Provide weatherproof holes for cable routing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.amazon.com/gp/product/B0000AZ9HG&quot;&gt;Electrical Tape - to waterproof antenna connection&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.amazon.com/dp/B07Z7SNH4T&quot;&gt;25 foot USB cable - for mains power)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I switched to mains power via USB since the 18650 batteries only lasted about 3-4 hours per charge. I&#39;d avoid using these batteries unless the small runtime works for your needs.&lt;/p&gt;
+&lt;p&gt;Additionally, I had to mount the antenna to the box somehow. I first used a small piece of scrap wood, but later glued together small strips of plastic to form a vertical antenna mount. Any scraps will do.&lt;/p&gt;
+&lt;p&gt;As you can see in the picture below, you can really just get creative with what&#39;s lying around. Here is a previous setup using a tupperware container and some scrap wood... setup in the University of Washington&#39;s Red Square.&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://mattmakesmaps.com/img/7RzZzOCCVp-320.webp 320w, https://mattmakesmaps.com/img/7RzZzOCCVp-600.webp 600w, https://mattmakesmaps.com/img/7RzZzOCCVp-960.webp 960w, https://mattmakesmaps.com/img/7RzZzOCCVp-1280.webp 1280w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;source type=&quot;image/jpeg&quot; srcset=&quot;https://mattmakesmaps.com/img/7RzZzOCCVp-320.jpeg 320w, https://mattmakesmaps.com/img/7RzZzOCCVp-600.jpeg 600w, https://mattmakesmaps.com/img/7RzZzOCCVp-960.jpeg 960w, https://mattmakesmaps.com/img/7RzZzOCCVp-1280.jpeg 1280w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;img alt=&quot;Screenshot of recent telemetry packets from my backyard station.&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://mattmakesmaps.com/img/7RzZzOCCVp-320.jpeg&quot; width=&quot;1280&quot; height=&quot;960&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;h2 id=&quot;conclusions&quot; tabindex=&quot;-1&quot;&gt;Conclusions &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2024-01-22-tinygs-overview/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;There are so many interesting aspects of this project to hack on. Some of which include.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Exploring different antenna configurations. Compare your results to those of &lt;a href=&quot;https://tinygs.com/station/W7RCS@6500205772&quot;&gt;your neighbors&lt;/a&gt;!&lt;/li&gt;
+&lt;li&gt;Figuring out how raw binary packets are &lt;a href=&quot;https://github.com/4m1g0/tinygs-decoders/tree/master&quot;&gt;decoded via the tinygs-decoders project&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Building &lt;a href=&quot;https://www.youtube.com/watch?v=jwsSpdWuTwk&quot;&gt;your own MQTT workflow&lt;/a&gt; to preserve packets that your station has received.&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>Yaesu FTM-6000R Manually Program A Repeater</title>
