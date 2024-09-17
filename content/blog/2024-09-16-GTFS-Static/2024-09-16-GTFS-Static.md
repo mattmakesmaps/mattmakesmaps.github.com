@@ -1,6 +1,6 @@
 ---
 title: King County Transit Data Part One - GTFS Static Schedules
-draft: true
+draft: false
 description: A look at the non-realtime schedule data available in GTFS format for King County
 date: 2024-09-16
 tags:
@@ -97,3 +97,37 @@ in the mornings and afternoons.
 {% image "./SAT_Chart.png", "Saturday Frequency Chart." %}
 
 ## Example Analysis: ArcGIS Pro Network Analyst
+
+Jumping over to the Esri World, there are already actually a robust [set of tools](https://pro.arcgis.com/en/pro-app/latest/tool-reference/conversion/an-overview-of-the-transit-feed-gtfs-toolset.htm)
+already built in to take consume `GTFS` data and create a network dataset for downstream analysis.
+
+Based on my understand of Esri's platform, their ability to generate a networked dataset
+specific to the transportation domain predates the `GTFS` standard. The `GTFS` tools they provide
+today allow a user to transform those data into their own existing transit data model.
+
+I took the previously mentioned [King County GTFS Data](https://www.soundtransit.org/GTFS-KCM/google_transit.zip) and used them as input into the following tutorial from Esri,
+[Create and Use A Network Dataset With Public Transit Data](https://pro.arcgis.com/en/pro-app/latest/help/analysis/networks/create-and-use-a-network-dataset-with-public-transit-data.htm#ESRI_SECTION1_AF5F225DBCF6461F96061274858459C9). This is a very comprehensive tutorial
+that covers the GTFS data import, network creation, and finally a "Service Area Analysis"
+that allows you to generate an isochrone map depicting travel distance from one more points
+during a given timeframe.
+
+For example, here is are two isochrones showing the 30-minute "travel-shed" (aka Service Area)
+around my house, on any given Tuesday at 3PM vs 3AM.
+
+Tuesday 3PM: 30-Minute Bus Service Area
+
+{% image "./3PM.png", "Service Area 3PM" %}
+
+Tuesday 3AM: 30-Minute Bus Service Area
+
+{% image "./3AM.png", "Service Area 3AM." %}
+
+This travel-shed is based only on the schedule data and doesn't account for real-time effects of
+traffic congestion. If for example, the schedule is constructed in such a way that buses are
+regularly late/missed, that wouldn't be reflected here.
+
+There are a number of additional weights that can be fine-tuned in this model, but this simple
+exercise really illustrates how easy it is to use GTFS data to quickly understand access to
+transit in a particular area.
+
+I think I might try to further augment this model with data for other modes of transport serving Seattle e.g Light Rail, Street Car, Ferry. Coincidentally, Sound Transit offers a consolidated GTFS feed which aggregates all these together already: [https://gtfs.sound.obaweb.org/prod/gtfs_puget_sound_consolidated.zip](https://gtfs.sound.obaweb.org/prod/gtfs_puget_sound_consolidated.zip)
