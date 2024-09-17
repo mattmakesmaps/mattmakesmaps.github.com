@@ -4,12 +4,110 @@
 	<subtitle>Matthew Matt Kenny GIS and woodworking blog.</subtitle>
 	<link href="https://mattmakesmaps.com/feed/feed.xml" rel="self"/>
 	<link href="https://mattmakesmaps.com/"/>
-	<updated>2024-01-22T00:00:00Z</updated>
+	<updated>2024-09-16T00:00:00Z</updated>
 	<id>https://mattmakesmaps.com/</id>
 	<author>
 		<name>Matt Kenny</name>
 		<email></email>
 	</author>
+	
+	<entry>
+		<title>King County Transit Data Part One - GTFS Static Schedules</title>
+		<link href="https://mattmakesmaps.com/blog/2024-09-16-GTFS-Static/"/>
+		<updated>2024-09-16T00:00:00Z</updated>
+		<id>https://mattmakesmaps.com/blog/2024-09-16-GTFS-Static/</id>
+		<content type="html">&lt;p&gt;In Seattle Washington, we&#39;re blessed with great multimodal transit, as well apps and
+open data to help us get around as efficiently as possible.&lt;/p&gt;
+&lt;p&gt;Both static (schedule) data and realtime locations of transit vehicles (light right/bus
+/street car/etc) can be found in the &lt;a href=&quot;https://onebusaway.org/&quot;&gt;OneBusAway&lt;/a&gt; app, which
+originally started in the Puget Sound Region. One of the powerful elements of the OBA app is
+that it ties together information for &lt;a href=&quot;https://www.soundtransit.org/help-contacts/business-information/open-transit-data-otd/otd-downloads&quot;&gt;multiple regional transit agencies&lt;/a&gt; in a single interface.&lt;/p&gt;
+&lt;p&gt;This post will focus on the static schedule data, and later posts hopefully will cover
+my exploration on the realtime data offered up both by the OneBusAway API and some of
+the agency specific data hosts.&lt;/p&gt;
+&lt;p&gt;Static scheduling data that power OneBusAway are published by regional transit agencies in
+the General Transit Feed Specification or &lt;code&gt;GTFS&lt;/code&gt; format, originally developed by
+&lt;a href=&quot;https://developers.google.com/transit/gtfs&quot;&gt;Google&lt;/a&gt; in 2006, with an interesting tie-in
+to &lt;a href=&quot;https://en.wikipedia.org/wiki/GTFS#History&quot;&gt;Portland&#39;s TriMet transit agency&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Each Puget Sound regional transit agency&#39;s &lt;code&gt;GTFS&lt;/code&gt; schedules can be found at the following
+page, as a formatted set of zipped text files conforming to the GTFS standard:
+&lt;a href=&quot;https://www.soundtransit.org/help-contacts/business-information/open-transit-data-otd/otd-downloads&quot;&gt;https://www.soundtransit.org/help-contacts/business-information/open-transit-data-otd/otd-downloads&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;data-overview&quot; tabindex=&quot;-1&quot;&gt;Data Overview &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2024-09-16-GTFS-Static/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Let&#39;s take a look at the &lt;a href=&quot;https://www.soundtransit.org/GTFS-KCM/google_transit.zip&quot;&gt;King County Metro GTFS Export&lt;/a&gt; to better understand what we&#39;re dealing with.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;matthewkenny@Matthews-MacBook-Pro kc_metro % wc -l *
+       4 agency.txt
+      62 calendar.txt
+    3300 calendar_dates.txt
+      12 fare_attributes.txt
+      59 fare_rules.txt
+       1 feed_info.txt
+     151 routes.txt
+  234853 shapes.txt
+ 1978415 stop_times.txt
+    6600 stops.txt
+   56500 trips.txt
+ 2279957 total
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The full data dictionary for each of the above text files can be found at the
+&lt;a href=&quot;https://gtfs.org/documentation/schedule/reference/&quot;&gt;gtfs.org reference webpage&lt;/a&gt;.
+This reference doc outlines which files are required/optional and within those files,
+fields themselves that are required/optional.&lt;/p&gt;
+&lt;p&gt;Let&#39;s follow &lt;a href=&quot;https://kingcounty.gov/en/dept/metro/routes-and-service/schedules-and-maps/008&quot;&gt;King County Metro Route 8&lt;/a&gt; in these data files. Route 8 happens to weave its way by my house in Seattle&#39;s Central District, through the dense neighborhood of Capitol Hill, past the Amazon HQ in South Lake Union, and ends all the way at the Space Needle and my personal favorite destination, the KEXP cafe an gathering space.&lt;/p&gt;
+&lt;p&gt;This route is identified in these data using a unique &lt;code&gt;route_id&lt;/code&gt; value (&lt;code&gt;100275&lt;/code&gt;) found in &lt;code&gt;routes.txt&lt;/code&gt;.
+See below for an example from &lt;code&gt;routes.txt&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
+100275,1,&amp;quot;8&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;Seattle Center - Capitol Hill - Rainier Beach&amp;quot;,3,https://kingcounty.gov/en/dept/metro/routes-and-service/schedules-and-maps/008.html,,
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;An individual trip, meaning a scheduled run of a single bus on that route, is represented by a
+unique &lt;code&gt;trip_id&lt;/code&gt; value found in &lt;code&gt;trips.txt&lt;/code&gt;. A unique &lt;code&gt;trip_id&lt;/code&gt; is generated, I believe, for
+every combination of &lt;code&gt;route_id&lt;/code&gt;, &lt;code&gt;service_id&lt;/code&gt;, and &lt;code&gt;direction_id&lt;/code&gt;. Where &lt;code&gt;service_id&lt;/code&gt; represents
+the schedule e.g &lt;code&gt;Weekday&lt;/code&gt; vs &lt;code&gt;Weekend&lt;/code&gt; and &lt;code&gt;direction_id&lt;/code&gt; represents &lt;code&gt;inbound&lt;/code&gt; vs &lt;code&gt;outbound&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;route_id,service_id,trip_id,trip_headsign,trip_short_name,direction_id,block_id,shape_id,peak_flag,fare_id,wheelchair_accessible,bikes_allowed
+100275,3105,572987776,&amp;quot;Seattle Center&amp;quot;,&amp;quot;LOCAL&amp;quot;,0,7331487,31008004,0,101,1,1
+100275,18192,599398116,&amp;quot;Mount Baker Transit Center&amp;quot;,&amp;quot;LOCAL&amp;quot;,1,7331728,40008003,0,101,1,1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;example-analysis-jupytr-notebook&quot; tabindex=&quot;-1&quot;&gt;Example Analysis: Jupytr Notebook &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2024-09-16-GTFS-Static/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I first started to play with these data using a Jupytr Notebook, which I&#39;ve posted to github here: &lt;a href=&quot;https://github.com/mattmakesmaps/gtfs-exploration/blob/main/notebooks/kc_metro/data-exploration-and-mapping.ipynb&quot;&gt;https://github.com/mattmakesmaps/gtfs-exploration/blob/main/notebooks/kc_metro/data-exploration-and-mapping.ipynb&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Checkout that workbook to see some basic pandas exploration around the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Find all stops for a route.&lt;/li&gt;
+&lt;li&gt;Map all stops for a route.&lt;/li&gt;
+&lt;li&gt;Visualize frequency of trips by hour for a given route and service
+(e.g weekday vs weekend.)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://mattmakesmaps.com/img/mC8tXZ64wy-320.webp 320w, https://mattmakesmaps.com/img/mC8tXZ64wy-600.webp 600w, https://mattmakesmaps.com/img/mC8tXZ64wy-960.webp 960w, https://mattmakesmaps.com/img/mC8tXZ64wy-1280.webp 1280w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;img alt=&quot;Screenshot of KC Metro Route 8 polyline.&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://mattmakesmaps.com/img/mC8tXZ64wy-320.jpeg&quot; width=&quot;1280&quot; height=&quot;775&quot; srcset=&quot;https://mattmakesmaps.com/img/mC8tXZ64wy-320.jpeg 320w, https://mattmakesmaps.com/img/mC8tXZ64wy-600.jpeg 600w, https://mattmakesmaps.com/img/mC8tXZ64wy-960.jpeg 960w, https://mattmakesmaps.com/img/mC8tXZ64wy-1280.jpeg 1280w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;With regards to the later question for example, it was fun to see how service levels
+didn&#39;t decrease all that much on the weekend for Route 8. Weekday vs Weekend,
+it looks like the major difference are a few extra weekday trips during rush hour
+in the mornings and afternoons.&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://mattmakesmaps.com/img/5U0o2hUun7-320.webp 320w, https://mattmakesmaps.com/img/5U0o2hUun7-600.webp 600w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;img alt=&quot;MTF Frequency Chart&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://mattmakesmaps.com/img/5U0o2hUun7-320.jpeg&quot; width=&quot;600&quot; height=&quot;506&quot; srcset=&quot;https://mattmakesmaps.com/img/5U0o2hUun7-320.jpeg 320w, https://mattmakesmaps.com/img/5U0o2hUun7-600.jpeg 600w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://mattmakesmaps.com/img/x_XYcRLNxu-320.webp 320w, https://mattmakesmaps.com/img/x_XYcRLNxu-600.webp 600w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;img alt=&quot;Saturday Frequency Chart.&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://mattmakesmaps.com/img/x_XYcRLNxu-320.jpeg&quot; width=&quot;600&quot; height=&quot;494&quot; srcset=&quot;https://mattmakesmaps.com/img/x_XYcRLNxu-320.jpeg 320w, https://mattmakesmaps.com/img/x_XYcRLNxu-600.jpeg 600w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;h2 id=&quot;example-analysis-arcgis-pro-network-analyst&quot; tabindex=&quot;-1&quot;&gt;Example Analysis: ArcGIS Pro Network Analyst &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2024-09-16-GTFS-Static/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Jumping over to the Esri World, there are already actually a robust &lt;a href=&quot;https://pro.arcgis.com/en/pro-app/latest/tool-reference/conversion/an-overview-of-the-transit-feed-gtfs-toolset.htm&quot;&gt;set of tools&lt;/a&gt;
+already built in to take consume &lt;code&gt;GTFS&lt;/code&gt; data and create a network dataset for downstream analysis.&lt;/p&gt;
+&lt;p&gt;Based on my understand of Esri&#39;s platform, their ability to generate a networked dataset
+specific to the transportation domain predates the &lt;code&gt;GTFS&lt;/code&gt; standard. The &lt;code&gt;GTFS&lt;/code&gt; tools they provide
+today allow a user to transform those data into their own existing transit data model.&lt;/p&gt;
+&lt;p&gt;I took the previously mentioned &lt;a href=&quot;https://www.soundtransit.org/GTFS-KCM/google_transit.zip&quot;&gt;King County GTFS Data&lt;/a&gt; and used them as input into the following tutorial from Esri,
+&lt;a href=&quot;https://pro.arcgis.com/en/pro-app/latest/help/analysis/networks/create-and-use-a-network-dataset-with-public-transit-data.htm#ESRI_SECTION1_AF5F225DBCF6461F96061274858459C9&quot;&gt;Create and Use A Network Dataset With Public Transit Data&lt;/a&gt;. This is a very comprehensive tutorial
+that covers the GTFS data import, network creation, and finally a &amp;quot;Service Area Analysis&amp;quot;
+that allows you to generate an isochrone map depicting travel distance from one more points
+during a given timeframe.&lt;/p&gt;
+&lt;p&gt;For example, here is are two isochrones showing the 30-minute &amp;quot;travel-shed&amp;quot; (aka Service Area)
+around my house, on any given Tuesday at 3PM vs 3AM.&lt;/p&gt;
+&lt;p&gt;Tuesday 3PM: 30-Minute Bus Service Area&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://mattmakesmaps.com/img/OTmtJWTQF9-320.webp 320w, https://mattmakesmaps.com/img/OTmtJWTQF9-600.webp 600w, https://mattmakesmaps.com/img/OTmtJWTQF9-960.webp 960w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;img alt=&quot;Service Area 3PM&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://mattmakesmaps.com/img/OTmtJWTQF9-320.jpeg&quot; width=&quot;960&quot; height=&quot;557&quot; srcset=&quot;https://mattmakesmaps.com/img/OTmtJWTQF9-320.jpeg 320w, https://mattmakesmaps.com/img/OTmtJWTQF9-600.jpeg 600w, https://mattmakesmaps.com/img/OTmtJWTQF9-960.jpeg 960w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;Tuesday 3AM: 30-Minute Bus Service Area&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://mattmakesmaps.com/img/GrvKKFX4m0-320.webp 320w, https://mattmakesmaps.com/img/GrvKKFX4m0-600.webp 600w, https://mattmakesmaps.com/img/GrvKKFX4m0-960.webp 960w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;img alt=&quot;Service Area 3AM.&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://mattmakesmaps.com/img/GrvKKFX4m0-320.jpeg&quot; width=&quot;960&quot; height=&quot;560&quot; srcset=&quot;https://mattmakesmaps.com/img/GrvKKFX4m0-320.jpeg 320w, https://mattmakesmaps.com/img/GrvKKFX4m0-600.jpeg 600w, https://mattmakesmaps.com/img/GrvKKFX4m0-960.jpeg 960w&quot; sizes=&quot;90vw, (min-width: 1280px) 1156px&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;This travel-shed is based only on the schedule data and doesn&#39;t account for real-time effects of
+traffic congestion. If for example, the schedule is constructed in such a way that buses are
+regularly late/missed, that wouldn&#39;t be reflected here.&lt;/p&gt;
+&lt;p&gt;There are a number of additional weights that can be fine-tuned in this model, but this simple
+exercise really illustrates how easy it is to use GTFS data to quickly understand access to
+transit in a particular area.&lt;/p&gt;
+&lt;p&gt;I think I might try to further augment this model with data for other modes of transport serving Seattle e.g Light Rail, Street Car, Ferry. Coincidentally, Sound Transit offers a consolidated GTFS feed which aggregates all these together already: &lt;a href=&quot;https://gtfs.sound.obaweb.org/prod/gtfs_puget_sound_consolidated.zip&quot;&gt;https://gtfs.sound.obaweb.org/prod/gtfs_puget_sound_consolidated.zip&lt;/a&gt;&lt;/p&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>Build a TinyGS Cube Satellite Receiver</title>

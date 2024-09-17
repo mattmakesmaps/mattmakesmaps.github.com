@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>King County Transit Data Part One - GTFS Static Schedules</title>
+		<meta name="description" content="A look at the non-realtime schedule data available in GTFS format for King County">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
+		<link rel="canonical" href="https://mattmakesmaps.com/blog/2024-09-16-GTFS-Static/">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+
+	--homepage-postlist-background-color: #4d49be;
+	--homepage-postlist-text-color: #fff;
+
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+
+		--homepage-postlist-text-color: var(--color-gray-20);
+
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	max-width: 60em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main {
+	padding: 1rem;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+header:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	padding: .1em .2em;
+	font-family: var(--font-family-monospace);
+	font-size: 90%;
+	background-color: var(--color-gray-20);
+	border-radius: 3px;
+}
+pre:not([class*="language-"]) {
+	margin: .5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: capitalize;
+	font-style: italic;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.post-metadata time {
+	margin-right: 1em;
+}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+a[href].header-anchor:focus,
+a[href].header-anchor:hover {
+	text-decoration: underline;
+}
+a[href].header-anchor:focus,
+:hover > a[href].header-anchor {
+	color: #aaa;
+}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/* Create "responsive" images that resize with the viewport */
+
+img {
+	max-inline-size: 100%;
+	block-size: auto;
+}
+
+div.recentPosts {
+	background-color: var(--homepage-postlist-background-color);
+	color: var(--homepage-postlist-text-color);
+	padding: 1rem;
+}
+
+a[href].homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:visited.homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:hover.homepage-postlist-link,
+a[href]:active.homepage-postlist-link {
+	color: var(--color-gray-50);
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/" class="home-link">mattmakesmaps</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/">Home</a></li>
+					<li class="nav-item"><a href="/blog/">Blog</a></li>
+					<li class="nav-item"><a href="/cv/">CV</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>King County Transit Data Part One - GTFS Static Schedules</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2024-09-16">16 September 2024</time></li>
+	<li><a href="/tags/gtfs/" class="post-tag">GTFS</a>, </li>
+	<li><a href="/tags/gis/" class="post-tag">GIS</a></li>
+</ul>
+
+<p>In Seattle Washington, we're blessed with great multimodal transit, as well apps and
+open data to help us get around as efficiently as possible.</p>
+<p>Both static (schedule) data and realtime locations of transit vehicles (light right/bus
+/street car/etc) can be found in the <a href="https://onebusaway.org/">OneBusAway</a> app, which
+originally started in the Puget Sound Region. One of the powerful elements of the OBA app is
+that it ties together information for <a href="https://www.soundtransit.org/help-contacts/business-information/open-transit-data-otd/otd-downloads">multiple regional transit agencies</a> in a single interface.</p>
+<p>This post will focus on the static schedule data, and later posts hopefully will cover
+my exploration on the realtime data offered up both by the OneBusAway API and some of
+the agency specific data hosts.</p>
+<p>Static scheduling data that power OneBusAway are published by regional transit agencies in
+the General Transit Feed Specification or <code>GTFS</code> format, originally developed by
+<a href="https://developers.google.com/transit/gtfs">Google</a> in 2006, with an interesting tie-in
+to <a href="https://en.wikipedia.org/wiki/GTFS#History">Portland's TriMet transit agency</a></p>
+<p>Each Puget Sound regional transit agency's <code>GTFS</code> schedules can be found at the following
+page, as a formatted set of zipped text files conforming to the GTFS standard:
+<a href="https://www.soundtransit.org/help-contacts/business-information/open-transit-data-otd/otd-downloads">https://www.soundtransit.org/help-contacts/business-information/open-transit-data-otd/otd-downloads</a></p>
+<h2 id="data-overview" tabindex="-1">Data Overview <a class="header-anchor" href="#data-overview">#</a></h2>
+<p>Let's take a look at the <a href="https://www.soundtransit.org/GTFS-KCM/google_transit.zip">King County Metro GTFS Export</a> to better understand what we're dealing with.</p>
+<pre><code>matthewkenny@Matthews-MacBook-Pro kc_metro % wc -l *
+       4 agency.txt
+      62 calendar.txt
+    3300 calendar_dates.txt
+      12 fare_attributes.txt
+      59 fare_rules.txt
+       1 feed_info.txt
+     151 routes.txt
+  234853 shapes.txt
+ 1978415 stop_times.txt
+    6600 stops.txt
+   56500 trips.txt
+ 2279957 total
+</code></pre>
+<p>The full data dictionary for each of the above text files can be found at the
+<a href="https://gtfs.org/documentation/schedule/reference/">gtfs.org reference webpage</a>.
+This reference doc outlines which files are required/optional and within those files,
+fields themselves that are required/optional.</p>
+<p>Let's follow <a href="https://kingcounty.gov/en/dept/metro/routes-and-service/schedules-and-maps/008">King County Metro Route 8</a> in these data files. Route 8 happens to weave its way by my house in Seattle's Central District, through the dense neighborhood of Capitol Hill, past the Amazon HQ in South Lake Union, and ends all the way at the Space Needle and my personal favorite destination, the KEXP cafe an gathering space.</p>
+<p>This route is identified in these data using a unique <code>route_id</code> value (<code>100275</code>) found in <code>routes.txt</code>.
+See below for an example from <code>routes.txt</code>.</p>
+<pre><code>route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
+100275,1,&quot;8&quot;,&quot;&quot;,&quot;Seattle Center - Capitol Hill - Rainier Beach&quot;,3,https://kingcounty.gov/en/dept/metro/routes-and-service/schedules-and-maps/008.html,,
+</code></pre>
+<p>An individual trip, meaning a scheduled run of a single bus on that route, is represented by a
+unique <code>trip_id</code> value found in <code>trips.txt</code>. A unique <code>trip_id</code> is generated, I believe, for
+every combination of <code>route_id</code>, <code>service_id</code>, and <code>direction_id</code>. Where <code>service_id</code> represents
+the schedule e.g <code>Weekday</code> vs <code>Weekend</code> and <code>direction_id</code> represents <code>inbound</code> vs <code>outbound</code>.</p>
+<pre><code>route_id,service_id,trip_id,trip_headsign,trip_short_name,direction_id,block_id,shape_id,peak_flag,fare_id,wheelchair_accessible,bikes_allowed
+100275,3105,572987776,&quot;Seattle Center&quot;,&quot;LOCAL&quot;,0,7331487,31008004,0,101,1,1
+100275,18192,599398116,&quot;Mount Baker Transit Center&quot;,&quot;LOCAL&quot;,1,7331728,40008003,0,101,1,1
+</code></pre>
+<h2 id="example-analysis-jupytr-notebook" tabindex="-1">Example Analysis: Jupytr Notebook <a class="header-anchor" href="#example-analysis-jupytr-notebook">#</a></h2>
+<p>I first started to play with these data using a Jupytr Notebook, which I've posted to github here: <a href="https://github.com/mattmakesmaps/gtfs-exploration/blob/main/notebooks/kc_metro/data-exploration-and-mapping.ipynb">https://github.com/mattmakesmaps/gtfs-exploration/blob/main/notebooks/kc_metro/data-exploration-and-mapping.ipynb</a>.</p>
+<p>Checkout that workbook to see some basic pandas exploration around the following:</p>
+<ul>
+<li>Find all stops for a route.</li>
+<li>Map all stops for a route.</li>
+<li>Visualize frequency of trips by hour for a given route and service
+(e.g weekday vs weekend.)</li>
+</ul>
+<p><picture><source type="image/webp" srcset="/img/mC8tXZ64wy-320.webp 320w, /img/mC8tXZ64wy-600.webp 600w, /img/mC8tXZ64wy-960.webp 960w, /img/mC8tXZ64wy-1280.webp 1280w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Screenshot of KC Metro Route 8 polyline." loading="lazy" decoding="async" src="/img/mC8tXZ64wy-320.jpeg" width="1280" height="775" srcset="/img/mC8tXZ64wy-320.jpeg 320w, /img/mC8tXZ64wy-600.jpeg 600w, /img/mC8tXZ64wy-960.jpeg 960w, /img/mC8tXZ64wy-1280.jpeg 1280w" sizes="90vw, (min-width: 1280px) 1156px"></picture></p>
+<p>With regards to the later question for example, it was fun to see how service levels
+didn't decrease all that much on the weekend for Route 8. Weekday vs Weekend,
+it looks like the major difference are a few extra weekday trips during rush hour
+in the mornings and afternoons.</p>
+<p><picture><source type="image/webp" srcset="/img/5U0o2hUun7-320.webp 320w, /img/5U0o2hUun7-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="MTF Frequency Chart" loading="lazy" decoding="async" src="/img/5U0o2hUun7-320.jpeg" width="600" height="506" srcset="/img/5U0o2hUun7-320.jpeg 320w, /img/5U0o2hUun7-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"></picture></p>
+<p><picture><source type="image/webp" srcset="/img/x_XYcRLNxu-320.webp 320w, /img/x_XYcRLNxu-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Saturday Frequency Chart." loading="lazy" decoding="async" src="/img/x_XYcRLNxu-320.jpeg" width="600" height="494" srcset="/img/x_XYcRLNxu-320.jpeg 320w, /img/x_XYcRLNxu-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"></picture></p>
+<h2 id="example-analysis-arcgis-pro-network-analyst" tabindex="-1">Example Analysis: ArcGIS Pro Network Analyst <a class="header-anchor" href="#example-analysis-arcgis-pro-network-analyst">#</a></h2>
+<p>Jumping over to the Esri World, there are already actually a robust <a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/conversion/an-overview-of-the-transit-feed-gtfs-toolset.htm">set of tools</a>
+already built in to take consume <code>GTFS</code> data and create a network dataset for downstream analysis.</p>
+<p>Based on my understand of Esri's platform, their ability to generate a networked dataset
+specific to the transportation domain predates the <code>GTFS</code> standard. The <code>GTFS</code> tools they provide
+today allow a user to transform those data into their own existing transit data model.</p>
+<p>I took the previously mentioned <a href="https://www.soundtransit.org/GTFS-KCM/google_transit.zip">King County GTFS Data</a> and used them as input into the following tutorial from Esri,
+<a href="https://pro.arcgis.com/en/pro-app/latest/help/analysis/networks/create-and-use-a-network-dataset-with-public-transit-data.htm#ESRI_SECTION1_AF5F225DBCF6461F96061274858459C9">Create and Use A Network Dataset With Public Transit Data</a>. This is a very comprehensive tutorial
+that covers the GTFS data import, network creation, and finally a &quot;Service Area Analysis&quot;
+that allows you to generate an isochrone map depicting travel distance from one more points
+during a given timeframe.</p>
+<p>For example, here is are two isochrones showing the 30-minute &quot;travel-shed&quot; (aka Service Area)
+around my house, on any given Tuesday at 3PM vs 3AM.</p>
+<p>Tuesday 3PM: 30-Minute Bus Service Area</p>
+<p><picture><source type="image/webp" srcset="/img/OTmtJWTQF9-320.webp 320w, /img/OTmtJWTQF9-600.webp 600w, /img/OTmtJWTQF9-960.webp 960w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Service Area 3PM" loading="lazy" decoding="async" src="/img/OTmtJWTQF9-320.jpeg" width="960" height="557" srcset="/img/OTmtJWTQF9-320.jpeg 320w, /img/OTmtJWTQF9-600.jpeg 600w, /img/OTmtJWTQF9-960.jpeg 960w" sizes="90vw, (min-width: 1280px) 1156px"></picture></p>
+<p>Tuesday 3AM: 30-Minute Bus Service Area</p>
+<p><picture><source type="image/webp" srcset="/img/GrvKKFX4m0-320.webp 320w, /img/GrvKKFX4m0-600.webp 600w, /img/GrvKKFX4m0-960.webp 960w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Service Area 3AM." loading="lazy" decoding="async" src="/img/GrvKKFX4m0-320.jpeg" width="960" height="560" srcset="/img/GrvKKFX4m0-320.jpeg 320w, /img/GrvKKFX4m0-600.jpeg 600w, /img/GrvKKFX4m0-960.jpeg 960w" sizes="90vw, (min-width: 1280px) 1156px"></picture></p>
+<p>This travel-shed is based only on the schedule data and doesn't account for real-time effects of
+traffic congestion. If for example, the schedule is constructed in such a way that buses are
+regularly late/missed, that wouldn't be reflected here.</p>
+<p>There are a number of additional weights that can be fine-tuned in this model, but this simple
+exercise really illustrates how easy it is to use GTFS data to quickly understand access to
+transit in a particular area.</p>
+<p>I think I might try to further augment this model with data for other modes of transport serving Seattle e.g Light Rail, Street Car, Ferry. Coincidentally, Sound Transit offers a consolidated GTFS feed which aggregates all these together already: <a href="https://gtfs.sound.obaweb.org/prod/gtfs_puget_sound_consolidated.zip">https://gtfs.sound.obaweb.org/prod/gtfs_puget_sound_consolidated.zip</a></p>
+
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2024-01-22-tinygs-overview/">Build a TinyGS Cube Satellite Receiver</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- Current page: /blog/2024-09-16-GTFS-Static/ -->
+	</body>
+</html>
