@@ -24,4 +24,63 @@ Each Puget Sound regional transit agency's GTFS schedules can be found at the fo
 
 ## Data Overview
 
+Let's take a look at the [King County Metro GTFS Export](https://www.soundtransit.org/GTFS-KCM/google_transit.zip) to better understand what we're dealing with.
+
+```
+matthewkenny@Matthews-MacBook-Pro kc_metro % wc -l *
+       4 agency.txt
+      62 calendar.txt
+    3300 calendar_dates.txt
+      12 fare_attributes.txt
+      59 fare_rules.txt
+       1 feed_info.txt
+     151 routes.txt
+  234853 shapes.txt
+ 1978415 stop_times.txt
+    6600 stops.txt
+   56500 trips.txt
+ 2279957 total
+```
+
+The full data dictionary for each of the above text files can be found at the
+[gtfs.org reference webpage](https://gtfs.org/documentation/schedule/reference/).
+This reference doc outlines which files are required/optional and within those files,
+fields themselves that are required/optional.
+
+Let's follow [King County Metro Route 8](https://kingcounty.gov/en/dept/metro/routes-and-service/schedules-and-maps/008) in these data files. Route 8 happens to weave its way by my house in Seattle's Central District, through the dense neighborhood of Capitol Hill, past the Amazon HQ in South Lake Union, and ends all the way at the Space Needle and my personal favorite destination, the KEXP cafe an gathering space.
+
+This route is identified in these data using a unique `route_id` value (`100275`) found in `routes.txt`.
+See below for an example from `routes.txt`.
+
+```
+route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
+100275,1,"8","","Seattle Center - Capitol Hill - Rainier Beach",3,https://kingcounty.gov/en/dept/metro/routes-and-service/schedules-and-maps/008.html,,
+```
+
+An individual trip, meaning a scheduled run of a single bus on that route, is represented by a
+unique `trip_id` value found in `trips.txt`. A unique `trip_id` is generated, I believe, for
+every combination of `route_id`, `service_id`, and `direction_id`. Where `service_id` represents
+the schedule e.g `Weekday` vs `Weekend` and `direction_id` represents `inbound` vs `outbound`.
+
+```
+route_id,service_id,trip_id,trip_headsign,trip_short_name,direction_id,block_id,shape_id,peak_flag,fare_id,wheelchair_accessible,bikes_allowed
+100275,3105,572987776,"Seattle Center","LOCAL",0,7331487,31008004,0,101,1,1
+100275,18192,599398116,"Mount Baker Transit Center","LOCAL",1,7331728,40008003,0,101,1,1
+```
+
+## Example Analysis: Jupytr Notebook
+
+I first started to play with these data using a Jupytr Notebook, which I've posted to github here: [https://github.com/mattmakesmaps/gtfs-exploration/blob/main/notebooks/kc_metro/data-exploration-and-mapping.ipynb](https://github.com/mattmakesmaps/gtfs-exploration/blob/main/notebooks/kc_metro/data-exploration-and-mapping.ipynb)
+
+I wanted to answer some basic questions such as:
+- Try to find all stops for a given route.
+- Visualize all stops for a given route as a map.
+- Visualize frequency of trips by hour for a given route and service
+  (e.g weekday vs weekend.)
+
+With regards to the later question for example, it was fun to see how service levels
+didn't decrease all that much on the weekend for Route 8. Weekday vs Weekend,
+it looks like the major difference are a few extra weekday trips during rush hour
+in the mornings and afternoons. 
+
 ## Example Analysis: ArcGIS Pro Network Analyst
