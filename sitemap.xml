@@ -287,11 +287,6 @@
 	</url>
 	
 	<url>
-		<loc>https://mattmakesmaps.com/tags/ham-radio/</loc>
-		<lastmod>2024-09-17</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://mattmakesmaps.com/tags/intro/</loc>
 		<lastmod>2024-09-17</lastmod>
 	</url>
@@ -302,12 +297,7 @@
 	</url>
 	
 	<url>
-		<loc>https://mattmakesmaps.com/tags/tinygs/</loc>
-		<lastmod>2024-09-17</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://mattmakesmaps.com/tags/satellite/</loc>
+		<loc>https://mattmakesmaps.com/tags/ham-radio/</loc>
 		<lastmod>2024-09-17</lastmod>
 	</url>
 	
@@ -318,6 +308,16 @@
 	
 	<url>
 		<loc>https://mattmakesmaps.com/tags/gis/</loc>
+		<lastmod>2024-09-17</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/tags/tinygs/</loc>
+		<lastmod>2024-09-17</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/tags/satellite/</loc>
 		<lastmod>2024-09-17</lastmod>
 	</url>
 </urlset>
