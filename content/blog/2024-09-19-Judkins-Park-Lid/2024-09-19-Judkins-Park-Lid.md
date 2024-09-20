@@ -36,7 +36,7 @@ Image Credit: [King County 2023](https://gismaps.kingcounty.gov/arcgis/rest/serv
 
 **I-90 Lid: Jimi Hendrix Park/Northwest African American Museum - Sam Smith Park**
 
-{% image "./Park_Closeup.png", "I-90 Lid: Sam Smith Park - Jimi Hendrix Park." %}
+{% image "./Park_CloseUp.png", "I-90 Lid: Sam Smith Park - Jimi Hendrix Park." %}
 
 Image Credit: [King County 2023](https://gismaps.kingcounty.gov/arcgis/rest/services/BaseMaps/KingCo_Aerial_2023/MapServer)
 
@@ -83,6 +83,13 @@ georeferencing is a best approximation given the fact that I was taking cell-pho
 of these sheets.
 
 <iframe src="https://mattmakesmaps.maps.arcgis.com/apps/instant/compare/index.html?appid=7f63f129f63f44c1b5e6afd95f89cbac" width="1000" height="600" frameborder="0" style="border:0" allowfullscreen>iFrames are not supported on this page.</iframe>
+
+Some takeaways from the 1977 Kroll Atlas:
+- 23rd Ave S had a full-on bridge over I-90 (`Lake Way`) allowing vehicular crossing north/south.
+- A pedestrian bridge existed near 24th Ave S providing another crossing opportunity.
+- `Empire Way` now `MLK Jr Way S` ran undisturbed north/south. Users of I-90 crossed via
+an overpass on `Lake Way`.
+- Numerous parcels (houses/industrial) were razed to accommodate The Lid and widening of I-90.
 
 **1983: View of Atlantic Street neighborhood, Seattle.**
 
