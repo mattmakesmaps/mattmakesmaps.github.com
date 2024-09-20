@@ -191,6 +191,7 @@ pre[class*="language-diff-"] {
 	--color-gray-50: #C0C0C0;
 	--color-gray-90: #333;
 
+	--code-background-color: #e0e0e0;
 	--background-color: #fff;
 
 	--text-color: var(--color-gray-90);
@@ -209,6 +210,8 @@ pre[class*="language-diff-"] {
 		--color-gray-20: #e0e0e0;
 		--color-gray-50: #C0C0C0;
 		--color-gray-90: #dad8d8;
+
+		--code-background-color: #1c1c1c;
 
 		/* --text-color is assigned to --color-gray-_ above */
 		--text-color-link: #1493fb;
@@ -310,7 +313,7 @@ code {
 	padding: .1em .2em;
 	font-family: var(--font-family-monospace);
 	font-size: 90%;
-	background-color: var(--color-gray-20);
+	background-color: var(--code-background-color);
 	border-radius: 3px;
 }
 pre:not([class*="language-"]) {
