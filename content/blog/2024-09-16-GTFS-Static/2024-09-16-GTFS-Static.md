@@ -6,6 +6,7 @@ date: 2024-09-16
 tags:
     - GTFS
     - GIS
+    - Transit
 ---
 
 In Seattle Washington, we're blessed with great multimodal transit, as well apps and
