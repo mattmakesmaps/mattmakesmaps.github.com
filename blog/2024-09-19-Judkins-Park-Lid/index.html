@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Judkins Park I-90 Before &quot;The Lid&quot;</title>
+		<meta name="description" content="Notes on the street configuration around Judkins Park before the I-90 Lid">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
+		<link rel="canonical" href="https://mattmakesmaps.com/blog/2024-09-19-Judkins-Park-Lid/">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+
+	--code-background-color: #e0e0e0;
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+
+	--homepage-postlist-background-color: #4d49be;
+	--homepage-postlist-text-color: #fff;
+
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+
+		--code-background-color: #1c1c1c;
+
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+
+		--homepage-postlist-text-color: var(--color-gray-20);
+
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	max-width: 60em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main {
+	padding: 1rem;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+header:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	padding: .1em .2em;
+	font-family: var(--font-family-monospace);
+	font-size: 90%;
+	background-color: var(--code-background-color);
+	border-radius: 3px;
+}
+pre:not([class*="language-"]) {
+	margin: .5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: capitalize;
+	font-style: italic;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.post-metadata time {
+	margin-right: 1em;
+}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+a[href].header-anchor:focus,
+a[href].header-anchor:hover {
+	text-decoration: underline;
+}
+a[href].header-anchor:focus,
+:hover > a[href].header-anchor {
+	color: #aaa;
+}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/* Create "responsive" images that resize with the viewport */
+
+img {
+	max-inline-size: 100%;
+	block-size: auto;
+}
+
+div.recentPosts {
+	background-color: var(--homepage-postlist-background-color);
+	color: var(--homepage-postlist-text-color);
+	padding: 1rem;
+}
+
+a[href].homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:visited.homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:hover.homepage-postlist-link,
+a[href]:active.homepage-postlist-link {
+	color: var(--color-gray-50);
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/" class="home-link">mattmakesmaps</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/">Home</a></li>
+					<li class="nav-item"><a href="/blog/">Blog</a></li>
+					<li class="nav-item"><a href="/cv/">CV</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>Judkins Park I-90 Before &quot;The Lid&quot;</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2024-09-16">16 September 2024</time></li>
+	<li><a href="/tags/gis/" class="post-tag">GIS</a>, </li>
+	<li><a href="/tags/seattle/" class="post-tag">Seattle</a>, </li>
+	<li><a href="/tags/transit/" class="post-tag">Transit</a>, </li>
+	<li><a href="/tags/judkins-park/" class="post-tag">Judkins Park</a></li>
+</ul>
+
+<h2 id="background" tabindex="-1">Background <a class="header-anchor" href="#background">#</a></h2>
+<p>I've lived in the Judkins Park neighborhood of Seattle for the last ten years.</p>
+<p>The City's own <a href="https://data-seattlecitygis.opendata.arcgis.com/datasets/b4a142f592e94d39a3bf787f3c112c1d/explore?location=47.585811%2C-122.294092%2C14.47">Neighborhood Map Atlas</a> lists the primary name of this neighborhood as <code>Atlantic</code> with <code>Judkins Park</code>
+as an alternative name among <code>Colman</code> and <code>Jackson Place</code>.
+<a href="https://archive.seattletimes.com/archive/?date=19911018&amp;slug=1311682">Seattle Times articles from the 1990s</a>
+also highlight the &quot;Judkins-Rejected&quot; nickname, used by residents to since the 1970's, to highlight their discontent
+with policy decisions (including transportation) that threatened to disrupt the fabric of the neighborhood.</p>
+<p>Interstate 90 runs beneath this neighborhood, encapsulated for a length of 3,300 feet according to the
+Mount Baker Tunnel <a href="https://en.wikipedia.org/wiki/Mount_Baker_Tunnel">wikipedia page</a>. The eastern half
+of that tunnel has existed since 1940 (according to the previously linked wikipedia article). The western
+half however was exposed, and covered as part of the creation of a &quot;lid&quot; that developed Sam Smith Park,
+Jimi Hendrix Park, and the opening of the (potentially soon to be shuttered)
+Thurgood Marshall Elementary School.</p>
+<p><strong>I-90 West and East Tunnel Entrances.</strong></p>
+<p>Note the layout of I-90 in the image below. The West and East tunnel entrances can be seen on either
+side. <code>23rd Ave S</code> is visible as the western most street running North/South.
+<code>Martin Luther King Jr Way S</code> (Formerly <code>Empire Way</code>) is visible bisecting Sam Smith Park to the East
+and Thurgood Marshall Elementary/Jimi Hendrix Park/Northwest African American Museum to the West.</p>
+<p>The area in red indicates the rough location of The Lid, as seen in higher detail below.</p>
+<p><picture><source type="image/webp" srcset="/img/oshaNfyJ4a-320.webp 320w, /img/oshaNfyJ4a-600.webp 600w, /img/oshaNfyJ4a-960.webp 960w, /img/oshaNfyJ4a-1280.webp 1280w, /img/oshaNfyJ4a-1600.webp 1600w, /img/oshaNfyJ4a-1920.webp 1920w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="I-90 West and East Tunnel Entrances." loading="lazy" decoding="async" src="/img/oshaNfyJ4a-320.jpeg" width="1920" height="853" srcset="/img/oshaNfyJ4a-320.jpeg 320w, /img/oshaNfyJ4a-600.jpeg 600w, /img/oshaNfyJ4a-960.jpeg 960w, /img/oshaNfyJ4a-1280.jpeg 1280w, /img/oshaNfyJ4a-1600.jpeg 1600w, /img/oshaNfyJ4a-1920.jpeg 1920w" sizes="90vw, (min-width: 1280px) 1156px"></picture></p>
+<p>Image Credit: <a href="https://gismaps.kingcounty.gov/arcgis/rest/services/BaseMaps/KingCo_Aerial_2023/MapServer">King County 2023</a></p>
+<p><strong>I-90 Lid: Jimi Hendrix Park/Northwest African American Museum - Sam Smith Park</strong></p>
+<p><picture><source type="image/webp" srcset="/img/UT0032pcPx-320.webp 320w, /img/UT0032pcPx-600.webp 600w, /img/UT0032pcPx-960.webp 960w, /img/UT0032pcPx-1280.webp 1280w, /img/UT0032pcPx-1600.webp 1600w, /img/UT0032pcPx-1920.webp 1920w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="I-90 Lid: Sam Smith Park - Jimi Hendrix Park." loading="lazy" decoding="async" src="/img/UT0032pcPx-320.jpeg" width="1920" height="933" srcset="/img/UT0032pcPx-320.jpeg 320w, /img/UT0032pcPx-600.jpeg 600w, /img/UT0032pcPx-960.jpeg 960w, /img/UT0032pcPx-1280.jpeg 1280w, /img/UT0032pcPx-1600.jpeg 1600w, /img/UT0032pcPx-1920.jpeg 1920w" sizes="90vw, (min-width: 1280px) 1156px"></picture></p>
+<p>Image Credit: <a href="https://gismaps.kingcounty.gov/arcgis/rest/services/BaseMaps/KingCo_Aerial_2023/MapServer">King County 2023</a></p>
+<p>As I've walked and cycled across this green space, I've tried to imagine what this area was like
+before The Lid existed. I have always assumed there had to be some combination of overpasses,
+underpasses, onramps, offramps, and maybe even a sidewalk or two allowing the interstate and a
+neighborhood to co-exist somehow.</p>
+<p>After a bit of research on the MOHAI image archives and a visit to the
+<a href="https://www.spl.org/programs-and-services/arts-and-culture/unique-collections/seattle-room">Seattle Room</a> of the Central Library branch, I found out I was generally correct (I believe).</p>
+<h2 id="pre-lid-condition" tabindex="-1">Pre-Lid Condition <a class="header-anchor" href="#pre-lid-condition">#</a></h2>
+<p><strong>1982: Former West Portal Mt. Baker Ridge Tunnel.</strong></p>
+<p>This photo was my first clue, found on the Mount Baker Tunnel
+<a href="https://en.wikipedia.org/wiki/Mount_Baker_Tunnel">wikipedia page</a>. Looking East, it shows
+the West tunnel entrance to I-90 at <code>Yakima Ave S.</code> Current day, this would be underground,
+below the current day Bike/Pedestrian Tunnel of Sam Smith Park (See below)</p>
+<p><picture><source type="image/webp" srcset="/img/8yB2DxNVnG-320.webp 320w, /img/8yB2DxNVnG-600.webp 600w, /img/8yB2DxNVnG-960.webp 960w, /img/8yB2DxNVnG-1280.webp 1280w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Former West Portal Mt. Baker Ridge Tunnel 1982." loading="lazy" decoding="async" src="/img/8yB2DxNVnG-320.jpeg" width="1280" height="828" srcset="/img/8yB2DxNVnG-320.jpeg 320w, /img/8yB2DxNVnG-600.jpeg 600w, /img/8yB2DxNVnG-960.jpeg 960w, /img/8yB2DxNVnG-1280.jpeg 1280w" sizes="90vw, (min-width: 1280px) 1156px"></picture></p>
+<p>Image Credit: <a href="https://commons.wikimedia.org/w/index.php?curid=69055887">By Steve Morgan, CC BYSA 4.0</a></p>
+<p>The current bike/pedestrian tunnel, opened in 1994, situated on The Lid above the
+former tunnel portals pictured previously.</p>
+<p><picture><source type="image/webp" srcset="/img/aFNcQ1NRcc-320.webp 320w, /img/aFNcQ1NRcc-600.webp 600w, /img/aFNcQ1NRcc-960.webp 960w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="Sam Smith Park Bike Tunnel." loading="lazy" decoding="async" src="/img/aFNcQ1NRcc-320.jpeg" width="960" height="720" srcset="/img/aFNcQ1NRcc-320.jpeg 320w, /img/aFNcQ1NRcc-600.jpeg 600w, /img/aFNcQ1NRcc-960.jpeg 960w" sizes="90vw, (min-width: 1280px) 1156px"></picture></p>
+<p>Image Credit: <a href="https://commons.wikimedia.org/wiki/File:I-90_bike_tunnel,_Seattle_(10508441764).jpg">By Robert Ashworth, CC BYSA 2.0</a></p>
+<p>Given the gentle slope of The Lid, it's hard to imagine being in the past, walking South from say
+Norman Street, and running into an impassible mass of freeway. It's literally <em>hard to imagine</em>.</p>
+<p>I looked for available aerial imagery from before the lid's construction, but couldn't really
+find anything. So I decided to take a trip to the &quot;Seattle Room&quot; of the Central Library branch,
+which has a collection of Kroll Street Atlases. I was able to find a copy from 1977, which
+showed the old street configuration in perfect detail.</p>
+<p>I took a few photos with my phone of the relevant sheets, georeferenced them, and created the
+side-by-side map embedded below. Panning and zooming the map can allow you to compare the
+1977 Pre-Lid layout with aerial imagery showing the current configuration. Note tha the
+georeferencing is a best approximation given the fact that I was taking cell-phone shots
+of these sheets.</p>
+<iframe src="https://mattmakesmaps.maps.arcgis.com/apps/instant/compare/index.html?appid=7f63f129f63f44c1b5e6afd95f89cbac" width="1000" height="600" frameborder="0" style="border:0" allowfullscreen>iFrames are not supported on this page.</iframe>
+<p>Some takeaways from the 1977 Kroll Atlas:</p>
+<ul>
+<li>23rd Ave S had a full-on bridge over I-90 (<code>Lake Way</code>) allowing vehicular crossing north/south.</li>
+<li>A pedestrian bridge existed near 24th Ave S providing another crossing opportunity.</li>
+<li><code>Empire Way</code> now <code>MLK Jr Way S</code> ran undisturbed north/south. Users of I-90 crossed via
+an overpass on <code>Lake Way</code>.</li>
+<li>Numerous parcels (houses/industrial) were razed to accommodate The Lid and widening of I-90.</li>
+<li><code>Atlantic</code> and <code>Day</code> streets, running east/west on either side of I-90, were disconnected
+by the construction of The Lid.</li>
+</ul>
+<p>From the MOHAI digital archives (accessed via the University of Washington
+<a href="https://content.lib.washington.edu/seattleweb/index.html">digital collections</a>) I was able to find
+two images that provide some real context to the illustrations of the Kroll Atlas.</p>
+<p><strong>1983: View of Atlantic Street neighborhood, Seattle.</strong></p>
+<p>On the left side of this image you can see I-90, the overpass at
+<code>23rd Ave S</code> (closest to the viewer), a faint line that I believe to be
+the <code>24th Ave S</code> pedestrian crossing, and the old tunnel entrance.</p>
+<p><code>Atlantic Street</code> can also be seen to the right, along with the old
+Colman School/Current NAAM building.</p>
+<p><picture><source type="image/webp" srcset="/img/8XsCs6m-qS-320.webp 320w, /img/8XsCs6m-qS-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="View of Atlantic Street neighborhood, Seattle, 1983." loading="lazy" decoding="async" src="/img/8XsCs6m-qS-320.jpeg" width="600" height="444" srcset="/img/8XsCs6m-qS-320.jpeg 320w, /img/8XsCs6m-qS-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"></picture></p>
+<p>Image Credit: <a href="https://digitalcollections.lib.washington.edu/digital/collection/imlsmohai/id/9876/rec/156">MOHAI, Seattle Post-Intelligencer Photograph Collection, 9876</a></p>
+<p><strong>1954: View of Rainier Avenue and Lake Way looking east.</strong></p>
+<p>In this earlier image, you can see parcels that no longer exist in the
+circular patch of land between the offramp of I-90 at Rainier and
+Rainier itself. <code>Day</code> street is also visible.</p>
+<p>I also just enjoy seeing how &quot;filled out&quot; the neighborhood looks.
+The structures are mostly low-density single-family homes of course,
+but it seems clear that there is an established neighborhood.</p>
+<p><picture><source type="image/webp" srcset="/img/bG1p9SYVyb-320.webp 320w, /img/bG1p9SYVyb-600.webp 600w" sizes="90vw, (min-width: 1280px) 1156px"><img alt="View of Rainier Avenue and Lake Way looking east, March 1954." loading="lazy" decoding="async" src="/img/bG1p9SYVyb-320.jpeg" width="600" height="485" srcset="/img/bG1p9SYVyb-320.jpeg 320w, /img/bG1p9SYVyb-600.jpeg 600w" sizes="90vw, (min-width: 1280px) 1156px"></picture></p>
+<p>Image Credit: <a href="https://digitalcollections.lib.washington.edu/digital/collection/imlsmohai/id/17965/rec/157">MOHAI, Seattle Post-Intelligencer Photograph Collection, 17965</a></p>
+<p>I've appreciated learning about this small bit of history of my neighbhorhood. As I've mentioned
+previously, it's hard to imagine what walking through this area would be like before The Lid.
+The Lid, I assume, creates such a different experience for users of the space that it's just
+hard for me to imagine the sensory experience of being able to hear and look down at the interstate,
+a few blocks from my house.</p>
+<p>Additionally, while learning about &quot;what was&quot; the previous condition and comparing it to &quot;what is&quot;
+today, I've enjoyed learning a bit about &quot;what could have been&quot;, like a <a href="https://archive.seattletimes.com/archive/?date=19911018&amp;slug=1311682">proposed I-90 offramp at
+23rd Ave S</a>,
+successfully rejected by neighborhood activism. The challenges of development,
+displacement, and gentrification that the neighborhood faces today, as well as the hard work of
+community members working to combat those challenges, have been present in previous forms for
+decades.</p>
+<p>I'm hopeful to learn more about how this neighborhood has evolved over time, specifically
+using transportation as a lens.</p>
+<h2 id="additional-reading" tabindex="-1">Additional Reading <a class="header-anchor" href="#additional-reading">#</a></h2>
+<ul>
+<li><a href="https://www.historylink.org/File/2448">Historylink.org : Residents file suit to stop Interstate 90 project on May 28, 1970.</a></li>
+<li><a href="https://archive.seattletimes.com/archive/?date=19911018&amp;slug=1311682">Seattle Times: Forget Ramp, Judkins-Rejected Says -- Lingering I-90 Proposal Still Alive Despite Neighborhood Opposition</a></li>
+<li><a href="https://archive.seattletimes.com/archive/?date=19980901&amp;slug=2769533">Seattle Times: Rebuilding A Neighborhood -- No Longer `Rejected,' Judkins Park's On Its Way Back Up</a></li>
+</ul>
+
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2024-09-16-GTFS-Static/">King County Transit Data Part One - GTFS Static Schedules</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- Current page: /blog/2024-09-19-Judkins-Park-Lid/ -->
+	</body>
+</html>
