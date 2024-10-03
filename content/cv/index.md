@@ -8,7 +8,7 @@ eleventyNavigation:
 
 - [Linkedin](https://www.linkedin.com/in/mattmakesmaps/)
 - [Github](https://github.com/mattmakesmaps)
-- [Resume PDF](./mkenny_resume_2023.pdf)
+- [Resume PDF](./matt_kenny_website_resume.pdf)
 
 ## Presentations and Workshops
 
