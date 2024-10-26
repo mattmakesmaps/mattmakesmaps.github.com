@@ -322,17 +322,7 @@
 	</url>
 	
 	<url>
-		<loc>https://mattmakesmaps.com/tags/gtfs/</loc>
-		<lastmod>2024-10-26</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://mattmakesmaps.com/tags/gis/</loc>
-		<lastmod>2024-10-26</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://mattmakesmaps.com/tags/transit/</loc>
 		<lastmod>2024-10-26</lastmod>
 	</url>
 	
@@ -342,7 +332,17 @@
 	</url>
 	
 	<url>
+		<loc>https://mattmakesmaps.com/tags/transit/</loc>
+		<lastmod>2024-10-26</lastmod>
+	</url>
+	
+	<url>
 		<loc>https://mattmakesmaps.com/tags/judkins-park/</loc>
+		<lastmod>2024-10-26</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/tags/gtfs/</loc>
 		<lastmod>2024-10-26</lastmod>
 	</url>
 </urlset>
