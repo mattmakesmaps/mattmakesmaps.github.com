@@ -4,12 +4,96 @@
 	<subtitle>Matthew Matt Kenny GIS and woodworking blog.</subtitle>
 	<link href="https://mattmakesmaps.com/feed/feed.xml" rel="self"/>
 	<link href="https://mattmakesmaps.com/"/>
-	<updated>2024-09-16T00:00:00Z</updated>
+	<updated>2026-02-03T00:00:00Z</updated>
 	<id>https://mattmakesmaps.com/</id>
 	<author>
 		<name>Matt Kenny</name>
 		<email></email>
 	</author>
+	
+	<entry>
+		<title>Run a Geospatial Python Workshop Like It&#39;s 2026</title>
+		<link href="https://mattmakesmaps.com/blog/2026-02-03-Running-A-Python-Workshop/"/>
+		<updated>2026-02-03T00:00:00Z</updated>
+		<id>https://mattmakesmaps.com/blog/2026-02-03-Running-A-Python-Workshop/</id>
+		<content type="html">&lt;p&gt;The start to 2026 has given me the opportunity to help draft a Python workshop for our
+global science staff at The Nature Conservancy. I&#39;ll be running the
+&lt;a href=&quot;https://github.com/TNC-Geospatial-Conservation-Tech/ocs-training-2026-intermediate-mybinder&quot;&gt;Intermediate Module&lt;/a&gt;,
+demoing workflows for accessing GIS data stored in the cloud, either through raw object store,
+or through services such as OGC API Feature/OGC API Tiles. I&#39;ll also be demoing
+data search workflows using STAC.&lt;/p&gt;
+&lt;p&gt;I&#39;m incredibly proud of my team, my personal contributions, and the participants who are
+interested in learning about Cloud Native Geospatial workflows.&lt;/p&gt;
+&lt;p&gt;These demos will be run as Python Notebooks. Taking a step back, below are my practical notes
+on creating a workshop environment that allows for both interactive execution of
+these notebooks, backup plans, and some prerequisite logistical questions to consider.&lt;/p&gt;
+&lt;h2 id=&quot;jupyterlab-universe&quot; tabindex=&quot;-1&quot;&gt;JupyterLab Universe &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2026-02-03-Running-A-Python-Workshop/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Running Python notebooks in the cloud means interacting with the &lt;a href=&quot;https://jupyter.org/&quot;&gt;Project Jupyter&lt;/a&gt;
+suite of tools. Primarily, this refers to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://jupyterlab.readthedocs.io/en/latest/#&quot;&gt;JupyterLab&lt;/a&gt; environment for authoring and
+executing python notebooks.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mybinder.org/&quot;&gt;binder&lt;/a&gt; which consumes a public github repo of notebooks and provides
+a small ephemeral compute environments running JupyterLab for interactive execution.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://nbviewer.org/&quot;&gt;nbviewer&lt;/a&gt; is a separate service for beautifully rendering non-executable
+versions of existing notebooks, useful for sharing.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://nbconvert.readthedocs.io/en/latest/#&quot;&gt;nbconvert&lt;/a&gt; a command-line utility for converting notebooks
+to other formats. Useful for conversion to a static site served by &lt;a href=&quot;https://docs.github.com/en/pages&quot;&gt;github pages&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;These tools, to be honest, are incredible. They provide a tightly coupled system for authoring, hosting,
+and sharing python notebooks. Geospatial Python in 2026 is undeniably &lt;em&gt;open&lt;/em&gt; and undeniably &lt;em&gt;cool&lt;/em&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;my-ideal-workflow&quot; tabindex=&quot;-1&quot;&gt;My Ideal Workflow &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2026-02-03-Running-A-Python-Workshop/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Although I didn&#39;t follow this workflow this time around, this is what I&#39;ll be doing next time.&lt;/p&gt;
+&lt;ol start=&quot;0&quot;&gt;
+&lt;li&gt;&lt;strong&gt;Use &lt;a href=&quot;https://mybinder.org/&quot;&gt;binder&lt;/a&gt;&lt;/strong&gt; to allow participants to interact with and execute notebook cells.
+As of 02/2026 it seems to be very stable. The launcher badge that is generated can be placed directly
+into your repo&#39;s README.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Draft workbooks outside of binder, but continously check your python environment&#39;s compatibility with binder:&lt;/strong&gt; Author notebooks in a local jupyterlab or alternative cloud-compute environment, but
+make sure to periodically check that your &lt;code&gt;binder&lt;/code&gt;&#39;s &lt;code&gt;environment.yml&lt;/code&gt; file can still be used to successfully
+spin up an instance. In my experience, I had to drop down dependencies such as &lt;code&gt;python==3.11&lt;/code&gt; or &lt;code&gt;rasterio==1.3&lt;/code&gt; in order to have the environment successfully spin up before a timeout error is thrown. Additional notes
+on optimizing your environment for binder can be found &lt;a href=&quot;https://discourse.jupyter.org/t/how-to-reduce-mybinder-org-repository-startup-time/4956&quot;&gt;here&lt;/a&gt;) &lt;strong&gt;Anytime you add a new dependency, check that your environment still launches in binder.&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Use &lt;a href=&quot;https://nbviewer.org/&quot;&gt;nbviewer&lt;/a&gt; or &lt;a href=&quot;https://nbconvert.readthedocs.io/en/latest/#&quot;&gt;nbconvert&lt;/a&gt; to render static webpages from your notebooks:&lt;/strong&gt; Github&#39;s preview functionality does an &amp;quot;OK&amp;quot; job of
+rendering &lt;code&gt;.ipynb&lt;/code&gt; files, but for things like interactive slippy maps, it falls flat. In order to correctly display these and other interactive components, use one of these tools. These also serve as great backups
+and alternatives, per note at bottom of this post.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;logistical-notes&quot; tabindex=&quot;-1&quot;&gt;Logistical Notes &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2026-02-03-Running-A-Python-Workshop/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Although not always possible, here are some aspirational thoughts on logistics/planning.&lt;/p&gt;
+&lt;h3 id=&quot;make-a-decision-about-participant-count-early&quot; tabindex=&quot;-1&quot;&gt;Make a decision about participant count early &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2026-02-03-Running-A-Python-Workshop/&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;When planning, decide on whether or not to implement a participant cap early on.&lt;/p&gt;
+&lt;p&gt;The number of participants has downstream impacts. Determining wether or not to cap participation
+can affect things like:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;What the workshop compute environment is (local workstations, cloud platform &lt;code&gt;A&lt;/code&gt; vs &lt;code&gt;B&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;What the workshop storage environment is (local storage, JupyterLab local storage, cloud storage)&lt;/li&gt;
+&lt;li&gt;Your ability to provide real-time support during a workshop&lt;/li&gt;
+&lt;li&gt;Your need to generate backup plans in the event of compute capacity issues. (Notebook Webpages)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;pick-a-compute-and-storage-environment-early&quot; tabindex=&quot;-1&quot;&gt;Pick a compute and storage environment early &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2026-02-03-Running-A-Python-Workshop/&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Although the promise of Cloud-based compute is to provide a consistent, reproducible environment,
+no longer subject to the &lt;code&gt;Sorry... It works on my computer&lt;/code&gt; trap, the reality is not necessarily
+the case.&lt;/p&gt;
+&lt;p&gt;In my experience, I ported my notebooks between three different JupyterLab hosting implementations:
+&lt;a href=&quot;https://mybinder.org/&quot;&gt;binder&lt;/a&gt;, &lt;a href=&quot;https://studiolab.sagemaker.aws/&quot;&gt;SageMaker Studio Lab&lt;/a&gt;, and
+an internal SageMaker deployment. Each platform had their own integration issues, requiring subtle
+changes to be made to the structure of my notebooks and python dependencies. Choosing the compute
+environment once and sticking to it reduces churn and wasted effort.&lt;/p&gt;
+&lt;p&gt;Some integration challenges were:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Binder: Optimizing Python dependencies and repo structure to &lt;a href=&quot;https://discourse.jupyter.org/t/how-to-reduce-mybinder-org-repository-startup-time/4956&quot;&gt;reduce startup time and eliminate blocking &amp;quot;spawn errors&amp;quot;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;SageMaker Studio Lab: Finding alternative map visualization extensions to mitigate &lt;a href=&quot;https://github.com/jupyter-widgets/ipyleaflet/issues/1034&quot;&gt;platform-specific loading issues&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Object Storage Policies: Adjusting bucket policies to integrate with each platform.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;have-a-backup-plan-or-two&quot; tabindex=&quot;-1&quot;&gt;Have a backup plan (or two) &lt;a class=&quot;header-anchor&quot; href=&quot;https://mattmakesmaps.com/blog/2026-02-03-Running-A-Python-Workshop/&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;With live demos, stuff happens... guaranteed. Third party services may go down. Globally distributed
+participants may run into unforeseen network issues. Participants who are unfamiliar with a notebook
+interface may just prefer to follow along rather then modify and execute notebook cells.&lt;/p&gt;
+&lt;p&gt;Binder seems to be working great, but there is always a risk that it might go down day of presentation.&lt;/p&gt;
+&lt;p&gt;As a backup/alternative, static workbooks can be viewed using &lt;code&gt;nbviewer&lt;/code&gt;. However, &lt;code&gt;nbviewer&lt;/code&gt; itself is
+&lt;a href=&quot;https://github.com/jupyter/nbviewer/issues?q=503%20sort%3Acreated-desc&quot;&gt;subject to rate limiting by Github&lt;/a&gt;,
+and in my experience has been unable to render notebooks.&lt;/p&gt;
+&lt;p&gt;Backup to the backup? Use &lt;code&gt;nbconvert&lt;/code&gt; to create a static site &lt;a href=&quot;https://tnc-geospatial-conservation-tech.github.io/ocs-training-2026-intermediate-mybinder/&quot;&gt;hosted on github pages&lt;/a&gt;.&lt;/p&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>Judkins Park I-90 Before &quot;The Lid&quot;</title>

@@ -277,6 +277,11 @@
 	</url>
 	
 	<url>
+		<loc>https://mattmakesmaps.com/blog/2026-02-03-Running-A-Python-Workshop/</loc>
+		<lastmod>2026-02-03</lastmod>
+	</url>
+	
+	<url>
 		<loc>https://mattmakesmaps.com/blog/</loc>
 		<lastmod>2026-02-03</lastmod>
 	</url>
@@ -307,11 +312,6 @@
 	</url>
 	
 	<url>
-		<loc>https://mattmakesmaps.com/tags/python/</loc>
-		<lastmod>2026-02-03</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://mattmakesmaps.com/tags/tinygs/</loc>
 		<lastmod>2026-02-03</lastmod>
 	</url>
@@ -322,12 +322,17 @@
 	</url>
 	
 	<url>
-		<loc>https://mattmakesmaps.com/tags/gis/</loc>
+		<loc>https://mattmakesmaps.com/tags/python/</loc>
 		<lastmod>2026-02-03</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://mattmakesmaps.com/tags/seattle/</loc>
+		<loc>https://mattmakesmaps.com/tags/gtfs/</loc>
+		<lastmod>2026-02-03</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://mattmakesmaps.com/tags/gis/</loc>
 		<lastmod>2026-02-03</lastmod>
 	</url>
 	
@@ -337,12 +342,12 @@
 	</url>
 	
 	<url>
-		<loc>https://mattmakesmaps.com/tags/judkins-park/</loc>
+		<loc>https://mattmakesmaps.com/tags/seattle/</loc>
 		<lastmod>2026-02-03</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://mattmakesmaps.com/tags/gtfs/</loc>
+		<loc>https://mattmakesmaps.com/tags/judkins-park/</loc>
 		<lastmod>2026-02-03</lastmod>
 	</url>
 	

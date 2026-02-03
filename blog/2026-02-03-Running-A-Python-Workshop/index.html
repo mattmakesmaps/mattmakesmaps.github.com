@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Run a Geospatial Python Workshop Like It&#39;s 2026</title>
+		<meta name="description" content="Tips and Tricks on Hosting a Geospatial Python Workshop">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="mattmakesmaps">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="mattmakesmaps">
+		<link rel="canonical" href="https://mattmakesmaps.com/blog/2026-02-03-Running-A-Python-Workshop/">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+
+	--code-background-color: #e0e0e0;
+	--background-color: #fff;
+
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+
+	--homepage-postlist-background-color: #4d49be;
+	--homepage-postlist-text-color: #fff;
+
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+
+		--code-background-color: #1c1c1c;
+
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+
+		--homepage-postlist-text-color: var(--color-gray-20);
+
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+html {
+	overflow-y: scroll;
+}
+body {
+	max-width: 60em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+a[href]:visited {
+	color: var(--text-color-link-visited);
+}
+a[href]:hover,
+a[href]:active {
+	color: var(--text-color-link-active);
+}
+
+main {
+	padding: 1rem;
+}
+main :first-child {
+	margin-top: 0;
+}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+header:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+table td,
+table th {
+	padding-right: 1em;
+}
+
+pre,
+code {
+	padding: .1em .2em;
+	font-family: var(--font-family-monospace);
+	font-size: 90%;
+	background-color: var(--code-background-color);
+	border-radius: 3px;
+}
+pre:not([class*="language-"]) {
+	margin: .5em 0;
+	line-height: 1.375; /* 22px /16 */
+	-moz-tab-size: var(--syntax-tab-size);
+	-o-tab-size: var(--syntax-tab-size);
+	tab-size: var(--syntax-tab-size);
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+}
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+.home-link:link:not(:hover) {
+	text-decoration: none;
+}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+.nav-item a[href]:not(:hover) {
+	text-decoration: none;
+}
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	list-style: none;
+	padding: 0;
+	padding-left: 1.5rem;
+}
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	counter-increment: start-from -1;
+	margin-bottom: 1em;
+}
+.postlist-item:before {
+	display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+	line-height: 100%;
+	text-align: right;
+	margin-left: -1.5rem;
+}
+.postlist-date,
+.postlist-item:before {
+	font-size: 0.8125em; /* 13px /16 */
+	color: var(--color-gray-90);
+}
+.postlist-date {
+	word-spacing: -0.5px;
+}
+.postlist-link {
+	font-size: 1.1875em; /* 19px /16 */
+	font-weight: 700;
+	flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;
+}
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-transform: capitalize;
+	font-style: italic;
+}
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.post-metadata time {
+	margin-right: 1em;
+}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+a[href].header-anchor:focus,
+a[href].header-anchor:hover {
+	text-decoration: underline;
+}
+a[href].header-anchor:focus,
+:hover > a[href].header-anchor {
+	color: #aaa;
+}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/* Create "responsive" images that resize with the viewport */
+
+img {
+	max-inline-size: 100%;
+	block-size: auto;
+}
+
+div.recentPosts {
+	background-color: var(--homepage-postlist-background-color);
+	color: var(--homepage-postlist-text-color);
+	padding: 1rem;
+}
+
+a[href].homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:visited.homepage-postlist-link {
+	color: var(--homepage-postlist-text-color);
+}
+a[href]:hover.homepage-postlist-link,
+a[href]:active.homepage-postlist-link {
+	color: var(--color-gray-50);
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/" class="home-link">mattmakesmaps</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/">Home</a></li>
+					<li class="nav-item"><a href="/blog/">Blog</a></li>
+					<li class="nav-item"><a href="/cv/">CV</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>Run a Geospatial Python Workshop Like It&#39;s 2026</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2026-02-03">03 February 2026</time></li>
+	<li><a href="/tags/gis/" class="post-tag">GIS</a>, </li>
+	<li><a href="/tags/python/" class="post-tag">python</a>, </li>
+	<li><a href="/tags/tnc/" class="post-tag">TNC</a>, </li>
+	<li><a href="/tags/nature-conservancy/" class="post-tag">Nature Conservancy</a></li>
+</ul>
+
+<p>The start to 2026 has given me the opportunity to help draft a Python workshop for our
+global science staff at The Nature Conservancy. I'll be running the
+<a href="https://github.com/TNC-Geospatial-Conservation-Tech/ocs-training-2026-intermediate-mybinder">Intermediate Module</a>,
+demoing workflows for accessing GIS data stored in the cloud, either through raw object store,
+or through services such as OGC API Feature/OGC API Tiles. I'll also be demoing
+data search workflows using STAC.</p>
+<p>I'm incredibly proud of my team, my personal contributions, and the participants who are
+interested in learning about Cloud Native Geospatial workflows.</p>
+<p>These demos will be run as Python Notebooks. Taking a step back, below are my practical notes
+on creating a workshop environment that allows for both interactive execution of
+these notebooks, backup plans, and some prerequisite logistical questions to consider.</p>
+<h2 id="jupyterlab-universe" tabindex="-1">JupyterLab Universe <a class="header-anchor" href="#jupyterlab-universe">#</a></h2>
+<p>Running Python notebooks in the cloud means interacting with the <a href="https://jupyter.org/">Project Jupyter</a>
+suite of tools. Primarily, this refers to:</p>
+<ul>
+<li><a href="https://jupyterlab.readthedocs.io/en/latest/#">JupyterLab</a> environment for authoring and
+executing python notebooks.</li>
+<li><a href="https://mybinder.org/">binder</a> which consumes a public github repo of notebooks and provides
+a small ephemeral compute environments running JupyterLab for interactive execution.</li>
+<li><a href="https://nbviewer.org/">nbviewer</a> is a separate service for beautifully rendering non-executable
+versions of existing notebooks, useful for sharing.</li>
+<li><a href="https://nbconvert.readthedocs.io/en/latest/#">nbconvert</a> a command-line utility for converting notebooks
+to other formats. Useful for conversion to a static site served by <a href="https://docs.github.com/en/pages">github pages</a>.</li>
+</ul>
+<p>These tools, to be honest, are incredible. They provide a tightly coupled system for authoring, hosting,
+and sharing python notebooks. Geospatial Python in 2026 is undeniably <em>open</em> and undeniably <em>cool</em>.</p>
+<h2 id="my-ideal-workflow" tabindex="-1">My Ideal Workflow <a class="header-anchor" href="#my-ideal-workflow">#</a></h2>
+<p>Although I didn't follow this workflow this time around, this is what I'll be doing next time.</p>
+<ol start="0">
+<li><strong>Use <a href="https://mybinder.org/">binder</a></strong> to allow participants to interact with and execute notebook cells.
+As of 02/2026 it seems to be very stable. The launcher badge that is generated can be placed directly
+into your repo's README.</li>
+<li><strong>Draft workbooks outside of binder, but continously check your python environment's compatibility with binder:</strong> Author notebooks in a local jupyterlab or alternative cloud-compute environment, but
+make sure to periodically check that your <code>binder</code>'s <code>environment.yml</code> file can still be used to successfully
+spin up an instance. In my experience, I had to drop down dependencies such as <code>python==3.11</code> or <code>rasterio==1.3</code> in order to have the environment successfully spin up before a timeout error is thrown. Additional notes
+on optimizing your environment for binder can be found <a href="https://discourse.jupyter.org/t/how-to-reduce-mybinder-org-repository-startup-time/4956">here</a>) <strong>Anytime you add a new dependency, check that your environment still launches in binder.</strong></li>
+<li><strong>Use <a href="https://nbviewer.org/">nbviewer</a> or <a href="https://nbconvert.readthedocs.io/en/latest/#">nbconvert</a> to render static webpages from your notebooks:</strong> Github's preview functionality does an &quot;OK&quot; job of
+rendering <code>.ipynb</code> files, but for things like interactive slippy maps, it falls flat. In order to correctly display these and other interactive components, use one of these tools. These also serve as great backups
+and alternatives, per note at bottom of this post.</li>
+</ol>
+<h2 id="logistical-notes" tabindex="-1">Logistical Notes <a class="header-anchor" href="#logistical-notes">#</a></h2>
+<p>Although not always possible, here are some aspirational thoughts on logistics/planning.</p>
+<h3 id="make-a-decision-about-participant-count-early" tabindex="-1">Make a decision about participant count early <a class="header-anchor" href="#make-a-decision-about-participant-count-early">#</a></h3>
+<p>When planning, decide on whether or not to implement a participant cap early on.</p>
+<p>The number of participants has downstream impacts. Determining wether or not to cap participation
+can affect things like:</p>
+<ul>
+<li>What the workshop compute environment is (local workstations, cloud platform <code>A</code> vs <code>B</code>)</li>
+<li>What the workshop storage environment is (local storage, JupyterLab local storage, cloud storage)</li>
+<li>Your ability to provide real-time support during a workshop</li>
+<li>Your need to generate backup plans in the event of compute capacity issues. (Notebook Webpages)</li>
+</ul>
+<h3 id="pick-a-compute-and-storage-environment-early" tabindex="-1">Pick a compute and storage environment early <a class="header-anchor" href="#pick-a-compute-and-storage-environment-early">#</a></h3>
+<p>Although the promise of Cloud-based compute is to provide a consistent, reproducible environment,
+no longer subject to the <code>Sorry... It works on my computer</code> trap, the reality is not necessarily
+the case.</p>
+<p>In my experience, I ported my notebooks between three different JupyterLab hosting implementations:
+<a href="https://mybinder.org/">binder</a>, <a href="https://studiolab.sagemaker.aws/">SageMaker Studio Lab</a>, and
+an internal SageMaker deployment. Each platform had their own integration issues, requiring subtle
+changes to be made to the structure of my notebooks and python dependencies. Choosing the compute
+environment once and sticking to it reduces churn and wasted effort.</p>
+<p>Some integration challenges were:</p>
+<ul>
+<li>Binder: Optimizing Python dependencies and repo structure to <a href="https://discourse.jupyter.org/t/how-to-reduce-mybinder-org-repository-startup-time/4956">reduce startup time and eliminate blocking &quot;spawn errors&quot;</a></li>
+<li>SageMaker Studio Lab: Finding alternative map visualization extensions to mitigate <a href="https://github.com/jupyter-widgets/ipyleaflet/issues/1034">platform-specific loading issues</a></li>
+<li>Object Storage Policies: Adjusting bucket policies to integrate with each platform.</li>
+</ul>
+<h3 id="have-a-backup-plan-or-two" tabindex="-1">Have a backup plan (or two) <a class="header-anchor" href="#have-a-backup-plan-or-two">#</a></h3>
+<p>With live demos, stuff happens... guaranteed. Third party services may go down. Globally distributed
+participants may run into unforeseen network issues. Participants who are unfamiliar with a notebook
+interface may just prefer to follow along rather then modify and execute notebook cells.</p>
+<p>Binder seems to be working great, but there is always a risk that it might go down day of presentation.</p>
+<p>As a backup/alternative, static workbooks can be viewed using <code>nbviewer</code>. However, <code>nbviewer</code> itself is
+<a href="https://github.com/jupyter/nbviewer/issues?q=503%20sort%3Acreated-desc">subject to rate limiting by Github</a>,
+and in my experience has been unable to render notebooks.</p>
+<p>Backup to the backup? Use <code>nbconvert</code> to create a static site <a href="https://tnc-geospatial-conservation-tech.github.io/ocs-training-2026-intermediate-mybinder/">hosted on github pages</a>.</p>
+
+<ul class="links-nextprev"><li>Previous: <a href="/blog/2024-09-19-Judkins-Park-Lid/">Judkins Park I-90 Before &quot;The Lid&quot;</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- Current page: /blog/2026-02-03-Running-A-Python-Workshop/ -->
+	</body>
+</html>
