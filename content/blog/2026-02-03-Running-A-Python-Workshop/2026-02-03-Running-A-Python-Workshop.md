@@ -64,7 +64,7 @@ Although not always possible, here are some aspirational thoughts on logistics/p
 
 When planning, decide on whether or not to implement a participant cap early on.
 
-The number of participants has downstream impacts. Determining wether or not to cap participation
+The number of participants has downstream impacts. Determining whether or not to cap participation
 can affect things like:
 
 - What the workshop compute environment is (local workstations, cloud platform `A` vs `B`)
