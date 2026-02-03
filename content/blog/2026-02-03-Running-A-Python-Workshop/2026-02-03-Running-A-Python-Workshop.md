@@ -1,6 +1,6 @@
 ---
 title: Run a Geospatial Python Workshop Like It's 2026
-draft: true 
+draft: false
 description: Tips and Tricks on Hosting a Geospatial Python Workshop
 date: 2026-02-03
 tags:
