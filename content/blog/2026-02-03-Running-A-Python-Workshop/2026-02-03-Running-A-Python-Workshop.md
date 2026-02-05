@@ -10,15 +10,16 @@ tags:
     - Nature Conservancy
 ---
 
-The start to 2026 has given me the opportunity to help draft a Python workshop for our 
-global science staff at The Nature Conservancy. I'll be running the 
+The start to 2026 has given me the opportunity to help draft a Python workshop
+for our global science staff at The Nature Conservancy. I'll be running the 
 [Intermediate Module](https://github.com/TNC-Geospatial-Conservation-Tech/ocs-training-2026-intermediate-mybinder),
 demoing workflows for accessing GIS data stored in the cloud, either through raw object store,
-or through services such as OGC API Feature/OGC API Tiles. I'll also be demoing
-data search workflows using STAC.
+or through services such as OGC API Feature/OGC API Tiles (hosted by our friends at 
+[Earthmover](https://earthmover.io/)). I'll also be demoing data search workflows using STAC.
 
-I'm incredibly proud of my team, my personal contributions, and the participants who are
-interested in learning about Cloud Native Geospatial workflows.
+I'm incredibly proud of the work my colleagues have done constructing the other modules,
+my personal contributions, and the participants who are interested in learning
+about Cloud Native Geospatial workflows.
 
 These demos will be run as Python Notebooks. Taking a step back, below are my practical notes
 on creating a workshop environment that allows for both interactive execution of
@@ -32,7 +33,9 @@ suite of tools. Primarily, this refers to:
 - [JupyterLab](https://jupyterlab.readthedocs.io/en/latest/#) environment for authoring and
 executing python notebooks.
 - [binder](https://mybinder.org/) which consumes a public github repo of notebooks and provides
-a small ephemeral compute environments running JupyterLab for interactive execution.
+a small ephemeral compute environments running JupyterLab for interactive execution. **Example implementations** include the
+`xarray` [getting started tutorial](https://tutorial.xarray.dev/overview/get-started.html) and the
+University of Washington's [Geospatial Data Analysis with Python](https://github.com/UW-GDA/gda_course_2021#try-it) course.
 - [nbviewer](https://nbviewer.org/) is a separate service for beautifully rendering non-executable
 versions of existing notebooks, useful for sharing.
 - [nbconvert](https://nbconvert.readthedocs.io/en/latest/#) a command-line utility for converting notebooks
@@ -43,18 +46,22 @@ and sharing python notebooks. Geospatial Python in 2026 is undeniably _open_ and
 
 ## My Ideal Workflow
 
-Although I didn't follow this workflow this time around, this is what I'll be doing next time.
+Based on my experience in this workshop, here is my proposed ideal technical workflow for next time.
 
-0) **Use [binder](https://mybinder.org/)** to allow participants to interact with and execute notebook cells.
+1) **Use [binder](https://mybinder.org/)** to allow participants to interact with and execute notebook cells.
 As of 02/2026 it seems to be very stable. The launcher badge that is generated can be placed directly
 into your repo's README.
-1) **Draft workbooks outside of binder, but continously check your python environment's compatibility with binder:** Author notebooks in a local jupyterlab or alternative cloud-compute environment, but
-make sure to periodically check that your `binder`'s `environment.yml` file can still be used to successfully
-spin up an instance. In my experience, I had to drop down dependencies such as `python==3.11` or `rasterio==1.3` in order to have the environment successfully spin up before a timeout error is thrown. Additional notes
-on optimizing your environment for binder can be found [here](https://discourse.jupyter.org/t/how-to-reduce-mybinder-org-repository-startup-time/4956)) **Anytime you add a new dependency, check that your environment still launches in binder.**
-2) **Use [nbviewer](https://nbviewer.org/) or [nbconvert](https://nbconvert.readthedocs.io/en/latest/#) to render static webpages from your notebooks:** Github's preview functionality does an "OK" job of
-rendering `.ipynb` files, but for things like interactive slippy maps, it falls flat. In order to correctly display these and other interactive components, use one of these tools. These also serve as great backups
-and alternatives, per note at bottom of this post.
+2) **Draft workbooks outside of binder, but continuously check your python environment's compatibility with binder:**
+Author notebooks in a local jupyterlab or alternative cloud-compute environment, but make sure to periodically
+check that your `binder`'s `environment.yml` file can still be used to successfully spin up an instance.
+In my experience, I had to drop down dependencies such as `python==3.11` or `rasterio==1.3` in order to
+have the environment successfully spin up before a timeout error is thrown. Additional notes on optimizing
+your environment for binder can be found [here](https://discourse.jupyter.org/t/how-to-reduce-mybinder-org-repository-startup-time/4956))
+**Anytime you add a new dependency, check that your environment still launches in binder.**
+3) **Use [nbviewer](https://nbviewer.org/) or [nbconvert](https://nbconvert.readthedocs.io/en/latest/#) to render static webpages from your notebooks:**
+Github's preview functionality does an "OK" job of rendering `.ipynb` files, but for things like
+interactive slippy maps, it falls flat. In order to correctly display these and other interactive components,
+use one of these tools. These also serve as great backups and alternatives, per note at bottom of this post.
 
 ## Logistical Notes
 
@@ -100,5 +107,7 @@ Binder seems to be working great, but there is always a risk that it might go do
 As a backup/alternative, static workbooks can be viewed using `nbviewer`. However, `nbviewer` itself is
 [subject to rate limiting by Github](https://github.com/jupyter/nbviewer/issues?q=503%20sort%3Acreated-desc),
 and in my experience has been unable to render notebooks.
+
+![nbviewer 503 error](https://user-images.githubusercontent.com/15007159/58266074-94d9df80-7d46-11e9-97a3-6166a743cd9a.png)
 
 Backup to the backup? Use `nbconvert` to create a static site [hosted on github pages](https://tnc-geospatial-conservation-tech.github.io/ocs-training-2026-intermediate-mybinder/).
