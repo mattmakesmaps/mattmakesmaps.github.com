@@ -513,14 +513,15 @@ a[href]:active.homepage-postlist-link {
 	<li><a href="/tags/nature-conservancy/" class="post-tag">Nature Conservancy</a></li>
 </ul>
 
-<p>The start to 2026 has given me the opportunity to help draft a Python workshop for our
-global science staff at The Nature Conservancy. I'll be running the
+<p>The start to 2026 has given me the opportunity to help draft a Python workshop
+for our global science staff at The Nature Conservancy. I'll be running the
 <a href="https://github.com/TNC-Geospatial-Conservation-Tech/ocs-training-2026-intermediate-mybinder">Intermediate Module</a>,
 demoing workflows for accessing GIS data stored in the cloud, either through raw object store,
-or through services such as OGC API Feature/OGC API Tiles. I'll also be demoing
-data search workflows using STAC.</p>
-<p>I'm incredibly proud of my team, my personal contributions, and the participants who are
-interested in learning about Cloud Native Geospatial workflows.</p>
+or through services such as OGC API Feature/OGC API Tiles (hosted by our friends at
+<a href="https://earthmover.io/">Earthmover</a>). I'll also be demoing data search workflows using STAC.</p>
+<p>I'm incredibly proud of the work my colleagues have done constructing the other modules,
+my personal contributions, and the participants who are interested in learning
+about Cloud Native Geospatial workflows.</p>
 <p>These demos will be run as Python Notebooks. Taking a step back, below are my practical notes
 on creating a workshop environment that allows for both interactive execution of
 these notebooks, backup plans, and some prerequisite logistical questions to consider.</p>
@@ -531,7 +532,9 @@ suite of tools. Primarily, this refers to:</p>
 <li><a href="https://jupyterlab.readthedocs.io/en/latest/#">JupyterLab</a> environment for authoring and
 executing python notebooks.</li>
 <li><a href="https://mybinder.org/">binder</a> which consumes a public github repo of notebooks and provides
-a small ephemeral compute environments running JupyterLab for interactive execution.</li>
+a small ephemeral compute environments running JupyterLab for interactive execution. <strong>Example implementations</strong> include the
+<code>xarray</code> <a href="https://tutorial.xarray.dev/overview/get-started.html">getting started tutorial</a> and the
+University of Washington's <a href="https://github.com/UW-GDA/gda_course_2021#try-it">Geospatial Data Analysis with Python</a> course.</li>
 <li><a href="https://nbviewer.org/">nbviewer</a> is a separate service for beautifully rendering non-executable
 versions of existing notebooks, useful for sharing.</li>
 <li><a href="https://nbconvert.readthedocs.io/en/latest/#">nbconvert</a> a command-line utility for converting notebooks
@@ -540,18 +543,22 @@ to other formats. Useful for conversion to a static site served by <a href="http
 <p>These tools, to be honest, are incredible. They provide a tightly coupled system for authoring, hosting,
 and sharing python notebooks. Geospatial Python in 2026 is undeniably <em>open</em> and undeniably <em>cool</em>.</p>
 <h2 id="my-ideal-workflow" tabindex="-1">My Ideal Workflow <a class="header-anchor" href="#my-ideal-workflow">#</a></h2>
-<p>Although I didn't follow this workflow this time around, this is what I'll be doing next time.</p>
-<ol start="0">
+<p>Based on my experience in this workshop, here is my proposed ideal technical workflow for next time.</p>
+<ol>
 <li><strong>Use <a href="https://mybinder.org/">binder</a></strong> to allow participants to interact with and execute notebook cells.
 As of 02/2026 it seems to be very stable. The launcher badge that is generated can be placed directly
 into your repo's README.</li>
-<li><strong>Draft workbooks outside of binder, but continously check your python environment's compatibility with binder:</strong> Author notebooks in a local jupyterlab or alternative cloud-compute environment, but
-make sure to periodically check that your <code>binder</code>'s <code>environment.yml</code> file can still be used to successfully
-spin up an instance. In my experience, I had to drop down dependencies such as <code>python==3.11</code> or <code>rasterio==1.3</code> in order to have the environment successfully spin up before a timeout error is thrown. Additional notes
-on optimizing your environment for binder can be found <a href="https://discourse.jupyter.org/t/how-to-reduce-mybinder-org-repository-startup-time/4956">here</a>) <strong>Anytime you add a new dependency, check that your environment still launches in binder.</strong></li>
-<li><strong>Use <a href="https://nbviewer.org/">nbviewer</a> or <a href="https://nbconvert.readthedocs.io/en/latest/#">nbconvert</a> to render static webpages from your notebooks:</strong> Github's preview functionality does an &quot;OK&quot; job of
-rendering <code>.ipynb</code> files, but for things like interactive slippy maps, it falls flat. In order to correctly display these and other interactive components, use one of these tools. These also serve as great backups
-and alternatives, per note at bottom of this post.</li>
+<li><strong>Draft workbooks outside of binder, but continuously check your python environment's compatibility with binder:</strong>
+Author notebooks in a local jupyterlab or alternative cloud-compute environment, but make sure to periodically
+check that your <code>binder</code>'s <code>environment.yml</code> file can still be used to successfully spin up an instance.
+In my experience, I had to drop down dependencies such as <code>python==3.11</code> or <code>rasterio==1.3</code> in order to
+have the environment successfully spin up before a timeout error is thrown. Additional notes on optimizing
+your environment for binder can be found <a href="https://discourse.jupyter.org/t/how-to-reduce-mybinder-org-repository-startup-time/4956">here</a>)
+<strong>Anytime you add a new dependency, check that your environment still launches in binder.</strong></li>
+<li><strong>Use <a href="https://nbviewer.org/">nbviewer</a> or <a href="https://nbconvert.readthedocs.io/en/latest/#">nbconvert</a> to render static webpages from your notebooks:</strong>
+Github's preview functionality does an &quot;OK&quot; job of rendering <code>.ipynb</code> files, but for things like
+interactive slippy maps, it falls flat. In order to correctly display these and other interactive components,
+use one of these tools. These also serve as great backups and alternatives, per note at bottom of this post.</li>
 </ol>
 <h2 id="logistical-notes" tabindex="-1">Logistical Notes <a class="header-anchor" href="#logistical-notes">#</a></h2>
 <p>Although not always possible, here are some aspirational thoughts on logistics/planning.</p>
@@ -588,6 +595,7 @@ interface may just prefer to follow along rather then modify and execute noteboo
 <p>As a backup/alternative, static workbooks can be viewed using <code>nbviewer</code>. However, <code>nbviewer</code> itself is
 <a href="https://github.com/jupyter/nbviewer/issues?q=503%20sort%3Acreated-desc">subject to rate limiting by Github</a>,
 and in my experience has been unable to render notebooks.</p>
+<p><img src="https://user-images.githubusercontent.com/15007159/58266074-94d9df80-7d46-11e9-97a3-6166a743cd9a.png" alt="nbviewer 503 error"></p>
 <p>Backup to the backup? Use <code>nbconvert</code> to create a static site <a href="https://tnc-geospatial-conservation-tech.github.io/ocs-training-2026-intermediate-mybinder/">hosted on github pages</a>.</p>
 
 <ul class="links-nextprev"><li>Previous: <a href="/blog/2024-09-19-Judkins-Park-Lid/">Judkins Park I-90 Before &quot;The Lid&quot;</a></li>
