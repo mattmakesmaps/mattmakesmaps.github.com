@@ -14,6 +14,7 @@ eleventyNavigation:
 
 **Note:** CUGOS == [Cascadia Users of Geospatial Open Source](https://cugos.org/)
 
+- [_Intermediate Spatial Data Science_][9] - Workshop Presented to The Nature Conservancy's Global Science Staff 2026
 - [_Build a TinyGS Cube Satellite Receiver_][7] - CUGOS 2024
 - [_Intercept Weather Satellite Images From Space_][1] - CUGOS 2018
 - [_From an OSM Way to a Highway Shield_][2] - Co-Presented at State of the Map US 2016
@@ -39,3 +40,4 @@ Patent: Zhengxiao Li, Daniel Robert Strebe, Matthew Nathaniel Kenny et al., 2023
 [6]: https://drive.google.com/file/d/1WX_YBCr-ctJiE8nHPQrMTwrFrqgto3yq/view?usp=share_link
 [7]: https://mattmakesmaps.com/blog/2024-01-22-tinygs-overview/
 [8]: https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/11847723
+[9]: https://github.com/TNC-Geospatial-Conservation-Tech/ocs-training-2026-intermediate-mybinder
